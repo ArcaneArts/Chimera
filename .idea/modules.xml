@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/griffin/griffin.iml" filepath="$PROJECT_DIR$/griffin/griffin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hawkeye/hawkeye.iml" filepath="$PROJECT_DIR$/hawkeye/hawkeye.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kraken/kraken.iml" filepath="$PROJECT_DIR$/kraken/kraken.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myguide/myguide.iml" filepath="$PROJECT_DIR$/myguide/myguide.iml" />
+      <module fileurl="file://$PROJECT_DIR$/phoenix/phoenix.iml" filepath="$PROJECT_DIR$/phoenix/phoenix.iml" />
+    </modules>
+  </component>
+</project>

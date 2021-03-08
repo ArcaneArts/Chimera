@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.12/48e4e5d60309ebd833bc528dcf77668eab3cd72c/lombok-1.18.12.jar" />
+        </processorPath>
+        <module name="chimera.core.test" />
+        <module name="chimera.mail.test" />
+        <module name="chimera.gateway.main" />
+        <module name="chimera.account.main" />
+        <module name="chimera.paragon.main" />
+        <module name="chimera.core.main" />
+        <module name="chimera.gateway.test" />
+        <module name="chimera.mail.main" />
+        <module name="chimera.paragon.test" />
+        <module name="chimera.account.test" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="15">
+      <module name="chimera.guide" target="15" />
+      <module name="chimera.guide.main" target="15" />
+      <module name="chimera.guide.test" target="15" />
+      <module name="chimera.magnus" target="15" />
+      <module name="chimera.magnus.main" target="15" />
+      <module name="chimera.magnus.test" target="15" />
+      <module name="chimera.resource" target="15" />
+      <module name="chimera.resource.main" target="15" />
+      <module name="chimera.resource.test" target="15" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
