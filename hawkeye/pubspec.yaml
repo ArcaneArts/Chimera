@@ -7,6 +7,7 @@ dependencies:
   flutter:
     sdk: flutter
   ## === NATIVE === ##
+  charm: ^1.0.1
   crypto: ^2.1.5
   web_socket_channel: ^1.1.0
   path_provider: ^1.6.24

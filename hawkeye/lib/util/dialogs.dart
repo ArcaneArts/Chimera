@@ -18,61 +18,63 @@ class Dialogs {
   }) {
     showDialog(
         context: context,
-        child: Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(rad))),
-          elevation: ele,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    PaddingBottom(
-                      child: Text(
-                        title,
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      padding: 7,
-                    ),
-                    Text(
-                      description,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ],
-                ),
-                padding: EdgeInsets.only(left: 14, right: 14, top: 14),
-              ),
-              PaddingBottom(
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(rad))),
+            elevation: ele,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      FlatButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            clickLeft();
-                          },
-                          child: Text(buttonNameLeft)),
-                      FlatButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            clickRight();
-                          },
-                          child: Text(buttonNameRight))
+                      PaddingBottom(
+                        child: Text(
+                          title,
+                          style: TextStyle(fontSize: 24),
+                        ),
+                        padding: 7,
+                      ),
+                      Text(
+                        description,
+                        style: TextStyle(fontSize: 18),
+                      ),
                     ],
                   ),
+                  padding: EdgeInsets.only(left: 14, right: 14, top: 14),
                 ),
-                padding: 7,
-              )
-            ],
-          ),
-        ));
+                PaddingBottom(
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              clickLeft();
+                            },
+                            child: Text(buttonNameLeft)),
+                        FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              clickRight();
+                            },
+                            child: Text(buttonNameRight))
+                      ],
+                    ),
+                  ),
+                  padding: 7,
+                )
+              ],
+            ),
+          );
+        });
   }
 
   static void dialog(
@@ -85,65 +87,65 @@ class Dialogs {
       VoidCallback clickRight}) {
     showDialog(
         context: context,
-        child: Dialog(
-          elevation: ele,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(rad))),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    PaddingBottom(
-                      child: Text(
-                        title,
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      padding: 7,
+        builder: (context) => Dialog(
+              elevation: ele,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(rad))),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        PaddingBottom(
+                          child: Text(
+                            title,
+                            style: TextStyle(fontSize: 24),
+                          ),
+                          padding: 7,
+                        ),
+                        Text(
+                          description,
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
                     ),
-                    Text(
-                      description,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ],
-                ),
-                padding: EdgeInsets.only(left: 14, right: 14, top: 14),
-              ),
-              PaddingBottom(
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      FastVisibility(
-                        child: FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              if (clickLeft != null) clickLeft();
-                            },
-                            child: Text(buttonNameLeft)),
-                        visible:
-                            buttonNameLeft != null && buttonNameLeft.isNotEmpty,
-                      ),
-                      FlatButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            if (clickRight != null) clickRight();
-                          },
-                          child: Text(buttonNameRight))
-                    ],
+                    padding: EdgeInsets.only(left: 14, right: 14, top: 14),
                   ),
-                ),
-                padding: 7,
-              )
-            ],
-          ),
-        ));
+                  PaddingBottom(
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          FastVisibility(
+                            child: FlatButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  if (clickLeft != null) clickLeft();
+                                },
+                                child: Text(buttonNameLeft)),
+                            visible: buttonNameLeft != null &&
+                                buttonNameLeft.isNotEmpty,
+                          ),
+                          FlatButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                if (clickRight != null) clickRight();
+                              },
+                              child: Text(buttonNameRight))
+                        ],
+                      ),
+                    ),
+                    padding: 7,
+                  )
+                ],
+              ),
+            ));
   }
 
   static void dialog3(
@@ -158,75 +160,75 @@ class Dialogs {
       VoidCallback clickRight}) {
     showDialog(
         context: context,
-        child: Dialog(
-          elevation: ele,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(rad))),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    PaddingBottom(
-                      child: Text(
-                        title,
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      padding: 7,
+        builder: (context) => Dialog(
+              elevation: ele,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(rad))),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        PaddingBottom(
+                          child: Text(
+                            title,
+                            style: TextStyle(fontSize: 24),
+                          ),
+                          padding: 7,
+                        ),
+                        Text(
+                          description,
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
                     ),
-                    Text(
-                      description,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ],
-                ),
-                padding: EdgeInsets.only(left: 14, right: 14, top: 14),
-              ),
-              PaddingBottom(
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      FastVisibility(
-                        child: FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              if (clickLeft != null) clickLeft();
-                            },
-                            child: Text(buttonNameLeft)),
-                        visible:
-                            buttonNameLeft != null && buttonNameLeft.isNotEmpty,
-                      ),
-                      FastVisibility(
-                        child: FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              if (clickCenter != null) clickCenter();
-                            },
-                            child: Text(buttonNameCenter)),
-                        visible: buttonNameCenter != null &&
-                            buttonNameCenter.isNotEmpty,
-                      ),
-                      FlatButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            if (clickRight != null) clickRight();
-                          },
-                          child: Text(buttonNameRight))
-                    ],
+                    padding: EdgeInsets.only(left: 14, right: 14, top: 14),
                   ),
-                ),
-                padding: 7,
-              )
-            ],
-          ),
-        ));
+                  PaddingBottom(
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          FastVisibility(
+                            child: FlatButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  if (clickLeft != null) clickLeft();
+                                },
+                                child: Text(buttonNameLeft)),
+                            visible: buttonNameLeft != null &&
+                                buttonNameLeft.isNotEmpty,
+                          ),
+                          FastVisibility(
+                            child: FlatButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  if (clickCenter != null) clickCenter();
+                                },
+                                child: Text(buttonNameCenter)),
+                            visible: buttonNameCenter != null &&
+                                buttonNameCenter.isNotEmpty,
+                          ),
+                          FlatButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                if (clickRight != null) clickRight();
+                              },
+                              child: Text(buttonNameRight))
+                        ],
+                      ),
+                    ),
+                    padding: 7,
+                  )
+                ],
+              ),
+            ));
   }
 
   static void dialogWidget(
@@ -239,58 +241,58 @@ class Dialogs {
       VoidCallback clickRight}) {
     showDialog(
         context: context,
-        child: Dialog(
-          elevation: ele,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(rad))),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    PaddingBottom(
-                      child: Text(
-                        title,
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      padding: 7,
+        builder: (context) => Dialog(
+              elevation: ele,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(rad))),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        PaddingBottom(
+                          child: Text(
+                            title,
+                            style: TextStyle(fontSize: 24),
+                          ),
+                          padding: 7,
+                        ),
+                        w,
+                      ],
                     ),
-                    w,
-                  ],
-                ),
-                padding: EdgeInsets.only(left: 14, right: 14, top: 14),
-              ),
-              PaddingBottom(
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      FlatButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            clickLeft();
-                          },
-                          child: Text(buttonNameLeft)),
-                      FlatButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            clickRight();
-                          },
-                          child: Text(buttonNameRight))
-                    ],
+                    padding: EdgeInsets.only(left: 14, right: 14, top: 14),
                   ),
-                ),
-                padding: 7,
-              )
-            ],
-          ),
-        ));
+                  PaddingBottom(
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          FlatButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                clickLeft();
+                              },
+                              child: Text(buttonNameLeft)),
+                          FlatButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                clickRight();
+                              },
+                              child: Text(buttonNameRight))
+                        ],
+                      ),
+                    ),
+                    padding: 7,
+                  )
+                ],
+              ),
+            ));
   }
 
   static void dialogForPassword(
