@@ -1,0 +1,7 @@
+rootProject.name = 'chimera'
+include 'core'
+include 'gateway'
+include 'account'
+include 'mail'
+include 'paragon'
+

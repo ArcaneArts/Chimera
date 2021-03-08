@@ -1,0 +1,144 @@
+plugins {
+    id 'java'
+    id 'io.freefair.lombok' version '5.2.1' apply false
+    id "com.github.johnrengelman.shadow" version "6.0.0" apply false
+}
+
+/////////////////////////////////////////////////////////
+group 'art.arcane'
+version '1.0.0'
+String servicePackage = "art.arcane.chimera.core.protocol";
+String serviceName = "EDN";
+String flutterProjects = 'hawkeye'
+String flutterScanProjects =
+        'kraken@lib/chimera/functions.dart,' +
+                'griffin@lib/chimera/functions.dart,' +
+                'phoenix@lib/chimera/functions.dart,' +
+                'hawkeye@lib/chimera/global/functions.dart';
+boolean allowProtogen = false; // Turn this off before creating new modules
+/////////////////////////////////////////////////////////
+
+String serviceLocation = "${project.rootDir}\\core\\src\\main\\java\\" + servicePackage.replaceAll("\\Q.\\E", "\\\\") + "\\" + serviceName + ".java\\"
+
+task startRedisServer(type: Exec) {
+    group 'chimera-tools'
+    commandLine 'cmd', '/C', '\"' + project.rootDir + '/playground/redis/redis-server.exe\"'
+}
+
+task startXampp(type: Exec) {
+    group 'chimera-tools'
+    commandLine 'cmd', '/C', '\"' + project.rootDir + '/playground/xampp/xampp-control.exe\"'
+}
+
+subprojects {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'io.freefair.lombok'
+    apply plugin: 'com.github.johnrengelman.shadow'
+    group = rootProject.group
+    version = rootProject.version
+    String chimeraName = project.name.substring(0, 1).toUpperCase() + project.name.toLowerCase().substring(1)
+    String chimeraModule = chimeraName.toLowerCase();
+    String chimeraMainClass = "art.arcane.chimera." + chimeraModule + ".Chimera" + chimeraName + "Service";
+    String archiveName = "Chimera" + chimeraName + "-" + rootProject.version + ".jar"
+    String archivePath = jar.archiveFile.get().getAsFile().getParentFile().getAbsolutePath()
+    String archiveFilePath = archivePath + "\\" + archiveName
+
+    shadowJar {
+        zip64 true
+        minimize()
+        project.configurations.implementation.canBeResolved = true
+        project.configurations.runtime.canBeResolved = true
+        project.configurations.api.canBeResolved = true
+        project.configurations.compile.canBeResolved = true
+        archiveFileName = archiveFilePath
+    }
+
+    jar {
+        manifest {
+            attributes 'Main-Class': chimeraMainClass
+        }
+    }
+
+    compileJava {
+        options.compilerArgs << '-parameters'
+    }
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok:1.18.12'
+        annotationProcessor 'org.projectlombok:lombok:1.18.12'
+        implementation 'com.github.ArcaneArts:Quill:1.0.13'
+        implementation 'com.github.ArcaneArts:Archon:1.0.14'
+        implementation 'com.github.ArcaneArts:Cauldron:1.0.9'
+        implementation 'org.slf4j:slf4j-api:1.7.22'
+        implementation 'com.google.code.gson:gson:2.8.6'
+        implementation 'org.eclipse.jetty:jetty-server:9.4.28.v20200408'
+        implementation 'org.eclipse.jetty:jetty-servlet:9.4.28.v20200408'
+        implementation 'org.eclipse.jetty:jetty-webapp:9.4.28.v20200408'
+        implementation 'mysql:mysql-connector-java:8.0.21'
+        implementation "org.slf4j:slf4j-simple:1.6.1"
+        implementation 'redis.clients:jedis:3.3.0'
+        implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+        implementation 'com.github.ben-manes.caffeine:caffeine:2.8.5'
+    }
+
+    task artifact {
+        group 'chimera'
+        dependsOn 'shadowJar'
+    }
+
+    if (!allowProtogen || chimeraModule == "magnus") {
+        task protogen {
+            group 'chimera'
+        }
+
+        task protogenSrc {
+            group 'chimera'
+        }
+    } else {
+        if (chimeraModule != "core") {
+            println("Its " + archiveFilePath)
+            task run(type: JavaExec) {
+                group 'chimera'
+                dependsOn 'artifact'
+                classpath = files(archiveFilePath)
+                standardInput = System.in
+            }
+
+            task protogen(type: JavaExec) {
+                group 'chimera'
+                dependsOn 'artifact'
+                args '-protogen',
+                        "-protoout=${project.rootDir}\\protogen\\" + chimeraModule + ".json"
+                classpath = files(archiveFilePath)
+                standardInput = System.in
+            }
+        } else {
+            task protogen {
+                group 'chimera'
+                dependsOn 'artifact'
+            }
+
+            task protogenSrc(type: JavaExec) {
+                group 'chimera'
+                dependsOn 'protogen'
+                args '-codegen',
+                        "-protofolder=${project.rootDir}\\protogen",
+                        "-out=" + serviceLocation,
+                        "-pkg=" + servicePackage,
+                        "-name=" + serviceName,
+                        "-root=${project.rootDir}",
+                        "-flutter=" + flutterProjects,
+                        "-flutterscan=" + flutterScanProjects
+                classpath = files(archiveFilePath)
+                standardInput = System.in
+            }
+        }
+    }
+}
