@@ -1,0 +1,45 @@
+{
+    "console": {
+        "activeFlushInterval": 250,
+        "shittyConsole": false,
+        "allowCommands": true,
+        "deduplicateLines": true,
+        "idleFlushInterval": 1000
+    },
+    "database": {
+        "jdbcAddress": "localhost",
+        "jdbcDriver": "com.mysql.jdbc.Driver",
+        "jdbcPort": 3306,
+        "jdbcTimeout": 3000,
+        "jdbcConnections": 1,
+        "jdbcPassword": "123123123",
+        "jdbcLogging": true,
+        "jdbcDatabase": "chimera_mail",
+        "jdbcUsername": "chimera"
+    },
+    "serviceDatabase": {
+        "jdbcAddress": "localhost",
+        "jdbcDriver": "com.mysql.jdbc.Driver",
+        "jdbcPort": 3306,
+        "jdbcTimeout": 3000,
+        "jdbcConnections": 1,
+        "jdbcPassword": "123123123",
+        "jdbcLogging": true,
+        "jdbcDatabase": "chimera_core",
+        "jdbcUsername": "chimera"
+    },
+    "mail": {},
+    "backendService": {
+        "packetServer": {"port": 9598},
+        "redis": {
+            "database": 0,
+            "password": "asecurepassword",
+            "address": "localhost",
+            "port": 6379,
+            "logging": true,
+            "ssl": false,
+            "timeout": 7000
+        }
+    },
+    "verbose": true
+}
