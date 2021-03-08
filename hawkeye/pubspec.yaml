@@ -1,0 +1,36 @@
+name: hawkeye
+description: Hawkeye is a dart package indended to assist flutter apps use chimera
+version: 1.0.0
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  ## === NATIVE === ##
+  crypto: ^2.1.5
+  web_socket_channel: ^1.1.0
+  path_provider: ^1.6.24
+  url_launcher: ^5.7.10
+  local_auth: 0.6.3+4
+  flutter_sound: ^6.4.5+1
+  file_picker: ^2.1.0
+  ## === DART === ##
+  flutter_material_pickers: 1.8.1
+  get: ^3.22.2
+  flutter_typeahead: ^1.9.1
+  dough: ^0.3.6
+  fl_chart: ^0.12.0
+  animator: ^2.0.2
+  universal_html: ^1.2.3
+  hive: ^1.4.4+1
+  hive_flutter: ^0.3.1
+  intl: ^0.16.1
+  passwordfield: ^0.0.82
+  flutter_staggered_animations: ^0.1.2
+  auto_size_text: ^2.1.0
+  liquid_swipe: ^1.5.0
+  bloc: ^6.1.0
+  flutter_bloc: ^6.1.1
+  rxdart: ^0.25.0
+assets:
+  - assets/icon/
