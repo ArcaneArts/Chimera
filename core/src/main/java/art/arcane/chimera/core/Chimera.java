@@ -3,6 +3,7 @@ package art.arcane.chimera.core;
 import art.arcane.chimera.core.microservice.ChimeraService;
 import art.arcane.chimera.core.protocol.EDX;
 import art.arcane.chimera.core.protocol.generation.*;
+import art.arcane.chimera.core.util.ProjectConfigurator;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.collections.KMap;
 import art.arcane.quill.execution.J;
@@ -27,6 +28,12 @@ public class Chimera {
 
     public static void start(String[] a) {
         for (String v : a) {
+            if (v.equals("-config")) {
+                setupChimeraProject(a);
+
+                return;
+            }
+
             if (v.equals("-protogen")) {
                 for (StackTraceElement i : Thread.currentThread().getStackTrace()) {
                     try {
@@ -71,6 +78,12 @@ public class Chimera {
 
             }
         }
+    }
+
+    private static void setupChimeraProject(String[] a) {
+        ProjectConfigurator.start();
+        L.flush();
+        System.exit(0);
     }
 
     private static void startCodegen(Class<? extends ChimeraService> s, String[] a) {

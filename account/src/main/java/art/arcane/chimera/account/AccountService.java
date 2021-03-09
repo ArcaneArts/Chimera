@@ -10,8 +10,7 @@ import art.arcane.chimera.core.protocol.generation.Protocol;
 import art.arcane.quill.io.IO;
 import art.arcane.quill.logging.L;
 
-public class ChimeraAccountService extends ChimeraBackendService {
-
+public class AccountService extends ChimeraBackendService {
     public static void main(String[] a) {
         Chimera.start(a);
     }
@@ -20,7 +19,7 @@ public class ChimeraAccountService extends ChimeraBackendService {
     @Protocol
     private ProtoAccount account = new ProtoAccount();
 
-    public ChimeraAccountService() {
+    public AccountService() {
         super("Account");
     }
 

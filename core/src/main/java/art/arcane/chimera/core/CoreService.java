@@ -3,8 +3,8 @@ package art.arcane.chimera.core;
 import art.arcane.chimera.core.microservice.ChimeraService;
 import art.arcane.quill.logging.L;
 
-public class ChimeraCoreService extends ChimeraService {
-    public ChimeraCoreService() {
+public class CoreService extends ChimeraService {
+    public CoreService() {
         super("Core");
     }
 

@@ -43,7 +43,8 @@ subprojects {
     version = rootProject.version
     String chimeraName = project.name.substring(0, 1).toUpperCase() + project.name.toLowerCase().substring(1)
     String chimeraModule = chimeraName.toLowerCase();
-    String chimeraMainClass = "art.arcane.chimera." + chimeraModule + ".Chimera" + chimeraName + "Service";
+    String chimeraMainClass = "art.arcane.chimera." + chimeraModule + "." + chimeraName + "Service";
+
     String archiveName = "Chimera" + chimeraName + "-" + rootProject.version + ".jar"
     String archivePath = jar.archiveFile.get().getAsFile().getParentFile().getAbsolutePath()
     String archiveFilePath = archivePath + "\\" + archiveName
@@ -126,6 +127,14 @@ subprojects {
             task protogen {
                 group 'chimera'
                 dependsOn 'artifact'
+            }
+
+            task config(type: JavaExec) {
+                group 'chimera'
+                dependsOn 'artifact'
+                args '-config'
+                classpath = files(archiveFilePath)
+                standardInput = System.in
             }
 
             task protogenSrc(type: JavaExec) {

@@ -13,7 +13,7 @@ import lombok.Getter;
 
 import java.util.concurrent.TimeUnit;
 
-public class ChimeraGatewayService extends ChimeraBackendService {
+public class GatewayService extends ChimeraBackendService {
     private int listenerCleanupMinuteLaziness = 60;
     private int minutesPerSessionCleanup = 60;
     private int sessionCleanupMinuteLaziness = 30;
@@ -31,7 +31,7 @@ public class ChimeraGatewayService extends ChimeraBackendService {
     @Protocol
     private ProtoGateway gateway = new ProtoGateway();
 
-    public ChimeraGatewayService() {
+    public GatewayService() {
         super("Gateway");
     }
 

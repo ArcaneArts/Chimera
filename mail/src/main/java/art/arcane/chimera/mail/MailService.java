@@ -5,7 +5,7 @@ import art.arcane.chimera.core.microservice.ChimeraBackendService;
 import art.arcane.chimera.core.microservice.ServiceWorker;
 import art.arcane.chimera.core.protocol.generation.Protocol;
 
-public class ChimeraMailService extends ChimeraBackendService {
+public class MailService extends ChimeraBackendService {
     public static void main(String[] a) {
         Chimera.start(a);
     }
@@ -14,7 +14,7 @@ public class ChimeraMailService extends ChimeraBackendService {
     @Protocol
     private ProtoMail mail = new ProtoMail();
 
-    public ChimeraMailService() {
+    public MailService() {
         super("Mail");
     }
 

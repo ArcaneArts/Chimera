@@ -10,11 +10,11 @@ import art.arcane.chimera.core.protocol.EDN;
 import art.arcane.chimera.core.protocol.generation.FunctionReference;
 import art.arcane.chimera.core.protocol.generation.GatewayFunction;
 import art.arcane.chimera.core.protocol.generation.ServiceFunction;
+import art.arcane.chimera.gateway.net.GatewayClient;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.execution.J;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.math.M;
-import art.arcane.chimera.gateway.net.GatewayClient;
 import com.google.gson.Gson;
 
 import java.sql.ResultSet;
@@ -229,7 +229,7 @@ public class ProtoGateway extends ChimeraServiceWorker {
     @ServiceFunction
     public Boolean pushContext(ChimeraContext context) {
         try {
-            GatewayClient c = ((ChimeraGatewayService) Chimera.delegate).getWebSocketService().getGateway().getClient(context.getSessionId());
+            GatewayClient c = ((GatewayService) Chimera.delegate).getWebSocketService().getGateway().getClient(context.getSessionId());
             c.setContext(context);
 
             return true;
@@ -242,7 +242,7 @@ public class ProtoGateway extends ChimeraServiceWorker {
 
     @ServiceFunction
     public Object invokeClientObject(String sessionId, FunctionReference f, String expectedReturn, Boolean blind) {
-        GatewayClient c = ((ChimeraGatewayService) Chimera.delegate).getWebSocketService().getGateway().getClient(sessionId);
+        GatewayClient c = ((GatewayService) Chimera.delegate).getWebSocketService().getGateway().getClient(sessionId);
 
         if (c != null) {
             try {

@@ -5,7 +5,7 @@ import art.arcane.chimera.core.microservice.ChimeraBackendService;
 import art.arcane.chimera.core.microservice.ServiceWorker;
 import art.arcane.chimera.core.protocol.generation.Protocol;
 
-public class ChimeraParagonService extends ChimeraBackendService {
+public class ParagonService extends ChimeraBackendService {
     public static void main(String[] a) {
         Chimera.start(a);
     }
@@ -14,7 +14,7 @@ public class ChimeraParagonService extends ChimeraBackendService {
     @Protocol
     private ProtoParagon paragon = new ProtoParagon();
 
-    public ChimeraParagonService() {
+    public ParagonService() {
         super("Paragon");
     }
 
