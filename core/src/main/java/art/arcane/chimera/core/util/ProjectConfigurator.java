@@ -115,6 +115,8 @@ public class ProjectConfigurator extends QuillService {
 
     @Override
     public void onEnable() {
+        Quill.delegate = this;
+        Quill.delegateClass = getClass();
         console.registerCommand("newService", params -> {
             String projectName = params[0];
             setupNewService(projectName);
@@ -138,13 +140,13 @@ public class ProjectConfigurator extends QuillService {
         File rootProject = new File(new File(new File("derp").getAbsolutePath()).getParentFile().getParentFile().getAbsolutePath());
         File root = new File(rootProject, l);
 
+
         if (root.exists()) {
             L.w(root.getAbsolutePath() + " Already exists!");
             return;
         }
 
         root.mkdirs();
-
         File main = new File(root, "src/main/java/art/arcane/chimera/" + l + "/" + u + "Service.java");
         File proto = new File(root, "src/main/java/art/arcane/chimera/" + l + "/Proto" + u + ".java");
         main.getParentFile().mkdirs();
