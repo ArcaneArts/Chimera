@@ -1,57 +1,46 @@
 package art.arcane.chimera.core.object;
 
-import art.arcane.quill.sql.Column;
-import art.arcane.quill.sql.Table;
+import art.arcane.archon.element.Element;
+import art.arcane.archon.element.Identity;
+import art.arcane.archon.element.Type;
+import art.arcane.quill.collections.ID;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
-@Table("service")
-public class HostedService {
-    @Getter
-    @Setter
-    @Column(name = "id", type = "VARCHAR(128)", placeholder = "UNDEFINED", primary = true)
-    private String id;
+public class HostedService extends Element {
+    @Identity
+    @Builder.Default
+    private ID id = new ID();
 
-    @Getter
-    @Setter
-    @Column(name = "type", type = "VARCHAR(64)", placeholder = "UNDEFINED")
+    @Type("VARCHAR(64)")
     private String type;
 
-    @Getter
-    @Setter
-    @Column(name = "address", type = "VARCHAR(64)", placeholder = "UNDEFINED")
+    @Type("VARCHAR(64)")
     private String address;
 
-    @Getter
-    @Setter
-    @Column(name = "dir", type = "VARCHAR(64)", placeholder = "UNDEFINED")
+    @Type("VARCHAR(64)")
     private String dir;
 
-    @Getter
-    @Setter
-    @Column(name = "time", type = "BIGINT", placeholder = "0")
-    private long time;
-
-    @Getter
-    @Setter
-    @Column(name = "port", type = "INT", placeholder = "0")
-    private int port;
-
-    @Getter
-    @Setter
     @Builder.Default
-    @Column(name = "health", type = "INT", placeholder = "100")
+    private long time = 0;
+
+    @Builder.Default
+    private int port = 0;
+
+    @Type("SMALLINT")
+    @Builder.Default
     public int health = 100;
 
     public String getURL() {
         return "http://" + address + ":" + port + (dir.startsWith("/") ? dir : ("/" + dir));
     }
 
-    public String getRedisId() {
-        return getType() + "/" + getId();
+    @Override
+    public String getTableName() {
+        return "service";
     }
 }
