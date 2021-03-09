@@ -13,7 +13,7 @@ String flutterProjects = 'hawkeye'
 String flutterScanProjects =
         'kraken@lib/chimera/functions.dart,' +
                 'hawkeye@lib/chimera/global/functions.dart';
-boolean allowProtogen = false; // Turn this off before creating new modules
+boolean allowProtogen = true; // Turn this off before creating new modules
 /////////////////////////////////////////////////////////
 
 String serviceLocation = "${project.rootDir}\\core\\src\\main\\java\\" + servicePackage.replaceAll("\\Q.\\E", "\\\\") + "\\" + serviceName + ".java\\"

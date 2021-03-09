@@ -1,5 +1,4 @@
 rootProject.name = 'chimera'
-include 'test2'
 include 'core'
 include 'gateway'
 include 'account'
