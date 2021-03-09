@@ -147,7 +147,6 @@ public class ProjectConfigurator extends QuillService {
                 return;
             }
 
-            gradleCommand("clean", rootProject);
             root.mkdirs();
             File main = new File(root, "src/main/java/art/arcane/chimera/" + l + "/" + u + "Service.java");
             File proto = new File(root, "src/main/java/art/arcane/chimera/" + l + "/Proto" + u + ".java");
