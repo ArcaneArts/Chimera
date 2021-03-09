@@ -1,49 +1,45 @@
 package art.arcane.chimera.core.object.account;
 
-import art.arcane.chimera.core.object.ID;
+import art.arcane.archon.element.Element;
+import art.arcane.archon.element.Identity;
+import art.arcane.archon.element.Type;
 import art.arcane.chimera.core.protocol.generation.Dart;
-import art.arcane.quill.sql.Column;
-import art.arcane.quill.sql.Table;
+import art.arcane.quill.collections.ID;
+import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @Dart
 @Data
-@Table("user")
-public class User {
-    @Getter
-    @Setter
-    @Column(name = "id", type = ID.SQTYPE, placeholder = "UNDEFINED", primary = true)
-    private ID id;
+@Builder
+@NoArgsConstructor
+public class User extends Element {
+    @Identity
+    @Builder.Default
+    private ID id = new ID();
 
-    @Getter
-    @Setter
-    @Column(name = "first_name", type = "VARCHAR(50)", placeholder = "Jackson")
-    private String firstName;
+    @Type("VARCHAR(50)")
+    @Builder.Default
+    private String firstName = "Jackson";
 
-    @Getter
-    @Setter
-    @Column(name = "last_name", type = "VARCHAR(50)", placeholder = "McWhirt")
-    private String lastName;
+    @Type("VARCHAR(50)")
+    @Builder.Default
+    private String lastName = "Doe";
 
-    @Getter
-    @Setter
-    @Column(name = "email", type = "VARCHAR(64)", placeholder = "undefined@error.error")
-    private String email;
+    @Type("VARCHAR(64)")
+    @Builder.Default
+    private String email = "poof@arcane.art";
 
-    @Getter
-    @Setter
-    @Column(name = "created_on", type = "BIGINT", placeholder = "-1")
-    private long createdDate;
+    @Builder.Default
+    private long createdDate = -1;
 
-    @Getter
-    @Column(name = "suspended", type = "TINYINT", placeholder = "0")
-    private int suspended;
+    @Builder.Default
+    private boolean suspended = false;
 
     public User(ID id) {
         this.id = id;
-        suspended = 0;
     }
 
     public User(ID id, String email) {
@@ -51,15 +47,12 @@ public class User {
         this.email = email;
     }
 
-    public void setSuspended(boolean b) {
-        suspended = b ? 1 : 0;
-    }
-
-    public boolean isSuspended() {
-        return suspended == 1;
-    }
-
     public String getFullName() {
         return getFirstName() + " " + getLastName();
+    }
+
+    @Override
+    public String getTableName() {
+        return "user";
     }
 }
