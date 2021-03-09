@@ -1,19 +1,18 @@
 package art.arcane.chimera.account;
 
-import art.arcane.chimera.core.microservice.ChimeraServiceWorker;
-import art.arcane.chimera.core.object.ID;
 import art.arcane.chimera.core.object.account.AccessToken;
 import art.arcane.chimera.core.object.account.User;
 import art.arcane.chimera.core.object.account.UserAuthentication;
-import art.arcane.chimera.core.object.account.UserPersonal;
 import art.arcane.chimera.core.protocol.ChimeraContext;
 import art.arcane.chimera.core.protocol.EDN;
 import art.arcane.chimera.core.protocol.EDX;
 import art.arcane.chimera.core.protocol.generation.GatewayFunction;
 import art.arcane.chimera.core.protocol.generation.ServiceFunction;
+import art.arcane.quill.collections.ID;
 import art.arcane.quill.execution.J;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.math.M;
+import art.arcane.quill.service.QuillServiceWorker;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.SQLException;
 
-public class ProtoAccount extends ChimeraServiceWorker {
+public class ProtoAccount extends QuillServiceWorker {
     private boolean isContextAuthenticated() {
         return EDX.getContext().hasAccessToken();
     }
@@ -38,10 +37,6 @@ public class ProtoAccount extends ChimeraServiceWorker {
 
     private User getContextUser() {
         return getUser(getContextUserID());
-    }
-
-    private UserPersonal getContextUserPersonal() {
-        return getUserPersonal(getContextUserID());
     }
 
     private UserAuthentication getContextUserAuthentication() {

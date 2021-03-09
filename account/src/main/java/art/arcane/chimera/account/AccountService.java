@@ -2,13 +2,13 @@ package art.arcane.chimera.account;
 
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.microservice.ChimeraBackendService;
-import art.arcane.chimera.core.microservice.ServiceWorker;
-import art.arcane.chimera.core.object.ID;
 import art.arcane.chimera.core.object.account.User;
 import art.arcane.chimera.core.protocol.EDN;
 import art.arcane.chimera.core.protocol.generation.Protocol;
+import art.arcane.quill.collections.ID;
 import art.arcane.quill.io.IO;
 import art.arcane.quill.logging.L;
+import art.arcane.quill.service.ServiceWorker;
 
 public class AccountService extends ChimeraBackendService {
     public static void main(String[] a) {
@@ -37,7 +37,7 @@ public class AccountService extends ChimeraBackendService {
                 return true;
             }
 
-            User u = EDN.SERVICE.Account.createUser(ID.randomUUID(), a[0], IO.hash(a[1]).toLowerCase());
+            User u = EDN.SERVICE.Account.createUser(new ID(), a[0], IO.hash(a[1]).toLowerCase());
 
             if (u != null) {
                 L.i("Created " + u.toString());

@@ -5,6 +5,7 @@ import art.arcane.archon.server.ArchonServiceWorker;
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.object.ServiceJob;
 import art.arcane.chimera.core.protocol.EDX;
+import art.arcane.quill.collections.ID;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.math.M;
@@ -37,7 +38,7 @@ public class ChimeraJobServiceWorker extends ChimeraTickingServiceWorker {
             if (archon.update("DELETE FROM `jobs` WHERE `id` = '" + id + "' LIMIT 1;") > 0) {
                 String f;
                 KList<Object> pars = new KList<Object>(ServiceJob.builder().function(f = s.getString(2))
-                        .parameters(s.getString(3)).id(id).build().decodeParameters());
+                        .parameters(s.getString(3)).id(ID.fromString(id)).build().decodeParameters());
                 Object o = EDX.invoke(f, pars);
 
                 if (logJobExecutions) {

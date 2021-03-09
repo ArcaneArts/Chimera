@@ -15,7 +15,6 @@ import art.arcane.quill.logging.L;
 import art.arcane.quill.math.M;
 import art.arcane.quill.service.QuillServiceWorker;
 
-import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChimeraServiceAccess extends QuillServiceWorker {
@@ -144,14 +143,10 @@ public class ChimeraServiceAccess extends QuillServiceWorker {
             return svc;
         }
         ArchonServiceWorker archon = firstParentService();
-
         HostedService f = HostedService.builder().build();
-        try {
-            if (getServiceDatabase().getSql().getWhere(f, "type", type) && verifyService(f)) {
-                registerService(f);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        f.setArchon(archon);
+        if (f.pull(archon.query("SELECT * FROM `" + f.getTableName() + "` WHERE `type` = '" + type + "' LIMIT 1;")) && verifyService(f)) {
+            registerService(f);
         }
 
         return null;
@@ -168,7 +163,7 @@ public class ChimeraServiceAccess extends QuillServiceWorker {
                 return true;
             } else {
                 L.w("Unresponsive Service " + svc.getType() + "/" + svc.getId() + " at " + svc.getAddress() + ":" + svc.getPort() + " online for " + Form.duration(M.ms() - svc.getTime()));
-                getServiceDatabase().deleteAsync(svc);
+                svc.delete();
             }
         } catch (Throwable ignored) {
 
@@ -179,7 +174,8 @@ public class ChimeraServiceAccess extends QuillServiceWorker {
 
     private boolean ping(HostedService svc) {
         try {
-            ParcelPong pong = (ParcelPong) ((ChimeraBackendService) Chimera.delegate).requestImpatient(svc, new ParcelPing(), true);
+            ParcelPong pong = (ParcelPong) ((ChimeraBackendService) Chimera.delegate)
+                    .requestImpatient(svc, new ParcelPing(), true);
 
             if (pong != null) {
                 return true;
@@ -262,8 +258,10 @@ public class ChimeraServiceAccess extends QuillServiceWorker {
 
     public void tick() {
         HostedService h = HostedService.builder().build();
+        ArchonServiceWorker archon = firstParentService();
+        h.setArchon(archon);
 
-        if (getServiceDatabase().getRandom(h)) {
+        if (h.pull(archon.query("SELECT * FROM `" + h.getTableName() + "` ORDER BY RAND() LIMIT 1;"))) {
             registerService(h, maxConservativeServiceGroupSize);
         }
 
@@ -271,7 +269,7 @@ public class ChimeraServiceAccess extends QuillServiceWorker {
             try {
                 HostedService id = services.v().getRandom().getRandom();
 
-                if (!getServiceDatabase().getSql().exists(id)) {
+                if (!id.exists()) {
                     unregisterService(id);
                 }
             } catch (Throwable e) {

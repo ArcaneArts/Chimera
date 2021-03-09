@@ -1,5 +1,6 @@
 package art.arcane.chimera.core.microservice;
 
+import art.arcane.archon.server.ArchonServiceWorker;
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.net.parcels.ParcelGetProtocol;
 import art.arcane.chimera.core.net.parcels.ParcelSendProtocol;
@@ -8,6 +9,7 @@ import art.arcane.chimera.core.protocol.generation.ProtoBuilder;
 import art.arcane.chimera.core.protocol.generation.ProtoFunction;
 import art.arcane.chimera.core.protocol.generation.Protocol;
 import art.arcane.chimera.core.util.web.Parcelable;
+import art.arcane.quill.collections.ID;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.collections.KMap;
 import art.arcane.quill.execution.J;
@@ -66,7 +68,7 @@ public abstract class ChimeraBackendService extends QuillService {
 
     @Getter
     @ServiceWorker
-    private ChimeraDatabaseWorker database = new ChimeraDatabaseWorker();
+    private ArchonServiceWorker database = new ArchonServiceWorker();
 
     @Getter
     private transient KList<ProtoFunction> functions;
@@ -74,13 +76,13 @@ public abstract class ChimeraBackendService extends QuillService {
     private transient String id;
     private transient HostedService host;
     private transient KMap<String, Class<? extends Parcelable>> parcelTypeCache = new KMap<>();
-    
+
     private void publish(HostedService service) {
-        database.setAsync(service);
+        service.push();
     }
 
     private void unpublish(HostedService host) {
-        database.deleteAsync(host);
+        host.delete();
     }
 
     public Parcelable request(HostedService svc, Parcelable request) {
@@ -240,7 +242,7 @@ public abstract class ChimeraBackendService extends QuillService {
             host = HostedService.builder()
                     .address(InetAddress.getLocalHost().getHostAddress())
                     .port(web.getWebServer().httpPort())
-                    .id(id)
+                    .id(ID.fromString(id))
                     .time(M.ms())
                     .dir(web.getWebServer().serverPath())
                     .type(Chimera.getDelegateModuleName())
