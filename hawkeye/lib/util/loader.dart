@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:hawkeye/widget/quick_animator.dart';
 
 class Fade {
   static bool fast = false;
@@ -38,17 +38,7 @@ class Fade {
       return child;
     }
 
-    return AnimationConfiguration.staggeredList(
-      position: pos % 18,
-      delay: Duration(milliseconds: 45),
-      duration: const Duration(milliseconds: 215),
-      child: SlideAnimation(
-        verticalOffset: 50.0,
-        child: FadeInAnimation(
-          child: child,
-        ),
-      ),
-    );
+    return Quick.fadeIn(child: child);
   }
 
   static Widget fadeSlow(Widget child, {Key key}) {

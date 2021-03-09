@@ -27,10 +27,10 @@ class Quick {
         tween: Tween<double>(begin: 0, end: 1),
         curve: curve,
         cycles: 1,
-        child: child,
         builder: (c, s, h) => Opacity(
-          child: h,
           opacity: s.value,
+          child: h,
         ),
+        child: child,
       );
 }

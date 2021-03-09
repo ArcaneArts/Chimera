@@ -8,26 +8,19 @@ dependencies:
     sdk: flutter
   ## === NATIVE === ##
   charm: ^1.0.1
-  crypto: ^2.1.5
-  web_socket_channel: ^1.1.0
-  path_provider: ^1.6.24
+  crypto: ^3.0.0
+  web_socket_channel: ^2.0.0
+  path_provider: ^2.0.1
   url_launcher: ^5.7.10
-  local_auth: 0.6.3+4
-  flutter_sound: ^6.4.5+1
-  file_picker: ^2.1.0
   ## === DART === ##
-  flutter_material_pickers: 1.8.1
-  get: ^3.22.2
-  flutter_typeahead: ^1.9.1
-  dough: ^0.3.6
-  fl_chart: ^0.12.0
+  get: ^3.26.0
+  fl_chart: ^0.20.1
   animator: ^2.0.2
-  universal_html: ^1.2.3
-  hive: ^1.4.4+1
-  hive_flutter: ^0.3.1
-  intl: ^0.16.1
+  universal_html: ^1.2.4
+  hive: ^2.0.0
+  hive_flutter: ^1.0.0
+  intl: ^0.17.0
   passwordfield: ^0.0.82
-  flutter_staggered_animations: ^1.0.0
   auto_size_text: ^2.1.0
   liquid_swipe: ^1.5.0
   bloc: ^6.1.3

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:crypto/crypto.dart';
-import 'package:dough/dough.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hawkeye/chimera/protocol.dart';
@@ -234,180 +233,172 @@ class SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PressableDough(
-            onReleased: (f) {
-              doCreateAccountPressed();
-            },
-            child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  PaddingBottom(
-                    padding: 24,
-                    child: Hero(
-                      tag: "icon",
-                      child: Material(
-                        child: Flex(
-                          mainAxisSize: MainAxisSize.min,
-                          direction: Axis.horizontal,
-                          children: [
-                            Flexible(
-                                child: Icon(
-                              widget.icon,
-                              size: 150,
-                              color: widget.color,
-                            )),
-                            Flexible(
-                                child: PaddingLeft(
-                              child: Text(
-                                widget.name,
-                                maxLines: 1,
-                                softWrap: false,
-                                overflow: TextOverflow.fade,
-                                style: TextStyle(fontSize: 32),
-                              ),
-                              padding: 14,
-                            )),
-                          ],
-                        ),
-                        color: Colors.transparent,
+        body: Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          PaddingBottom(
+            padding: 24,
+            child: Hero(
+              tag: "icon",
+              child: Material(
+                child: Flex(
+                  mainAxisSize: MainAxisSize.min,
+                  direction: Axis.horizontal,
+                  children: [
+                    Flexible(
+                        child: Icon(
+                      widget.icon,
+                      size: 150,
+                      color: widget.color,
+                    )),
+                    Flexible(
+                        child: PaddingLeft(
+                      child: Text(
+                        widget.name,
+                        maxLines: 1,
+                        softWrap: false,
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(fontSize: 32),
                       ),
-                    ),
-                  ),
-                  PaddingHorizontal(
-                    padding: 14,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ConstrainedBox(
-                          constraints: BoxConstraints.loose(Size(470, 10000)),
-                          child: Hero(
-                            tag: "card",
-                            child: Card(
-                              child: Theme(
-                                  data: ThemeData(
-                                      primaryColor: widget.color,
-                                      accentColor: widget.color,
-                                      hintColor: widget.color.withAlpha(120)),
-                                  child: PaddingAll(
-                                    padding: 14,
-                                    child: Wrap(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Sign In",
-                                              style: TextStyle(fontSize: 24),
-                                            )
-                                          ],
-                                        ),
-                                        Theme(
-                                            data: ThemeData(
-                                                primaryColor: emailError
-                                                    ? Colors.red
-                                                    : widget.color,
-                                                accentColor: emailError
-                                                    ? Colors.red
-                                                    : widget.color,
-                                                hintColor: (emailError
-                                                        ? Colors.red
-                                                        : widget.color)
-                                                    .withAlpha(200)),
-                                            child: TextField(
-                                              enabled: !loading,
-                                              focusNode: fnUser,
-                                              controller: user,
-                                              cursorColor: emailError
-                                                  ? Colors.red
-                                                  : widget.color,
-                                              autocorrect: false,
-                                              autofocus: true,
-                                              onSubmitted: (v) =>
-                                                  fnPass.requestFocus(),
-                                              maxLines: 1,
-                                              onChanged: (a) => validate(),
-                                              decoration: InputDecoration(
-                                                  hintText: "Email Address"),
-                                            )),
-                                        Theme(
-                                            data: ThemeData(
-                                                primaryColor: passError
-                                                    ? Colors.red
-                                                    : widget.color,
-                                                accentColor: passError
-                                                    ? Colors.red
-                                                    : widget.color,
-                                                hintColor: (passError
-                                                        ? Colors.red
-                                                        : widget.color)
-                                                    .withAlpha(200)),
-                                            child: TextField(
-                                              controller: pass,
-                                              enabled: !loading,
-                                              focusNode: fnPass,
-                                              cursorColor: passError
-                                                  ? Colors.red
-                                                  : widget.color,
-                                              onChanged: (a) => validate(),
-                                              onSubmitted: isActuallyValid()
-                                                  ? (v) => signIn(
-                                                      user.value.text,
-                                                      pass.value.text)
-                                                  : null,
-                                              obscureText: true,
-                                              autocorrect: false,
-                                              autofocus: false,
-                                              maxLines: 1,
-                                              decoration: InputDecoration(
-                                                  hintText: "Password"),
-                                            )),
-                                        PaddingTop(
-                                          padding: 7,
-                                          child: Row(
-                                            children: [
-                                              Spacer(),
-                                              FlatButton(
-                                                  onPressed: isActuallyValid()
-                                                      ? () => signIn(
-                                                          user.value.text,
-                                                          pass.value.text)
-                                                      : null,
-                                                  child: Text(
-                                                    "Sign In",
-                                                    style: TextStyle(
-                                                        color: isActuallyValid()
-                                                            ? widget.color
-                                                            : null),
-                                                  ))
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                          ),
-                        ),
-                        Hero(
-                            tag: "button",
-                            child: FlatButton(
-                                onPressed: () {
-                                  doCreateAccountPressed();
-                                },
-                                child: Text(
-                                  "Create Account",
-                                  softWrap: false,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.fade,
-                                )))
-                      ],
-                    ),
-                  ),
-                ],
+                      padding: 14,
+                    )),
+                  ],
+                ),
+                color: Colors.transparent,
               ),
-            )));
+            ),
+          ),
+          PaddingHorizontal(
+            padding: 14,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints.loose(Size(470, 10000)),
+                  child: Hero(
+                    tag: "card",
+                    child: Card(
+                      child: Theme(
+                          data: ThemeData(
+                              primaryColor: widget.color,
+                              accentColor: widget.color,
+                              hintColor: widget.color.withAlpha(120)),
+                          child: PaddingAll(
+                            padding: 14,
+                            child: Wrap(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Sign In",
+                                      style: TextStyle(fontSize: 24),
+                                    )
+                                  ],
+                                ),
+                                Theme(
+                                    data: ThemeData(
+                                        primaryColor: emailError
+                                            ? Colors.red
+                                            : widget.color,
+                                        accentColor: emailError
+                                            ? Colors.red
+                                            : widget.color,
+                                        hintColor: (emailError
+                                                ? Colors.red
+                                                : widget.color)
+                                            .withAlpha(200)),
+                                    child: TextField(
+                                      enabled: !loading,
+                                      focusNode: fnUser,
+                                      controller: user,
+                                      cursorColor: emailError
+                                          ? Colors.red
+                                          : widget.color,
+                                      autocorrect: false,
+                                      autofocus: true,
+                                      onSubmitted: (v) => fnPass.requestFocus(),
+                                      maxLines: 1,
+                                      onChanged: (a) => validate(),
+                                      decoration: InputDecoration(
+                                          hintText: "Email Address"),
+                                    )),
+                                Theme(
+                                    data: ThemeData(
+                                        primaryColor: passError
+                                            ? Colors.red
+                                            : widget.color,
+                                        accentColor: passError
+                                            ? Colors.red
+                                            : widget.color,
+                                        hintColor: (passError
+                                                ? Colors.red
+                                                : widget.color)
+                                            .withAlpha(200)),
+                                    child: TextField(
+                                      controller: pass,
+                                      enabled: !loading,
+                                      focusNode: fnPass,
+                                      cursorColor:
+                                          passError ? Colors.red : widget.color,
+                                      onChanged: (a) => validate(),
+                                      onSubmitted: isActuallyValid()
+                                          ? (v) => signIn(
+                                              user.value.text, pass.value.text)
+                                          : null,
+                                      obscureText: true,
+                                      autocorrect: false,
+                                      autofocus: false,
+                                      maxLines: 1,
+                                      decoration:
+                                          InputDecoration(hintText: "Password"),
+                                    )),
+                                PaddingTop(
+                                  padding: 7,
+                                  child: Row(
+                                    children: [
+                                      Spacer(),
+                                      FlatButton(
+                                          onPressed: isActuallyValid()
+                                              ? () => signIn(user.value.text,
+                                                  pass.value.text)
+                                              : null,
+                                          child: Text(
+                                            "Sign In",
+                                            style: TextStyle(
+                                                color: isActuallyValid()
+                                                    ? widget.color
+                                                    : null),
+                                          ))
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                    ),
+                  ),
+                ),
+                Hero(
+                    tag: "button",
+                    child: FlatButton(
+                        onPressed: () {
+                          doCreateAccountPressed();
+                        },
+                        child: Text(
+                          "Create Account",
+                          softWrap: false,
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
+                        )))
+              ],
+            ),
+          ),
+        ],
+      ),
+    ));
   }
 
   void signIn(String u, String p) {
@@ -543,217 +534,212 @@ class SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PressableDough(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              PaddingBottom(
-                padding: 24,
-                child: Hero(
-                  tag: "icon",
-                  child: Material(
-                      child: Icon(
-                        widget.icon,
-                        size: 120,
-                        color: widget.color,
-                      ),
-                      color: Colors.transparent),
-                ),
+      body: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            PaddingBottom(
+              padding: 24,
+              child: Hero(
+                tag: "icon",
+                child: Material(
+                    child: Icon(
+                      widget.icon,
+                      size: 120,
+                      color: widget.color,
+                    ),
+                    color: Colors.transparent),
               ),
-              PaddingHorizontal(
-                padding: 14,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ConstrainedBox(
-                      constraints: BoxConstraints.loose(Size(470, 10000)),
-                      child: Hero(
-                        tag: "card",
-                        child: Card(
-                          child: Theme(
-                              data: ThemeData(
-                                  primaryColor: widget.color,
-                                  accentColor: widget.color,
-                                  hintColor: widget.color.withAlpha(120)),
-                              child: PaddingAll(
-                                padding: 14,
-                                child: Wrap(
-                                  children: [
-                                    Row(
+            ),
+            PaddingHorizontal(
+              padding: 14,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints.loose(Size(470, 10000)),
+                    child: Hero(
+                      tag: "card",
+                      child: Card(
+                        child: Theme(
+                            data: ThemeData(
+                                primaryColor: widget.color,
+                                accentColor: widget.color,
+                                hintColor: widget.color.withAlpha(120)),
+                            child: PaddingAll(
+                              padding: 14,
+                              child: Wrap(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Create an Account",
+                                        style: TextStyle(fontSize: 24),
+                                      )
+                                    ],
+                                  ),
+                                  Theme(
+                                      data: ThemeData(
+                                          primaryColor: fnameError
+                                              ? Colors.red
+                                              : widget.color,
+                                          accentColor: fnameError
+                                              ? Colors.red
+                                              : widget.color,
+                                          hintColor: (fnameError
+                                                  ? Colors.red
+                                                  : widget.color)
+                                              .withAlpha(200)),
+                                      child: TextField(
+                                        focusNode: fnFname,
+                                        controller: fname,
+                                        enabled: !loading,
+                                        cursorColor: fnameError
+                                            ? Colors.red
+                                            : widget.color,
+                                        autocorrect: false,
+                                        autofocus: true,
+                                        onSubmitted: (v) =>
+                                            fnLname.requestFocus(),
+                                        maxLines: 1,
+                                        onChanged: (a) => validate(),
+                                        decoration: InputDecoration(
+                                            hintText: "First Name"),
+                                      )),
+                                  Theme(
+                                      data: ThemeData(
+                                          primaryColor: lnameError
+                                              ? Colors.red
+                                              : widget.color,
+                                          accentColor: lnameError
+                                              ? Colors.red
+                                              : widget.color,
+                                          hintColor: (lnameError
+                                                  ? Colors.red
+                                                  : widget.color)
+                                              .withAlpha(200)),
+                                      child: TextField(
+                                        focusNode: fnLname,
+                                        enabled: !loading,
+                                        controller: lname,
+                                        cursorColor: lnameError
+                                            ? Colors.red
+                                            : widget.color,
+                                        autocorrect: false,
+                                        autofocus: false,
+                                        onSubmitted: (v) =>
+                                            fnUser.requestFocus(),
+                                        maxLines: 1,
+                                        onChanged: (a) => validate(),
+                                        decoration: InputDecoration(
+                                            hintText: "Last Name"),
+                                      )),
+                                  Theme(
+                                      data: ThemeData(
+                                          primaryColor: emailError
+                                              ? Colors.red
+                                              : widget.color,
+                                          accentColor: emailError
+                                              ? Colors.red
+                                              : widget.color,
+                                          hintColor: (emailError
+                                                  ? Colors.red
+                                                  : widget.color)
+                                              .withAlpha(200)),
+                                      child: TextField(
+                                        focusNode: fnUser,
+                                        controller: user,
+                                        enabled: !loading,
+                                        cursorColor: emailError
+                                            ? Colors.red
+                                            : widget.color,
+                                        autocorrect: false,
+                                        autofocus: false,
+                                        onSubmitted: (v) =>
+                                            fnPass.requestFocus(),
+                                        maxLines: 1,
+                                        onChanged: (a) => validate(),
+                                        decoration: InputDecoration(
+                                            hintText: "Email Address"),
+                                      )),
+                                  Theme(
+                                      data: ThemeData(
+                                          primaryColor: passError
+                                              ? Colors.red
+                                              : widget.color,
+                                          accentColor: passError
+                                              ? Colors.red
+                                              : widget.color,
+                                          hintColor: (passError
+                                                  ? Colors.red
+                                                  : widget.color)
+                                              .withAlpha(200)),
+                                      child: TextField(
+                                        controller: pass,
+                                        focusNode: fnPass,
+                                        enabled: !loading,
+                                        cursorColor: passError
+                                            ? Colors.red
+                                            : widget.color,
+                                        onChanged: (a) => validate(),
+                                        onSubmitted: isActuallyValid()
+                                            ? (v) => signUp(
+                                                fname.value.text,
+                                                lname.value.text,
+                                                user.value.text,
+                                                pass.value.text)
+                                            : null,
+                                        obscureText: true,
+                                        autocorrect: false,
+                                        autofocus: false,
+                                        maxLines: 1,
+                                        decoration: InputDecoration(
+                                            hintText: "Password"),
+                                      )),
+                                  PaddingTop(
+                                    padding: 7,
+                                    child: Row(
                                       children: [
-                                        Text(
-                                          "Create an Account",
-                                          style: TextStyle(fontSize: 24),
-                                        )
+                                        Spacer(),
+                                        FlatButton(
+                                            onPressed:
+                                                isActuallyValid() && !loading
+                                                    ? () => signUp(
+                                                        fname.value.text,
+                                                        lname.value.text,
+                                                        user.value.text,
+                                                        pass.value.text)
+                                                    : null,
+                                            child: Text(
+                                              "Create Account",
+                                              style: TextStyle(
+                                                  color: isActuallyValid()
+                                                      ? widget.color
+                                                      : null),
+                                            ))
                                       ],
                                     ),
-                                    Theme(
-                                        data: ThemeData(
-                                            primaryColor: fnameError
-                                                ? Colors.red
-                                                : widget.color,
-                                            accentColor: fnameError
-                                                ? Colors.red
-                                                : widget.color,
-                                            hintColor: (fnameError
-                                                    ? Colors.red
-                                                    : widget.color)
-                                                .withAlpha(200)),
-                                        child: TextField(
-                                          focusNode: fnFname,
-                                          controller: fname,
-                                          enabled: !loading,
-                                          cursorColor: fnameError
-                                              ? Colors.red
-                                              : widget.color,
-                                          autocorrect: false,
-                                          autofocus: true,
-                                          onSubmitted: (v) =>
-                                              fnLname.requestFocus(),
-                                          maxLines: 1,
-                                          onChanged: (a) => validate(),
-                                          decoration: InputDecoration(
-                                              hintText: "First Name"),
-                                        )),
-                                    Theme(
-                                        data: ThemeData(
-                                            primaryColor: lnameError
-                                                ? Colors.red
-                                                : widget.color,
-                                            accentColor: lnameError
-                                                ? Colors.red
-                                                : widget.color,
-                                            hintColor: (lnameError
-                                                    ? Colors.red
-                                                    : widget.color)
-                                                .withAlpha(200)),
-                                        child: TextField(
-                                          focusNode: fnLname,
-                                          enabled: !loading,
-                                          controller: lname,
-                                          cursorColor: lnameError
-                                              ? Colors.red
-                                              : widget.color,
-                                          autocorrect: false,
-                                          autofocus: false,
-                                          onSubmitted: (v) =>
-                                              fnUser.requestFocus(),
-                                          maxLines: 1,
-                                          onChanged: (a) => validate(),
-                                          decoration: InputDecoration(
-                                              hintText: "Last Name"),
-                                        )),
-                                    Theme(
-                                        data: ThemeData(
-                                            primaryColor: emailError
-                                                ? Colors.red
-                                                : widget.color,
-                                            accentColor: emailError
-                                                ? Colors.red
-                                                : widget.color,
-                                            hintColor: (emailError
-                                                    ? Colors.red
-                                                    : widget.color)
-                                                .withAlpha(200)),
-                                        child: TextField(
-                                          focusNode: fnUser,
-                                          controller: user,
-                                          enabled: !loading,
-                                          cursorColor: emailError
-                                              ? Colors.red
-                                              : widget.color,
-                                          autocorrect: false,
-                                          autofocus: false,
-                                          onSubmitted: (v) =>
-                                              fnPass.requestFocus(),
-                                          maxLines: 1,
-                                          onChanged: (a) => validate(),
-                                          decoration: InputDecoration(
-                                              hintText: "Email Address"),
-                                        )),
-                                    Theme(
-                                        data: ThemeData(
-                                            primaryColor: passError
-                                                ? Colors.red
-                                                : widget.color,
-                                            accentColor: passError
-                                                ? Colors.red
-                                                : widget.color,
-                                            hintColor: (passError
-                                                    ? Colors.red
-                                                    : widget.color)
-                                                .withAlpha(200)),
-                                        child: TextField(
-                                          controller: pass,
-                                          focusNode: fnPass,
-                                          enabled: !loading,
-                                          cursorColor: passError
-                                              ? Colors.red
-                                              : widget.color,
-                                          onChanged: (a) => validate(),
-                                          onSubmitted: isActuallyValid()
-                                              ? (v) => signUp(
-                                                  fname.value.text,
-                                                  lname.value.text,
-                                                  user.value.text,
-                                                  pass.value.text)
-                                              : null,
-                                          obscureText: true,
-                                          autocorrect: false,
-                                          autofocus: false,
-                                          maxLines: 1,
-                                          decoration: InputDecoration(
-                                              hintText: "Password"),
-                                        )),
-                                    PaddingTop(
-                                      padding: 7,
-                                      child: Row(
-                                        children: [
-                                          Spacer(),
-                                          FlatButton(
-                                              onPressed:
-                                                  isActuallyValid() && !loading
-                                                      ? () => signUp(
-                                                          fname.value.text,
-                                                          lname.value.text,
-                                                          user.value.text,
-                                                          pass.value.text)
-                                                      : null,
-                                              child: Text(
-                                                "Create Account",
-                                                style: TextStyle(
-                                                    color: isActuallyValid()
-                                                        ? widget.color
-                                                        : null),
-                                              ))
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )),
-                        ),
+                                  )
+                                ],
+                              ),
+                            )),
                       ),
                     ),
-                    Hero(
-                        tag: "button",
-                        child: FlatButton(
-                            onPressed: () {
-                              doSignInInsteadPress();
-                            },
-                            child: Text("Sign In Instead")))
-                  ],
-                ),
+                  ),
+                  Hero(
+                      tag: "button",
+                      child: FlatButton(
+                          onPressed: () {
+                            doSignInInsteadPress();
+                          },
+                          child: Text("Sign In Instead")))
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        onReleased: (f) {
-          doSignInInsteadPress();
-        },
       ),
     );
   }
