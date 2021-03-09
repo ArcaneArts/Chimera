@@ -184,10 +184,6 @@ public class ProjectConfigurator extends QuillService {
             gradleCommand("build", rootProject);
             L.i("Running Protogen");
             L.flush();
-            gradleCommand("protogen", rootProject);
-            L.i("Running ProtogenSRC");
-            L.flush();
-            gradleCommand("protogenSrc", rootProject);
             IO.writeAll(new File(rootProject, "build.gradle"), KList.from(IO.readLines(new FileInputStream(new File(rootProject, "build.gradle")))).convert((i) -> {
                 if (i.contains("boolean allowProtogen = true;")) {
                     return i.replaceAll("\\Qboolean allowProtogen = false;\\E", "boolean allowProtogen = true;");
@@ -196,9 +192,17 @@ public class ProjectConfigurator extends QuillService {
                 return i;
             }).toString("\n"));
             L.i("Editing " + new File(rootProject, "build.gradle").getPath());
+            gradleCommand("protogen", rootProject);
+            L.i("Running ProtogenSRC");
+            L.flush();
+            gradleCommand("protogenSrc", rootProject);
             L.i("Rebuilding Projects...");
             L.flush();
             gradleCommand("build", rootProject);
+            L.i("=========================================");
+            L.i("    Created Service " + u);
+            L.i("=========================================");
+            L.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
