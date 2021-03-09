@@ -2,48 +2,48 @@ import 'dart:convert';import 'package:hawkeye/chimera/chimera.dart';
 /// Represents the Remote Paragon Service on the Chimera Network
 class ChimeraParagon
 {
-/// Invokes getGradleProjects(...) on the Remote Paragon Service on the Chimera Network
-static Future<List<String>> getGradleProjects() async { try{ 
-return WrappedObject.of(await ChimeraSocketHelper.invoke("getGradleProjects",<dynamic>[])).get(listType: '!String') as List<String>;}catch(e){ print('Failed to convert result -> List<String>: (probably null) $e'); return null; }}
 /// Invokes getFlutterProjects(...) on the Remote Paragon Service on the Chimera Network
 static Future<List<String>> getFlutterProjects() async { try{ 
 return WrappedObject.of(await ChimeraSocketHelper.invoke("getFlutterProjects",<dynamic>[])).get(listType: '!String') as List<String>;}catch(e){ print('Failed to convert result -> List<String>: (probably null) $e'); return null; }}
 /// Invokes gradleClean(...) on the Remote Paragon Service on the Chimera Network
 static Future<bool> gradleClean(String project) async { try{ 
 return await (ChimeraSocketHelper.invokeBigJob("gradleClean",<dynamic>[project]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
-/// Invokes flutterPrecache(...) on the Remote Paragon Service on the Chimera Network
-static Future<bool> flutterPrecache() async { try{ 
-return await (ChimeraSocketHelper.invokeBigJob("flutterPrecache",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
 /// Invokes gradleArtifact(...) on the Remote Paragon Service on the Chimera Network
 static Future<bool> gradleArtifact(String project) async { try{ 
 return await (ChimeraSocketHelper.invokeBigJob("gradleArtifact",<dynamic>[project]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
-/// Invokes flutterClean(...) on the Remote Paragon Service on the Chimera Network
-static Future<bool> flutterClean(String project) async { try{ 
-return await (ChimeraSocketHelper.invokeBigJob("flutterClean",<dynamic>[project]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
-/// Invokes flutterUpgrade(...) on the Remote Paragon Service on the Chimera Network
-static Future<bool> flutterUpgrade() async { try{ 
-return await (ChimeraSocketHelper.invokeBigJob("flutterUpgrade",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
-/// Invokes flutterBuildAAB(...) on the Remote Paragon Service on the Chimera Network
-static Future<bool> flutterBuildAAB(String project) async { try{ 
-return await (ChimeraSocketHelper.invokeBigJob("flutterBuildAAB",<dynamic>[project]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
-/// Invokes gitPull(...) on the Remote Paragon Service on the Chimera Network
-static Future<bool> gitPull() async { try{ 
-return await (ChimeraSocketHelper.invokeBigJob("gitPull",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
+/// Invokes getGradleProjects(...) on the Remote Paragon Service on the Chimera Network
+static Future<List<String>> getGradleProjects() async { try{ 
+return WrappedObject.of(await ChimeraSocketHelper.invoke("getGradleProjects",<dynamic>[])).get(listType: '!String') as List<String>;}catch(e){ print('Failed to convert result -> List<String>: (probably null) $e'); return null; }}
 /// Invokes gradleBuild(...) on the Remote Paragon Service on the Chimera Network
 static Future<bool> gradleBuild(String project) async { try{ 
 return await (ChimeraSocketHelper.invokeBigJob("gradleBuild",<dynamic>[project]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
-/// Invokes gitDiscard(...) on the Remote Paragon Service on the Chimera Network
-static Future<bool> gitDiscard() async { try{ 
-return await (ChimeraSocketHelper.invokeBigJob("gitDiscard",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
-/// Invokes flutterBuildAPK(...) on the Remote Paragon Service on the Chimera Network
-static Future<bool> flutterBuildAPK(String project) async { try{ 
-return await (ChimeraSocketHelper.invokeBigJob("flutterBuildAPK",<dynamic>[project]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
 /// Invokes flutterBuildWeb(...) on the Remote Paragon Service on the Chimera Network
 static Future<bool> flutterBuildWeb(String project) async { try{ 
 return await (ChimeraSocketHelper.invokeBigJob("flutterBuildWeb",<dynamic>[project]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
+/// Invokes gitPull(...) on the Remote Paragon Service on the Chimera Network
+static Future<bool> gitPull() async { try{ 
+return await (ChimeraSocketHelper.invokeBigJob("gitPull",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
 /// Invokes gitSync(...) on the Remote Paragon Service on the Chimera Network
 static Future<bool> gitSync() async { try{ 
 return await (ChimeraSocketHelper.invokeBigJob("gitSync",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
+/// Invokes flutterPrecache(...) on the Remote Paragon Service on the Chimera Network
+static Future<bool> flutterPrecache() async { try{ 
+return await (ChimeraSocketHelper.invokeBigJob("flutterPrecache",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
+/// Invokes flutterUpgrade(...) on the Remote Paragon Service on the Chimera Network
+static Future<bool> flutterUpgrade() async { try{ 
+return await (ChimeraSocketHelper.invokeBigJob("flutterUpgrade",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
+/// Invokes gitDiscard(...) on the Remote Paragon Service on the Chimera Network
+static Future<bool> gitDiscard() async { try{ 
+return await (ChimeraSocketHelper.invokeBigJob("gitDiscard",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
+/// Invokes flutterClean(...) on the Remote Paragon Service on the Chimera Network
+static Future<bool> flutterClean(String project) async { try{ 
+return await (ChimeraSocketHelper.invokeBigJob("flutterClean",<dynamic>[project]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
+/// Invokes flutterBuildAAB(...) on the Remote Paragon Service on the Chimera Network
+static Future<bool> flutterBuildAAB(String project) async { try{ 
+return await (ChimeraSocketHelper.invokeBigJob("flutterBuildAAB",<dynamic>[project]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
+/// Invokes flutterBuildAPK(...) on the Remote Paragon Service on the Chimera Network
+static Future<bool> flutterBuildAPK(String project) async { try{ 
+return await (ChimeraSocketHelper.invokeBigJob("flutterBuildAPK",<dynamic>[project]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
 }
 /// Represents the Remote Account Service on the Chimera Network
 class ChimeraAccount
@@ -54,18 +54,18 @@ return await (ChimeraSocketHelper.invoke("requestChangePassword",<dynamic>[curre
 /// Invokes signUp(...) on the Remote Account Service on the Chimera Network
 static Future<User> signUp(String firstName,String lastName,String email,String password) async { try{ 
 return WrappedObject.of(await ChimeraSocketHelper.invoke("signUp",<dynamic>[firstName,lastName,email,password])).get() as User;}catch(e){ print('Failed to convert result -> User: (probably null) $e'); return null; }}
-/// Invokes getMe(...) on the Remote Account Service on the Chimera Network
-static Future<User> getMe() async { try{ 
-return WrappedObject.of(await ChimeraSocketHelper.invoke("getMe",<dynamic>[])).get() as User;}catch(e){ print('Failed to convert result -> User: (probably null) $e'); return null; }}
 /// Invokes validateToken(...) on the Remote Account Service on the Chimera Network
 static Future<bool> validateToken(AccessToken token) async { try{ 
 return await (ChimeraSocketHelper.invoke("validateToken",<dynamic>[token.toJson()]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
-/// Invokes releaseToken(...) on the Remote Account Service on the Chimera Network
-static Future<bool> releaseToken() async { try{ 
-return await (ChimeraSocketHelper.invoke("releaseToken",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
+/// Invokes getMe(...) on the Remote Account Service on the Chimera Network
+static Future<User> getMe() async { try{ 
+return WrappedObject.of(await ChimeraSocketHelper.invoke("getMe",<dynamic>[])).get() as User;}catch(e){ print('Failed to convert result -> User: (probably null) $e'); return null; }}
 /// Invokes getSomeStream(...) on the Remote Account Service on the Chimera Network
 static Future<InputStream> getSomeStream() async { try{ 
 return WrappedObject.of(await ChimeraSocketHelper.invoke("getSomeStream",<dynamic>[])).get() as InputStream;}catch(e){ print('Failed to convert result -> InputStream: (probably null) $e'); return null; }}
+/// Invokes releaseToken(...) on the Remote Account Service on the Chimera Network
+static Future<bool> releaseToken() async { try{ 
+return await (ChimeraSocketHelper.invoke("releaseToken",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
 /// Invokes aquireToken(...) on the Remote Account Service on the Chimera Network
 static Future<AccessToken> aquireToken(String email,String password) async { try{ 
 return WrappedObject.of(await ChimeraSocketHelper.invoke("aquireToken",<dynamic>[email,password])).get() as AccessToken;}catch(e){ print('Failed to convert result -> AccessToken: (probably null) $e'); return null; }}
@@ -76,24 +76,24 @@ class ChimeraGateway
 /// Invokes isRegistered(...) on the Remote Gateway Service on the Chimera Network
 static Future<bool> isRegistered(ID id) async { try{ 
 return await (ChimeraSocketHelper.invoke("isRegistered",<dynamic>[id.toJson()]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
+/// Invokes unregisterAllWithTarget(...) on the Remote Gateway Service on the Chimera Network
+static Future<int> unregisterAllWithTarget(ID target) async { try{ 
+return await (ChimeraSocketHelper.invoke("unregisterAllWithTarget",<dynamic>[target.toJson()]))as int;}catch(e){ print('Failed to convert result -> int: (probably null) $e'); return null; }}
 /// Invokes unregisterListener(...) on the Remote Gateway Service on the Chimera Network
 static Future<bool> unregisterListener(ID id) async { try{ 
 return await (ChimeraSocketHelper.invoke("unregisterListener",<dynamic>[id.toJson()]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
 /// Invokes unregisterAll(...) on the Remote Gateway Service on the Chimera Network
 static Future<int> unregisterAll() async { try{ 
 return await (ChimeraSocketHelper.invoke("unregisterAll",<dynamic>[]))as int;}catch(e){ print('Failed to convert result -> int: (probably null) $e'); return null; }}
-/// Invokes registerListener(...) on the Remote Gateway Service on the Chimera Network
-static Future<ID> registerListener(ID target) async { try{ 
-return WrappedObject.of(await ChimeraSocketHelper.invoke("registerListener",<dynamic>[target.toJson()])).get() as ID;}catch(e){ print('Failed to convert result -> ID: (probably null) $e'); return null; }}
 /// Invokes ping(...) on the Remote Gateway Service on the Chimera Network
 static Future<bool> ping() async { try{ 
 return await (ChimeraSocketHelper.invoke("ping",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
+/// Invokes registerListener(...) on the Remote Gateway Service on the Chimera Network
+static Future<ID> registerListener(ID target) async { try{ 
+return WrappedObject.of(await ChimeraSocketHelper.invoke("registerListener",<dynamic>[target.toJson()])).get() as ID;}catch(e){ print('Failed to convert result -> ID: (probably null) $e'); return null; }}
 /// Invokes getSessionId(...) on the Remote Gateway Service on the Chimera Network
 static Future<String> getSessionId() async { try{ 
 return await (ChimeraSocketHelper.invoke("getSessionId",<dynamic>[]))as String;}catch(e){ print('Failed to convert result -> String: (probably null) $e'); return null; }}
-/// Invokes unregisterAllWithTarget(...) on the Remote Gateway Service on the Chimera Network
-static Future<int> unregisterAllWithTarget(ID target) async { try{ 
-return await (ChimeraSocketHelper.invoke("unregisterAllWithTarget",<dynamic>[target.toJson()]))as int;}catch(e){ print('Failed to convert result -> int: (probably null) $e'); return null; }}
 }
 /// GuideData is a ghost-copy of the Java Object (art.arcane.chimera.core.object.guide.GuideData) on Chimera
 class GuideData{
