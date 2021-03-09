@@ -1,34 +1,34 @@
 package art.arcane.chimera.core.object.account;
 
-import art.arcane.chimera.core.object.ID;
+import art.arcane.archon.element.Element;
+import art.arcane.archon.element.Identity;
+import art.arcane.archon.element.Type;
 import art.arcane.chimera.core.protocol.generation.Dart;
+import art.arcane.quill.collections.ID;
 import art.arcane.quill.io.IO;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.random.RNG;
-import art.arcane.quill.sql.Column;
-import art.arcane.quill.sql.Table;
+import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@Data
 @Dart
-@EqualsAndHashCode
-@Table("user_auth")
-public class UserAuthentication {
-    @Getter
-    @Setter
-    @Column(name = "id", type = ID.SQTYPE, placeholder = "UNDEFINED", primary = true)
-    private ID id;
+public class UserAuthentication extends Element {
+    @Identity
+    @Builder.Default
+    private ID id = new ID();
 
-    @Column(name = "password", type = "VARCHAR(64)", placeholder = "UNDEFINED")
+    @Type("VARCHAR(64)")
     private String password;
 
-    @Column(name = "salt", type = "VARCHAR(32)", placeholder = "UNDEFINED")
+    @Type("VARCHAR(32)")
     private String salt;
 
-    @Column(name = "pepper", type = "VARCHAR(32)", placeholder = "UNDEFINED")
+    @Type("VARCHAR(32)")
     private String pepper;
 
     public UserAuthentication(ID id) {
@@ -64,5 +64,10 @@ public class UserAuthentication {
 
     public String season(String hash) {
         return IO.hash(pepper.toLowerCase() + hash.substring(32).toUpperCase() + salt.toUpperCase() + hash.substring(0, 32).toLowerCase() + salt + hash.toUpperCase().substring(24, 48) + pepper);
+    }
+
+    @Override
+    public String getTableName() {
+        return "user_auth";
     }
 }
