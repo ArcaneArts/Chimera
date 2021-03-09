@@ -171,7 +171,7 @@ public class ProjectConfigurator extends QuillService {
             L.i("Editing " + new File(rootProject, "settings.gradle").getPath());
 
             IO.writeAll(new File(rootProject, "settings.gradle"), lines.toString("\n"));
-            IO.writeAll(new File(rootProject, "build.gradle"), KList.from(IO.readLines(new FileInputStream("build.gradle"))).convert((i) -> {
+            IO.writeAll(new File(rootProject, "build.gradle"), KList.from(IO.readLines(new FileInputStream(new File(rootProject, "build.gradle")))).convert((i) -> {
                 if (i.contains("boolean allowProtogen = true;")) {
                     return i.replaceAll("\\Qboolean allowProtogen = true;\\E", "boolean allowProtogen = false;");
                 }
@@ -181,27 +181,27 @@ public class ProjectConfigurator extends QuillService {
             L.i("Editing " + new File(rootProject, "build.gradle").getPath());
             L.i("Building Projects...");
             L.flush();
-            ProcessBuilder pb = new ProcessBuilder("gradlew", "build");
+            ProcessBuilder pb = new ProcessBuilder("gradlew.bat", "build");
             Process p = pb.start();
             J.attempt(p::waitFor);
             new StreamGobbler(p.getInputStream(), "").start();
             new StreamGobbler(p.getErrorStream(), "ERROR: ").start();
             L.i("Running Protogen");
             L.flush();
-            pb = new ProcessBuilder("gradlew", "protogen");
+            pb = new ProcessBuilder("gradlew.bat", "protogen");
             Process p1 = pb.start();
             J.attempt(p1::waitFor);
             new StreamGobbler(p1.getInputStream(), "").start();
             new StreamGobbler(p1.getErrorStream(), "ERROR: ").start();
             L.i("Running ProtogenSRC");
             L.flush();
-            pb = new ProcessBuilder("gradlew", "protogenSrc");
+            pb = new ProcessBuilder("gradlew.bat", "protogenSrc");
             Process p2 = pb.start();
             J.attempt(p2::waitFor);
             new StreamGobbler(p2.getInputStream(), "").start();
             new StreamGobbler(p2.getErrorStream(), "ERROR: ").start();
 
-            IO.writeAll(new File(rootProject, "build.gradle"), KList.from(IO.readLines(new FileInputStream("build.gradle"))).convert((i) -> {
+            IO.writeAll(new File(rootProject, "build.gradle"), KList.from(IO.readLines(new FileInputStream(new File(rootProject, "build.gradle")))).convert((i) -> {
                 if (i.contains("boolean allowProtogen = true;")) {
                     return i.replaceAll("\\Qboolean allowProtogen = false;\\E", "boolean allowProtogen = true;");
                 }
@@ -211,7 +211,7 @@ public class ProjectConfigurator extends QuillService {
             L.i("Editing " + new File(rootProject, "build.gradle").getPath());
             L.i("Rebuilding Projects...");
             L.flush();
-            pb = new ProcessBuilder("gradlew", "build");
+            pb = new ProcessBuilder("gradlew.bat", "build");
             Process fp = pb.start();
             J.attempt(fp::waitFor);
             new StreamGobbler(fp.getInputStream(), "").start();
