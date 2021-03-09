@@ -35,24 +35,31 @@ public abstract class ChimeraBackendService extends QuillService {
     @Getter
     @ServiceWorker
     private ConsoleServiceWorker console = new ConsoleServiceWorker();
+
     @Getter
     @ServiceWorker
     private ChimeraWebServiceWorker web = new ChimeraWebServiceWorker();
+
     @Getter
     @ServiceWorker
     private ChimeraServiceAccess serviceAccess = new ChimeraServiceAccess();
+
     @Getter
     @ServiceWorker
     private ChimeraWebClientWorker hangingWebClient = new ChimeraWebClientWorker();
+
     @Getter
     @ServiceWorker
     private ChimeraWebImpatientClientWorker impatientWebClient = new ChimeraWebImpatientClientWorker();
+
     @Getter
     @ServiceWorker
     private ChimeraProtocolAccess protocolAccess = new ChimeraProtocolAccess();
+
     @Getter
     @ServiceWorker
     private ChimeraJobServiceWorker jobService = new ChimeraJobServiceWorker();
+
     @Getter
     @ServiceWorker
     private ChimeraJobScheduler schedulerService = new ChimeraJobScheduler();
@@ -67,8 +74,7 @@ public abstract class ChimeraBackendService extends QuillService {
     private transient String id;
     private transient HostedService host;
     private transient KMap<String, Class<? extends Parcelable>> parcelTypeCache = new KMap<>();
-
-
+    
     private void publish(HostedService service) {
         database.setAsync(service);
     }

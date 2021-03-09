@@ -180,7 +180,8 @@ public class ChimeraProtocolAccess extends QuillServiceWorker {
         invoke.setMethod(j.getName());
         invoke.setContext(context);
         invoke.setParameters(new KList<>(parameters));
-        ParcelResult result = (ParcelResult) ((ChimeraHostedServiceWorker) getParent()).request(j.getService(), invoke);
+        ChimeraBackendService c = (ChimeraBackendService) Chimera.delegate;
+        ParcelResult result = (ParcelResult) c.request(j.getService(), invoke);
 
         if (j.getResult().equals(ProtoType.JSON_OBJECT)) {
             try {
@@ -199,7 +200,7 @@ public class ChimeraProtocolAccess extends QuillServiceWorker {
         invoke.setContext(context);
         invoke.setParameters(new KList<>(parameters));
 
-        return ((ChimeraHostedServiceWorker) getParent()).requestDownstream(j.getService(), invoke);
+        return ((ChimeraBackendService) Chimera.delegate).requestDownstream(j.getService(), invoke);
     }
 
     private Object invokeRemote(String service, ProtoFunction j, Object[] parameters) {
