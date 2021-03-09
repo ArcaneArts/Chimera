@@ -28,6 +28,11 @@ task startXampp(type: Exec) {
     commandLine 'cmd', '/C', '\"' + project.rootDir + '/playground/xampp/xampp-control.exe\"'
 }
 
+clean.doFirst {
+    delete "${project.rootDir}\\protogen"
+    println "Deleted ${project.rootDir}\\protogen"
+}
+
 subprojects {
     apply plugin: 'idea'
     apply plugin: 'java'
