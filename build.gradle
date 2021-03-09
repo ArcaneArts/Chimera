@@ -11,7 +11,7 @@ String servicePackage = "art.arcane.chimera.core.protocol";
 String serviceName = "EDN";
 String flutterProjects = 'hawkeye'
 String flutterScanProjects =
-        'kraken@lib/chimera/functions.dart,' +
+        'application@lib/chimera/functions.dart,' +
                 'hawkeye@lib/chimera/global/functions.dart';
 boolean allowProtogen = true; // Turn this off before creating new modules
 /////////////////////////////////////////////////////////
