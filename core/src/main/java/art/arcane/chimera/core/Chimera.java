@@ -82,8 +82,6 @@ public class Chimera {
 
     private static void setupChimeraProject(String[] a) {
         ProjectConfigurator.start();
-        L.flush();
-        System.exit(0);
     }
 
     private static void startCodegen(Class<? extends ChimeraService> s, String[] a) {

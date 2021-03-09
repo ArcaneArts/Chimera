@@ -6,7 +6,6 @@ import art.arcane.quill.execution.J;
 import art.arcane.quill.io.IO;
 import art.arcane.quill.io.StreamGobbler;
 import art.arcane.quill.logging.L;
-import art.arcane.quill.service.CMD;
 import art.arcane.quill.service.ConsoleServiceWorker;
 import art.arcane.quill.service.QuillService;
 import art.arcane.quill.service.ServiceWorker;
@@ -111,19 +110,15 @@ public class ProjectConfigurator extends QuillService {
     }
 
     public static void start() {
-        Quill.start(new String[0]);
+        Quill.start(ProjectConfigurator.class, new String[0]);
     }
 
     @Override
     public void onEnable() {
-        console.registerCommand("newService", new CMD() {
-            @Override
-            public boolean onCommand(String... params) {
-                String projectName = params[0];
-                setupNewService(projectName);
-
-                return true;
-            }
+        console.registerCommand("newService", params -> {
+            String projectName = params[0];
+            setupNewService(projectName);
+            return true;
         });
     }
 
@@ -140,7 +135,8 @@ public class ProjectConfigurator extends QuillService {
 
         String u = projectName;
         String l = u.toLowerCase();
-        File root = new File(l);
+        File rootProject = new File(new File(new File("derp").getAbsolutePath()).getParentFile().getParentFile().getAbsolutePath());
+        File root = new File(rootProject, l);
 
         if (root.exists()) {
             L.w(root.getAbsolutePath() + " Already exists!");
@@ -170,16 +166,16 @@ public class ProjectConfigurator extends QuillService {
             L.i("Created " + bg.getAbsolutePath());
             KList<String> lines = KList.from(IO.readLines(new FileInputStream("settings.gradle")));
             lines.add(1, "include '" + l + "'");
-            IO.writeAll(new File("settings.gradle"), lines.toString("\n"));
-            L.i("Editing " + new File("settings.gradle").getAbsolutePath());
-            IO.writeAll(new File("build.gradle"), KList.from(IO.readLines(new FileInputStream("build.gradle"))).convert((i) -> {
+            IO.writeAll(new File(rootProject, "settings.gradle"), lines.toString("\n"));
+            L.i("Editing " + new File(rootProject, "settings.gradle").getAbsolutePath());
+            IO.writeAll(new File(rootProject, "build.gradle"), KList.from(IO.readLines(new FileInputStream("build.gradle"))).convert((i) -> {
                 if (i.contains("boolean allowProtogen = true;")) {
                     return i.replaceAll("\\Qboolean allowProtogen = true;\\E", "boolean allowProtogen = false;");
                 }
 
                 return i;
             }).toString("\n"));
-            L.i("Editing " + new File("build.gradle").getAbsolutePath());
+            L.i("Editing " + new File(rootProject, "build.gradle").getAbsolutePath());
             L.i("Building Projects...");
             L.flush();
             ProcessBuilder pb = new ProcessBuilder("gradlew", "build");
@@ -202,14 +198,14 @@ public class ProjectConfigurator extends QuillService {
             new StreamGobbler(p2.getInputStream(), "").start();
             new StreamGobbler(p2.getErrorStream(), "ERROR: ").start();
 
-            IO.writeAll(new File("build.gradle"), KList.from(IO.readLines(new FileInputStream("build.gradle"))).convert((i) -> {
+            IO.writeAll(new File(rootProject, "build.gradle"), KList.from(IO.readLines(new FileInputStream("build.gradle"))).convert((i) -> {
                 if (i.contains("boolean allowProtogen = true;")) {
                     return i.replaceAll("\\Qboolean allowProtogen = false;\\E", "boolean allowProtogen = true;");
                 }
 
                 return i;
             }).toString("\n"));
-            L.i("Editing " + new File("build.gradle").getAbsolutePath());
+            L.i("Editing " + new File(rootProject, "build.gradle").getAbsolutePath());
             L.i("Rebuilding Projects...");
             L.flush();
             pb = new ProcessBuilder("gradlew", "build");
