@@ -125,20 +125,25 @@ public class ProjectConfigurator extends QuillService {
     }
 
     private void setupNewService(String projectName) {
+        String u = projectName;
+        String l = u.toLowerCase();
+        File rootProject = new File(new File(new File("derp").getAbsolutePath()).getParentFile().getParentFile().getAbsolutePath());
+        File root = new File(rootProject, l);
+
         try {
-            ProcessBuilder pb = new ProcessBuilder("gradlew", "clean");
+            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "call", rootProject.getAbsolutePath() + "\\gradlew.bat", "build");
             Process p = pb.start();
             new StreamGobbler(p.getInputStream(), "").start();
             new StreamGobbler(p.getErrorStream(), "ERROR: ").start();
             p.waitFor();
         } catch (Throwable e) {
-
+            L.ex(e);
+            return;
         }
 
-        String u = projectName;
-        String l = u.toLowerCase();
-        File rootProject = new File(new File(new File("derp").getAbsolutePath()).getParentFile().getParentFile().getAbsolutePath());
-        File root = new File(rootProject, l);
+        if (true) {
+            return;
+        }
 
 
         if (root.exists()) {
