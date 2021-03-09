@@ -1,5 +1,5 @@
-name: kraken
-description: Developer app for building stuff
+name: application
+description: The main app chimera is linked to
 publish_to: 'none'
 version: 1.0.0+1
 environment:

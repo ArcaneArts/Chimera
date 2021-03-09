@@ -1,6 +1,6 @@
+import 'package:application/krakicon_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:hawkeye/util/paddings.dart';
-import 'package:kraken/krakicon_icons.dart';
 
 class Home extends StatefulWidget {
   @override
