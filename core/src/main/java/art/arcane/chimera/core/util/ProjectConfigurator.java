@@ -185,7 +185,7 @@ public class ProjectConfigurator extends QuillService {
             L.i("Running Protogen");
             L.flush();
             IO.writeAll(new File(rootProject, "build.gradle"), KList.from(IO.readLines(new FileInputStream(new File(rootProject, "build.gradle")))).convert((i) -> {
-                if (i.contains("boolean allowProtogen = true;")) {
+                if (i.contains("boolean allowProtogen = false;")) {
                     return i.replaceAll("\\Qboolean allowProtogen = false;\\E", "boolean allowProtogen = true;");
                 }
 
