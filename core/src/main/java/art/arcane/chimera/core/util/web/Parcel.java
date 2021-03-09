@@ -1,4 +1,4 @@
-package art.arcane.quill.web;
+package art.arcane.chimera.core.util.web;
 
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.execution.J;
@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @EqualsAndHashCode(callSuper = false)
-public abstract class Parcel extends HttpServlet implements art.arcane.quill.web.Parcelable, art.arcane.quill.web.ParcelWebHandler {
+public abstract class Parcel extends HttpServlet implements Parcelable, ParcelWebHandler {
     public static Runnable onHit = () -> {
     };
     public static boolean LOG_REQUESTS = true;
@@ -108,8 +108,8 @@ public abstract class Parcel extends HttpServlet implements art.arcane.quill.web
                 continue;
             }
 
-            if (i.isAnnotationPresent(art.arcane.quill.web.ParcelDescription.class)) {
-                m.add(i.getName() + " | " + i.getType().getSimpleName() + " | " + i.getDeclaredAnnotation(art.arcane.quill.web.ParcelDescription.class).value());
+            if (i.isAnnotationPresent(ParcelDescription.class)) {
+                m.add(i.getName() + " | " + i.getType().getSimpleName() + " | " + i.getDeclaredAnnotation(ParcelDescription.class).value());
             } else {
                 m.add(i.getName() + " | " + i.getType().getSimpleName() + " | No Description Provided");
             }
@@ -118,7 +118,7 @@ public abstract class Parcel extends HttpServlet implements art.arcane.quill.web
         return m;
     }
 
-    public abstract art.arcane.quill.web.Parcelable respond();
+    public abstract Parcelable respond();
 
     public String getExample() {
         return "https://server.io/" + getNode() + genExampleParams();
@@ -177,7 +177,7 @@ public abstract class Parcel extends HttpServlet implements art.arcane.quill.web
         }
 
         // Avoid using object serialization if we're hard cached and have a cached value
-        if (hardCache != null && getClass().isAnnotationPresent(art.arcane.quill.web.HardCache.class)) {
+        if (hardCache != null && getClass().isAnnotationPresent(HardCache.class)) {
             write(resp, hardCache);
             return;
         }
@@ -243,14 +243,14 @@ public abstract class Parcel extends HttpServlet implements art.arcane.quill.web
 
         if (d != null) {
             try {
-                art.arcane.quill.web.Parcelable g = null;
+                Parcelable g = null;
 
                 // If the parcel hit (this) is supposed to receive posts
                 // And if the request actually has post data
                 // -> Use the respond(stream) instead of respond()
-                if (posting && this instanceof art.arcane.quill.web.UploadParcelable) {
+                if (posting && this instanceof UploadParcelable) {
                     InputStream in = req.getInputStream();
-                    g = ((art.arcane.quill.web.UploadParcelable) new Gson().fromJson(d, getClass())).respond(in);
+                    g = ((UploadParcelable) new Gson().fromJson(d, getClass())).respond(in);
                 }
 
                 // Else, use the normal respond()
@@ -259,23 +259,23 @@ public abstract class Parcel extends HttpServlet implements art.arcane.quill.web
                 }
 
                 // If the response parcel is HTML, just render it as such
-                if (g instanceof art.arcane.quill.web.FancyParcelable) {
+                if (g instanceof FancyParcelable) {
                     resp.setContentType("text/html");
-                    write(resp, ((art.arcane.quill.web.FancyParcelable) g).getHTML());
+                    write(resp, ((FancyParcelable) g).getHTML());
                 }
 
                 // If the response parcel is Downloadable, send the stream as download
-                else if (g instanceof art.arcane.quill.web.DownloadParcelable) {
+                else if (g instanceof DownloadParcelable) {
                     resp.setContentType("application/octet-stream");
-                    resp.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", ((art.arcane.quill.web.DownloadParcelable) g).getName()));
-                    IO.fullTransfer(((art.arcane.quill.web.DownloadParcelable) g).getStream(), resp.getOutputStream(), 8192 * 2);
+                    resp.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", ((DownloadParcelable) g).getName()));
+                    IO.fullTransfer(((DownloadParcelable) g).getStream(), resp.getOutputStream(), 8192 * 2);
                     resp.getOutputStream().flush();
                     resp.getOutputStream().close();
                 }
 
                 // If its a normal parcel, write it as json
                 else {
-                    if (hardCache == null && getClass().isAnnotationPresent(art.arcane.quill.web.HardCache.class)) {
+                    if (hardCache == null && getClass().isAnnotationPresent(HardCache.class)) {
                         hardCache = new Gson().toJson(g);
                     }
 

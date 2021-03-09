@@ -1,6 +1,7 @@
 package art.arcane.chimera.core.microservice;
 
 import art.arcane.quill.logging.L;
+import art.arcane.quill.service.QuillServiceWorker;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -9,7 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
-public class ChimeraWebClientWorker extends ChimeraServiceWorker {
+public class ChimeraWebClientWorker extends QuillServiceWorker {
+
     private transient OkHttpClient client;
     private long timeoutMinutes = 5;
     private static final Runnable DEFAULT_ONFAIL = () ->

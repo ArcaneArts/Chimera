@@ -3,10 +3,12 @@ package art.arcane.chimera.core.net.parcels;
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.microservice.ChimeraBackendService;
 import art.arcane.chimera.core.protocol.ChimeraContext;
+import art.arcane.chimera.core.util.web.Parcel;
+import art.arcane.chimera.core.util.web.Parcelable;
 import art.arcane.quill.collections.KList;
 import lombok.Setter;
 
-public class ParcelInvoke extends art.arcane.quill.web.Parcel {
+public class ParcelInvoke extends Parcel {
     @Setter
     private String method = "";
     @Setter
@@ -19,7 +21,7 @@ public class ParcelInvoke extends art.arcane.quill.web.Parcel {
     }
 
     @Override
-    public art.arcane.quill.web.Parcelable respond() {
+    public Parcelable respond() {
         Object result = ((ChimeraBackendService) Chimera.delegate).getBackendService().getProtocolAccess().executeTypeWithContext(context, null, method, parameters.toArray(new Object[0]));
 
         return new ParcelResult(result);

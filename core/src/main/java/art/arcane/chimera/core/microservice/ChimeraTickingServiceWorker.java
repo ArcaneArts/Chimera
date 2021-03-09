@@ -3,8 +3,9 @@ package art.arcane.chimera.core.microservice;
 import art.arcane.quill.execution.J;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.random.RNG;
+import art.arcane.quill.service.QuillServiceWorker;
 
-public abstract class ChimeraTickingServiceWorker extends ChimeraServiceWorker {
+public abstract class ChimeraTickingServiceWorker extends QuillServiceWorker {
     private long minInterval = 1000;
     private long maxInterval = 1000;
     private int maxTicksPerInterval = 1;

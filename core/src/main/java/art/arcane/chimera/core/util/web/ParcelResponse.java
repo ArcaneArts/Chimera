@@ -1,4 +1,4 @@
-package art.arcane.quill.web;
+package art.arcane.chimera.core.util.web;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

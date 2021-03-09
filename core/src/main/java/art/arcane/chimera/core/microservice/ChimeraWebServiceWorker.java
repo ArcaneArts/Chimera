@@ -1,13 +1,14 @@
 package art.arcane.chimera.core.microservice;
 
 import art.arcane.chimera.core.Chimera;
+import art.arcane.chimera.core.util.web.ParcelWebServer;
+import art.arcane.chimera.core.util.web.ParcelWebServerConfiguration;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.random.RNG;
-import art.arcane.quill.web.ParcelWebServer;
-import art.arcane.quill.web.ParcelWebServerConfiguration;
+import art.arcane.quill.service.QuillServiceWorker;
 import lombok.Getter;
 
-public class ChimeraWebServiceWorker extends ChimeraServiceWorker {
+public class ChimeraWebServiceWorker extends QuillServiceWorker {
     @Getter
     private ParcelWebServerConfiguration webServer = new ParcelWebServerConfiguration();
     private int minPort = 10000;

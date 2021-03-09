@@ -1,4 +1,4 @@
-package art.arcane.quill.web;
+package art.arcane.chimera.core.util.web;
 
 import art.arcane.quill.collections.KList;
 
@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public interface DownloadParcelable extends Parcelable {
+public interface DownloadParcelable extends art.arcane.quill.web.Parcelable {
     public InputStream getStream();
 
     public String getName();

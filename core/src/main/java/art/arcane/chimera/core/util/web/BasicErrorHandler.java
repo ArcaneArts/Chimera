@@ -1,4 +1,4 @@
-package art.arcane.quill.web;
+package art.arcane.chimera.core.util.web;
 
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.ErrorHandler;

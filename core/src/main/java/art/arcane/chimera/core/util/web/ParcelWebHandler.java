@@ -1,4 +1,4 @@
-package art.arcane.quill.web;
+package art.arcane.chimera.core.util.web;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

@@ -11,11 +11,12 @@ import art.arcane.quill.execution.J;
 import art.arcane.quill.format.Form;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.math.M;
+import art.arcane.quill.service.QuillServiceWorker;
 
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ChimeraServiceAccess extends ChimeraServiceWorker {
+public class ChimeraServiceAccess extends QuillServiceWorker {
     private transient KMap<String, ServiceSet> services = new KMap<>();
     private int startupFastTicks = 7;
     private long fastTickTime = 950;

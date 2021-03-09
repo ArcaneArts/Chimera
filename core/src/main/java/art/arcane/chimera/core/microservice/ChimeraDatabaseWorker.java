@@ -4,6 +4,7 @@ import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.object.ID;
 import art.arcane.quill.execution.J;
 import art.arcane.quill.logging.L;
+import art.arcane.quill.service.QuillServiceWorker;
 import art.arcane.quill.sql.SQLKit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +19,7 @@ import java.util.concurrent.ThreadFactory;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class ChimeraDatabaseWorker extends ChimeraServiceWorker {
+public class ChimeraDatabaseWorker extends QuillServiceWorker {
     private transient ExecutorService executor;
     private transient SQLKit sql;
     private transient ID id = ID.randomUUID();

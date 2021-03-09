@@ -1,4 +1,4 @@
-package art.arcane.quill.web;
+package art.arcane.chimera.core.util.web;
 
 @FunctionalInterface
 public interface ParcelListener<IN, OUT> {

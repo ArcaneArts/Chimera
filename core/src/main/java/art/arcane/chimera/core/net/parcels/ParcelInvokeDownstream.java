@@ -3,10 +3,10 @@ package art.arcane.chimera.core.net.parcels;
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.microservice.ChimeraBackendService;
 import art.arcane.chimera.core.protocol.ChimeraContext;
+import art.arcane.chimera.core.util.web.DownloadParcelable;
+import art.arcane.chimera.core.util.web.Parcel;
+import art.arcane.chimera.core.util.web.Parcelable;
 import art.arcane.quill.collections.KList;
-import art.arcane.quill.web.DownloadParcelable;
-import art.arcane.quill.web.Parcel;
-import art.arcane.quill.web.Parcelable;
 import lombok.Setter;
 
 import java.io.InputStream;

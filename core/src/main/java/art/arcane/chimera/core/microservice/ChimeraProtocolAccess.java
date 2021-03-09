@@ -13,11 +13,12 @@ import art.arcane.chimera.core.protocol.generation.ProtoType;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.collections.KMap;
 import art.arcane.quill.logging.L;
+import art.arcane.quill.service.QuillServiceWorker;
 import com.google.gson.Gson;
 
 import java.io.InputStream;
 
-public class ChimeraProtocolAccess extends ChimeraServiceWorker {
+public class ChimeraProtocolAccess extends QuillServiceWorker {
     private transient KMap<String, ProtoFunction> localFunctions = new KMap<>();
     private transient KMap<String, KList<ProtoFunction>> remoteFunctionGroups = new KMap<>();
 

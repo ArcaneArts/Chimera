@@ -1,6 +1,7 @@
 package art.arcane.chimera.core.microservice;
 
 import art.arcane.quill.logging.L;
+import art.arcane.quill.service.QuillServiceWorker;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import okhttp3.OkHttpClient;
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ChimeraWebImpatientClientWorker extends ChimeraServiceWorker {
+public class ChimeraWebImpatientClientWorker extends QuillServiceWorker {
     private transient OkHttpClient client;
     private long timeoutMs = 150;
 
