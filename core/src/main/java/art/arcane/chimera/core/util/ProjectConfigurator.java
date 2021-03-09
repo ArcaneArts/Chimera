@@ -2,7 +2,6 @@ package art.arcane.chimera.core.util;
 
 import art.arcane.quill.Quill;
 import art.arcane.quill.collections.KList;
-import art.arcane.quill.execution.J;
 import art.arcane.quill.io.IO;
 import art.arcane.quill.io.StreamGobbler;
 import art.arcane.quill.logging.L;
@@ -124,45 +123,42 @@ public class ProjectConfigurator extends QuillService {
         });
     }
 
-    private void setupNewService(String projectName) {
-        String u = projectName;
-        String l = u.toLowerCase();
-        File rootProject = new File(new File(new File("derp").getAbsolutePath()).getParentFile().getParentFile().getAbsolutePath());
-        File root = new File(rootProject, l);
-
+    private void gradleCommand(String command, File path) {
         try {
-            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "call", rootProject.getAbsolutePath() + "\\gradlew.bat", "build");
+            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "call", path.getAbsolutePath() + "\\gradlew.bat", command);
             Process p = pb.start();
-            new StreamGobbler(p.getInputStream(), "").start();
-            new StreamGobbler(p.getErrorStream(), "ERROR: ").start();
+            new StreamGobbler(p.getInputStream(), "");
+            new StreamGobbler(p.getErrorStream(), "ERROR: ");
             p.waitFor();
         } catch (Throwable e) {
             L.ex(e);
-            return;
         }
+    }
 
-        if (true) {
-            return;
-        }
-
-
-        if (root.exists()) {
-            L.w(root.getAbsolutePath() + " Already exists!");
-            return;
-        }
-
-        root.mkdirs();
-        File main = new File(root, "src/main/java/art/arcane/chimera/" + l + "/" + u + "Service.java");
-        File proto = new File(root, "src/main/java/art/arcane/chimera/" + l + "/Proto" + u + ".java");
-        main.getParentFile().mkdirs();
-        new File(root, "src/main/resources").mkdirs();
-        new File(root, "src/test/resources").mkdirs();
-        new File(root, "src/test/java").mkdirs();
-        File mf = new File(root, "META-INF/MANIFEST.MF");
-        mf.getParentFile().mkdirs();
-        File bg = new File(root, "build.gradle");
-
+    private void setupNewService(String projectName) {
         try {
+            String u = projectName;
+            String l = u.toLowerCase();
+            File rootProject = new File(new File(new File("derp").getAbsolutePath()).getParentFile().getParentFile().getAbsolutePath());
+            File root = new File(rootProject, l);
+
+            if (root.exists()) {
+                L.w(root.getAbsolutePath() + " Already exists!");
+                return;
+            }
+
+            gradleCommand("clean", rootProject);
+            root.mkdirs();
+            File main = new File(root, "src/main/java/art/arcane/chimera/" + l + "/" + u + "Service.java");
+            File proto = new File(root, "src/main/java/art/arcane/chimera/" + l + "/Proto" + u + ".java");
+            main.getParentFile().mkdirs();
+            new File(root, "src/main/resources").mkdirs();
+            new File(root, "src/test/resources").mkdirs();
+            new File(root, "src/test/java").mkdirs();
+            File mf = new File(root, "META-INF/MANIFEST.MF");
+            mf.getParentFile().mkdirs();
+            File bg = new File(root, "build.gradle");
+
             IO.writeAll(main, src.replaceAll("\\Q$u\\E", u).replaceAll("\\Q$l\\E", l));
             L.i("Created " + main.getPath());
             IO.writeAll(proto, protoSrc.replaceAll("\\Q$u\\E", u).replaceAll("\\Q$l\\E", l));
@@ -174,7 +170,6 @@ public class ProjectConfigurator extends QuillService {
             KList<String> lines = KList.from(IO.readLines(new FileInputStream(new File(rootProject, "settings.gradle"))));
             lines.add(1, "include '" + l + "'");
             L.i("Editing " + new File(rootProject, "settings.gradle").getPath());
-
             IO.writeAll(new File(rootProject, "settings.gradle"), lines.toString("\n"));
             IO.writeAll(new File(rootProject, "build.gradle"), KList.from(IO.readLines(new FileInputStream(new File(rootProject, "build.gradle")))).convert((i) -> {
                 if (i.contains("boolean allowProtogen = true;")) {
@@ -186,26 +181,13 @@ public class ProjectConfigurator extends QuillService {
             L.i("Editing " + new File(rootProject, "build.gradle").getPath());
             L.i("Building Projects...");
             L.flush();
-            ProcessBuilder pb = new ProcessBuilder("cmd /c call " + rootProject.getAbsolutePath() + "\\gradlew.bat", "build");
-            Process p = pb.start();
-            J.attempt(p::waitFor);
-            new StreamGobbler(p.getInputStream(), "").start();
-            new StreamGobbler(p.getErrorStream(), "ERROR: ").start();
+            gradleCommand("build", rootProject);
             L.i("Running Protogen");
             L.flush();
-            pb = new ProcessBuilder("cmd /c call " + rootProject.getAbsolutePath() + "\\gradlew.bat", "protogen");
-            Process p1 = pb.start();
-            J.attempt(p1::waitFor);
-            new StreamGobbler(p1.getInputStream(), "").start();
-            new StreamGobbler(p1.getErrorStream(), "ERROR: ").start();
+            gradleCommand("protogen", rootProject);
             L.i("Running ProtogenSRC");
             L.flush();
-            pb = new ProcessBuilder("cmd /c call " + rootProject.getAbsolutePath() + "\\gradlew.bat", "protogenSrc");
-            Process p2 = pb.start();
-            J.attempt(p2::waitFor);
-            new StreamGobbler(p2.getInputStream(), "").start();
-            new StreamGobbler(p2.getErrorStream(), "ERROR: ").start();
-
+            gradleCommand("protogenSrc", rootProject);
             IO.writeAll(new File(rootProject, "build.gradle"), KList.from(IO.readLines(new FileInputStream(new File(rootProject, "build.gradle")))).convert((i) -> {
                 if (i.contains("boolean allowProtogen = true;")) {
                     return i.replaceAll("\\Qboolean allowProtogen = false;\\E", "boolean allowProtogen = true;");
@@ -216,11 +198,7 @@ public class ProjectConfigurator extends QuillService {
             L.i("Editing " + new File(rootProject, "build.gradle").getPath());
             L.i("Rebuilding Projects...");
             L.flush();
-            pb = new ProcessBuilder("cmd /c call " + rootProject.getAbsolutePath() + "\\gradlew.bat", "build");
-            Process fp = pb.start();
-            J.attempt(fp::waitFor);
-            new StreamGobbler(fp.getInputStream(), "").start();
-            new StreamGobbler(fp.getErrorStream(), "ERROR: ").start();
+            gradleCommand("build", rootProject);
         } catch (IOException e) {
             e.printStackTrace();
         }
