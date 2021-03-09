@@ -121,6 +121,16 @@ public class ProjectConfigurator extends QuillService {
             setupNewService(projectName);
             return true;
         });
+
+        for (int i = 0; i < 128; i++) {
+            System.out.println();
+        }
+
+        L.i("==================================================================================");
+        L.i("Chimera Configurator");
+        L.i("-----------------------------------------");
+        L.i("newService <ServiceName>     Create new Java Services, upper cammel case names.");
+        L.i("==================================================================================");
     }
 
     private void gradleCommand(String command, File path) {
@@ -200,6 +210,8 @@ public class ProjectConfigurator extends QuillService {
             gradleCommand("build", rootProject);
             L.i("=========================================");
             L.i("    Created Service " + u);
+            L.i("-----------------------------------------");
+            L.i("In Intellij Sync your gradle project!");
             L.i("=========================================");
             L.flush();
         } catch (IOException e) {
