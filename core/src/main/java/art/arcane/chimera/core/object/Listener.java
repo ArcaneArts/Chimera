@@ -1,37 +1,34 @@
 package art.arcane.chimera.core.object;
 
+import art.arcane.archon.element.Element;
+import art.arcane.archon.element.Identity;
+import art.arcane.archon.element.Type;
 import art.arcane.chimera.core.protocol.generation.Dart;
+import art.arcane.quill.collections.ID;
 import art.arcane.quill.math.M;
-import art.arcane.quill.sql.Column;
-import art.arcane.quill.sql.Table;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Dart
 @Builder
-@Table("listener")
-public class Listener {
-    @Getter
-    @Setter
-    @Column(name = "id", type = "VARCHAR(64)", placeholder = "UNDEFINED", primary = true)
-    private ID id;
+public class Listener extends Element {
+    @Identity
+    @Builder.Default
+    private ID id = new ID();
 
-    @Getter
-    @Setter
-    @Column(name = "target", type = "VARCHAR(64)", placeholder = "UNDEFINED")
     private ID target;
 
-    @Getter
-    @Setter
-    @Column(name = "session", type = "VARCHAR(64)", placeholder = "UNDEFINED")
+    @Type("VARCHAR(64)")
     private String session;
 
-    @Getter
-    @Setter
     @Builder.Default
-    @Column(name = "time", type = "BIGINT", placeholder = "0")
     private long time = M.ms();
+
+    @Override
+    public String getTableName() {
+        return "listener";
+    }
 }
