@@ -37,6 +37,7 @@ public class ProtoExport {
         this.dartFunctionFiles = dartFunctionFiles;
 
         JarScanner js = new JarScanner(JarTools.getJar(getClass()), "");
+        L.v("Scanning Jar: " + JarTools.getJar(getClass()).getAbsolutePath());
         try {
             js.scan();
         } catch (IOException e) {

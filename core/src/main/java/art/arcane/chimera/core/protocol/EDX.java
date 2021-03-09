@@ -15,7 +15,10 @@ public class EDX {
     public static final String TYPE_SERVICE = "service";
     public static final String TYPE_GATEWAY = "gateway";
     public static final String TYPE_CLIENT = "client";
-    private static final LoadingCache<Long, ChimeraContext> threadContext = Caffeine.newBuilder().expireAfterAccess(60, TimeUnit.SECONDS).build(k -> null);
+    private static final LoadingCache<Long, ChimeraContext> threadContext = Caffeine
+            .newBuilder()
+            .expireAfterAccess(60, TimeUnit.SECONDS)
+            .build((i) -> null);
 
     public static ChimeraContext getContext() {
         ChimeraContext c = threadContext.get(Thread.currentThread().getId());
