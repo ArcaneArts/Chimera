@@ -1,40 +1,29 @@
 package art.arcane.chimera.core.object;
 
+import art.arcane.archon.element.Element;
+import art.arcane.archon.element.Identity;
 import art.arcane.chimera.core.protocol.generation.Dart;
-import art.arcane.quill.sql.Column;
-import art.arcane.quill.sql.Table;
+import art.arcane.quill.collections.ID;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Dart
 @Builder
-@Table("session")
-public class Session {
-    @Getter
-    @Setter
-    @Column(name = "id", type = "VARCHAR(64)", placeholder = "UNDEFINED", primary = true)
-    private String id;
-
-    @Getter
-    @Setter
-    @Column(name = "gateway", type = "VARCHAR(64)", placeholder = "UNDEFINED")
-    private String gateway;
-
-    @Getter
-    @Setter
-    @Column(name = "token", type = ID.SQTYPE, placeholder = "UNDEFINED")
+public class Session extends Element {
+    @Identity
+    @Builder.Default
+    private ID id = new ID();
+    private ID gateway;
     private ID token;
-
-    @Getter
-    @Setter
-    @Column(name = "user", type = ID.SQTYPE, placeholder = "UNDEFINED")
     private ID user;
+    @Builder.Default
+    private long last = 0;
 
-    @Getter
-    @Setter
-    @Column(name = "last", type = "BIGINT", placeholder = "0")
-    private long last;
+    @Override
+    public String getTableName() {
+        return "session";
+    }
 }
