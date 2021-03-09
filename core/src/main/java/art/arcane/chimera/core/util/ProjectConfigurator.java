@@ -159,17 +159,18 @@ public class ProjectConfigurator extends QuillService {
 
         try {
             IO.writeAll(main, src.replaceAll("\\Q$u\\E", u).replaceAll("\\Q$l\\E", l));
-            L.i("Created " + main.getAbsolutePath());
+            L.i("Created " + main.getPath());
             IO.writeAll(proto, protoSrc.replaceAll("\\Q$u\\E", u).replaceAll("\\Q$l\\E", l));
-            L.i("Created " + proto.getAbsolutePath());
+            L.i("Created " + proto.getPath());
             IO.writeAll(mf, ProjectConfigurator.mf.replaceAll("\\Q$u\\E", u).replaceAll("\\Q$l\\E", l));
-            L.i("Created " + mf.getAbsolutePath());
+            L.i("Created " + mf.getPath());
             IO.writeAll(bg, gradle);
-            L.i("Created " + bg.getAbsolutePath());
-            KList<String> lines = KList.from(IO.readLines(new FileInputStream("settings.gradle")));
+            L.i("Created " + bg.getPath());
+            KList<String> lines = KList.from(IO.readLines(new FileInputStream(new File(rootProject, "settings.gradle"))));
             lines.add(1, "include '" + l + "'");
+            L.i("Editing " + new File(rootProject, "settings.gradle").getPath());
+
             IO.writeAll(new File(rootProject, "settings.gradle"), lines.toString("\n"));
-            L.i("Editing " + new File(rootProject, "settings.gradle").getAbsolutePath());
             IO.writeAll(new File(rootProject, "build.gradle"), KList.from(IO.readLines(new FileInputStream("build.gradle"))).convert((i) -> {
                 if (i.contains("boolean allowProtogen = true;")) {
                     return i.replaceAll("\\Qboolean allowProtogen = true;\\E", "boolean allowProtogen = false;");
@@ -177,7 +178,7 @@ public class ProjectConfigurator extends QuillService {
 
                 return i;
             }).toString("\n"));
-            L.i("Editing " + new File(rootProject, "build.gradle").getAbsolutePath());
+            L.i("Editing " + new File(rootProject, "build.gradle").getPath());
             L.i("Building Projects...");
             L.flush();
             ProcessBuilder pb = new ProcessBuilder("gradlew", "build");
@@ -207,7 +208,7 @@ public class ProjectConfigurator extends QuillService {
 
                 return i;
             }).toString("\n"));
-            L.i("Editing " + new File(rootProject, "build.gradle").getAbsolutePath());
+            L.i("Editing " + new File(rootProject, "build.gradle").getPath());
             L.i("Rebuilding Projects...");
             L.flush();
             pb = new ProcessBuilder("gradlew", "build");
