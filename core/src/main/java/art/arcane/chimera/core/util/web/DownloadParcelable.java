@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public interface DownloadParcelable extends art.arcane.quill.web.Parcelable {
+public interface DownloadParcelable extends Parcelable {
     public InputStream getStream();
 
     public String getName();
