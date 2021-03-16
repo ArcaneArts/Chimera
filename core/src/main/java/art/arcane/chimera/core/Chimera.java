@@ -37,6 +37,18 @@ public class Chimera {
             }
         };
 
+        for (StackTraceElement i : Thread.currentThread().getStackTrace()) {
+            try {
+                Class<? extends QuillService> s = (Class<? extends QuillService>) Class.forName(i.getClassName());
+                if (QuillService.class.isAssignableFrom(s)) {
+                    Quill.delegateClass = s;
+                    break;
+                }
+            } catch (Throwable e) {
+                
+            }
+        }
+
         for (String v : a) {
             if (v.equals("-config")) {
                 setupChimeraProject(a);

@@ -1,7 +1,6 @@
 package art.arcane.chimera.core.protocol.generation;
 
 import art.arcane.chimera.core.Chimera;
-import art.arcane.chimera.core.microservice.ChimeraBackendService;
 import art.arcane.chimera.core.object.ServiceJob;
 import art.arcane.chimera.core.protocol.EDX;
 import art.arcane.quill.collections.ID;
@@ -1037,10 +1036,8 @@ public class ProtoExport {
         cb.append(" {");
 
         cb.append(O.class.getCanonicalName() + "<" + f.getFixedResult() + "> result = new " + O.class.getCanonicalName() + "<>();");
-        cb.append(ChimeraBackendService.class.getCanonicalName());
         cb.append(Chimera.class.getCanonicalName() + ".backend");
         cb.append(".serviceWork(() -> result.set(");
-        cb.append(ChimeraBackendService.class.getCanonicalName() + "");
         cb.append(Chimera.class.getCanonicalName() + ".backend");
         cb.append(f.isDownstreamResult() ? (".invokeDownstreamFunction(\"" + f.getName() + "\"") : (".invokeFunction(\"" + f.getName() + "\""));
         pb = new StringBuilder();

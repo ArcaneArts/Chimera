@@ -2,67 +2,18 @@
     "webSocketService": {
         "bind": "localhost",
         "port": 8585,
-        "gateway": {
-            "remoteSocketUpdateInterval": 3250,
-            "redis": {
-                "database": 1,
-                "password": "asecurepassword",
-                "address": "localhost",
-                "port": 6379,
-                "logging": true,
-                "ssl": false,
-                "timeout": 7000
-            }
-        }
+        "gateway": {}
     },
     "console": {
         "activeFlushInterval": 250,
         "shittyConsole": false,
         "allowCommands": true,
         "deduplicateLines": true,
-        "idleFlushInterval": 1000
+        "idleFlushInterval": 1000,
+        "verbose": true
     },
     "sessionCleanupMinuteLaziness": 30,
     "hangingWebClient": {"timeoutMinutes": 5},
-    "backendService": {
-        "impatientWebClient": {"timeoutMs": 150},
-        "serviceAccess": {
-            "maxConservativeServiceGroupSize": 8,
-            "maxServiceGroupSize": 64,
-            "networkUpdates": true,
-            "tickTime": 5000,
-            "fastTickTime": 750,
-            "startupFastTicks": 30
-        },
-        "web": {
-            "webServer": {
-                "serverPath": "/",
-                "sslKeystorePassword": "",
-                "sslKeystoreKeyName": "",
-                "sslKeystore": "",
-                "maxFormContentSize": 1073741824,
-                "httpPort": 80,
-                "http": true,
-                "sslKeystoreKeyPassword": "",
-                "https": false,
-                "httpsPort": 8443
-            },
-            "minPort": 10000,
-            "maxPort": 20000
-        },
-        "hangingWebClient": {"timeoutMinutes": 5},
-        "protocolAccess": {},
-        "logRequests": true,
-        "redis": {
-            "database": 0,
-            "password": "asecurepassword",
-            "address": "localhost",
-            "port": 6379,
-            "logging": true,
-            "ssl": false,
-            "timeout": 7000
-        }
-    },
     "listenerCleanupMinuteLaziness": 60,
     "minutesPerSessionCleanup": 60,
     "logRequests": true,
@@ -72,19 +23,7 @@
         "maxInterval": 1000,
         "minTicksPerInterval": 3
     },
-    "verbose": true,
     "impatientWebClient": {"timeoutMs": 150},
-    "database": {
-        "jdbcAddress": "localhost",
-        "jdbcDriver": "com.mysql.jdbc.Driver",
-        "jdbcPort": 3306,
-        "jdbcTimeout": 3000,
-        "jdbcConnections": 1,
-        "jdbcPassword": "123123123",
-        "jdbcLogging": false,
-        "jdbcDatabase": "chimera_gateway",
-        "jdbcUsername": "chimera"
-    },
     "serviceAccess": {
         "maxConservativeServiceGroupSize": 64,
         "maxServiceGroupSize": 64,
@@ -93,17 +32,16 @@
         "fastTickTime": 950,
         "startupFastTicks": 7
     },
-    "serviceDatabase": {
-        "jdbcAddress": "localhost",
-        "jdbcDriver": "com.mysql.jdbc.Driver",
-        "jdbcPort": 3306,
-        "jdbcTimeout": 3000,
-        "jdbcConnections": 1,
-        "jdbcPassword": "123123123",
-        "jdbcLogging": false,
-        "jdbcDatabase": "chimera_core",
-        "jdbcUsername": "chimera"
-    },
+    "database": {"sqlConnections": [{
+        "database": "chimera",
+        "password": "chimera",
+        "address": "localhost",
+        "driver": "com.mysql.cj.jdbc.Driver",
+        "port": 3306,
+        "readOnly": false,
+        "username": "chimera",
+        "usesPassword": true
+    }]},
     "web": {
         "webServer": {
             "serverPath": "/",
@@ -128,5 +66,5 @@
         "maxInterval": 1000,
         "minTicksPerInterval": 3
     },
-    "gateway": {}
+    "gateway": {"listenerCleanupDaysEviction": 31}
 }
