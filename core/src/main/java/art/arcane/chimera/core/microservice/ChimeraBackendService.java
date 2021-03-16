@@ -84,11 +84,17 @@ public abstract class ChimeraBackendService extends QuillService {
         Chimera.backend = this;
     }
 
+    public ChimeraBackendService() {
+        this("ERROR");
+    }
+
     private void publish(HostedService service) {
+        service.setArchon(Chimera.archon);
         service.push();
     }
 
     private void unpublish(HostedService host) {
+        host.setArchon(Chimera.archon);
         host.delete();
     }
 
@@ -231,9 +237,34 @@ public abstract class ChimeraBackendService extends QuillService {
         return res.get();
     }
 
+    public abstract void onStart();
+
+    public abstract void onStop();
+
     @Override
     public void onEnable() {
         id = new ID();
+        functions = new KList<>();
+
+        L.v("FUNCSTI CREATE");
+        for (Field i : QuillService.getAllFields(getClass())) {
+            if (i.isAnnotationPresent(Protocol.class)) {
+                try {
+                    i.setAccessible(true);
+                    functions.add(ProtoBuilder.functions(i.getType(), i.get(Modifier.isStatic(i.getModifiers()) ? null : this)));
+                } catch (IllegalAccessException e) {
+                    L.ex(e);
+                    Quill.crash("Failed to read function list in field " + i.getName() + " in " + getClass().getCanonicalName());
+                }
+            }
+        }
+
+        console.registerCommand("list-functions", (args) ->
+        {
+            getProtocolAccess().getAllFunctions().forEach((i) -> L.i(i.getName() + ": " + new Gson().toJson(i)));
+            return true;
+        });
+
         for (Class<? extends Parcelable> i : web.getServer().getParcelables()) {
             try {
                 Parcelable v = i.getConstructor().newInstance();
@@ -271,8 +302,7 @@ public abstract class ChimeraBackendService extends QuillService {
             Quill.crashStack("Failed to register service protocols");
         }
 
-        L.i("STARTED");
-        L.i("EDICT " + getDatabase().access() != null);
+        onStart();
     }
 
     public void registerProtocols(String i) {
@@ -291,6 +321,7 @@ public abstract class ChimeraBackendService extends QuillService {
     @Override
     public void onDisable() {
         unpublish(host);
+        onStop();
     }
 
     public void scheduleRepeatingJob(Runnable delegate, long interval) {
@@ -320,29 +351,5 @@ public abstract class ChimeraBackendService extends QuillService {
 
     public InputStream invokeDownstreamFunction(String name, Object... params) {
         return getProtocolAccess().executeDownstream(name, params);
-    }
-
-    @Override
-    public void startService() {
-        functions = new KList<>();
-
-        for (Field i : QuillService.getAllFields(getClass())) {
-            if (i.isAnnotationPresent(Protocol.class)) {
-                try {
-                    i.setAccessible(true);
-                    functions.add(ProtoBuilder.functions(i.getType(), i.get(Modifier.isStatic(i.getModifiers()) ? null : this)));
-                } catch (IllegalAccessException e) {
-                    L.ex(e);
-                    Quill.crash("Failed to read function list in field " + i.getName() + " in " + getClass().getCanonicalName());
-                }
-            }
-        }
-        super.startService();
-
-        console.registerCommand("list-functions", (args) ->
-        {
-            getProtocolAccess().getAllFunctions().forEach((i) -> L.i(i.getName() + ": " + new Gson().toJson(i)));
-            return true;
-        });
     }
 }

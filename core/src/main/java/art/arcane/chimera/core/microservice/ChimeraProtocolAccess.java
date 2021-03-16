@@ -210,14 +210,16 @@ public class ChimeraProtocolAccess extends QuillServiceWorker {
 
     @Override
     public void onEnable() {
-        for (ProtoFunction i : Chimera.backend.getFunctions()) {
-            if (localFunctions.containsKey(i.getName())) {
-                Quill.crashStack("Duplicate Function! " + i.toString() + " AND " + localFunctions.get(i.getName()).toString());
-                return;
-            }
+        Quill.postJob(() -> {
+            for (ProtoFunction i : Chimera.backend.getFunctions()) {
+                if (localFunctions.containsKey(i.getName())) {
+                    Quill.crashStack("Duplicate Function! " + i.toString() + " AND " + localFunctions.get(i.getName()).toString());
+                    return;
+                }
 
-            localFunctions.put(i.getName(), i);
-        }
+                localFunctions.put(i.getName(), i);
+            }
+        });
     }
 
     @Override
