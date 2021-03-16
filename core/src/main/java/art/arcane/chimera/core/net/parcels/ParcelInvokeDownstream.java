@@ -1,7 +1,6 @@
 package art.arcane.chimera.core.net.parcels;
 
 import art.arcane.chimera.core.Chimera;
-import art.arcane.chimera.core.microservice.ChimeraBackendService;
 import art.arcane.chimera.core.protocol.ChimeraContext;
 import art.arcane.chimera.core.util.web.DownloadParcelable;
 import art.arcane.chimera.core.util.web.Parcel;
@@ -25,7 +24,7 @@ public class ParcelInvokeDownstream extends Parcel implements DownloadParcelable
 
     @Override
     public Parcelable respond() {
-        InputStream result = ((ChimeraBackendService) Chimera.delegate).getProtocolAccess().executeTypeDownstreamWithContext(context, null, method, parameters.toArray(new Object[0]));
+        InputStream result = Chimera.backend.getProtocolAccess().executeTypeDownstreamWithContext(context, null, method, parameters.toArray(new Object[0]));
 
         if (result == null) {
             return new ParcelError("Null Downstream for " + method);

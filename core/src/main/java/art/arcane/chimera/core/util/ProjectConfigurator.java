@@ -108,7 +108,7 @@ public class ProjectConfigurator extends QuillService {
         super("ChimeraSetup");
     }
 
-    public static void start() {
+    public static void startConfigurator() {
         Quill.start(ProjectConfigurator.class, new String[0]);
     }
 

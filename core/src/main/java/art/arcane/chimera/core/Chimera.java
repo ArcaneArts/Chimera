@@ -1,11 +1,13 @@
 package art.arcane.chimera.core;
 
+import art.arcane.archon.server.ArchonServiceWorker;
+import art.arcane.chimera.core.microservice.ChimeraBackendService;
 import art.arcane.chimera.core.protocol.EDX;
 import art.arcane.chimera.core.protocol.generation.*;
 import art.arcane.chimera.core.util.ProjectConfigurator;
+import art.arcane.quill.Quill;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.collections.KMap;
-import art.arcane.quill.execution.J;
 import art.arcane.quill.io.IO;
 import art.arcane.quill.json.JSONArray;
 import art.arcane.quill.json.JSONObject;
@@ -19,74 +21,44 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 
 public class Chimera {
-    public static Class<? extends QuillService> delegateClass = null;
-    public static QuillService delegate = null;
+    public static ArchonServiceWorker archon;
+    public static ChimeraBackendService backend;
+    public static QuillService delegate;
 
-    public static final void fix(Class<?> derp) {
+    public static void fix(Class<?> derp) {
         // "Fixed"
     }
 
     public static void start(String[] a) {
+        Runnable post = new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        };
+
         for (String v : a) {
             if (v.equals("-config")) {
-                setupChimeraProject(a);
-
-                return;
+                post = () -> setupChimeraProject(a);
             }
 
             if (v.equals("-protogen")) {
-                for (StackTraceElement i : Thread.currentThread().getStackTrace()) {
-                    try {
-                        Class<? extends QuillService> s = (Class<? extends QuillService>) Class.forName(i.getClassName());
-                        if (QuillService.class.isAssignableFrom(s)) {
-                            startProtogen(s, a);
-                            return;
-                        }
-                    } catch (Throwable e) {
-                        L.ex(e);
-                    }
-                }
-
-                return;
+                post = () -> startProtogen(a);
             }
 
             if (v.equals("-codegen")) {
-                for (StackTraceElement i : Thread.currentThread().getStackTrace()) {
-                    try {
-                        Class<? extends QuillService> s = (Class<? extends QuillService>) Class.forName(i.getClassName());
-                        if (QuillService.class.isAssignableFrom(s)) {
-                            startCodegen(s, a);
-                            return;
-                        }
-                    } catch (Throwable e) {
-                        L.ex(e);
-                    }
-                }
-
-                return;
+                post = () -> startCodegen(a);
             }
         }
 
-        for (StackTraceElement i : Thread.currentThread().getStackTrace()) {
-            try {
-                Class<? extends QuillService> s = (Class<? extends QuillService>) Class.forName(i.getClassName());
-                if (QuillService.class.isAssignableFrom(s)) {
-                    start(s, a);
-                    return;
-                }
-            } catch (Throwable e) {
-
-            }
-        }
+        Quill.start(a);
     }
 
     private static void setupChimeraProject(String[] a) {
-        ProjectConfigurator.start();
+        ProjectConfigurator.startConfigurator();
     }
 
-    private static void startCodegen(Class<? extends QuillService> s, String[] a) {
-        delegateClass = s;
-
+    private static void startCodegen(String[] a) {
         KMap<String, File> dff = new KMap<String, File>();
         String[] flutterProjects = new String[0];
         String[] flutterClientProjects = new String[0];
@@ -216,11 +188,10 @@ public class Chimera {
         System.exit(0);
     }
 
-    private static void startProtogen(Class<? extends QuillService> s, String[] a) {
-        delegateClass = s;
+    private static void startProtogen(String[] a) {
         KList<ProtoFunction> localFunctions = new KList<>();
 
-        for (Field i : s.getDeclaredFields()) {
+        for (Field i : Quill.delegateClass.getDeclaredFields()) {
             if (i.isAnnotationPresent(Protocol.class)) {
                 localFunctions.addAll(ProtoBuilder.functions(i.getType(), null));
             }
@@ -251,63 +222,5 @@ public class Chimera {
         L.i("Wrote " + localFunctions.size() + " Functions to " + out.getAbsolutePath());
         L.flush();
         System.exit(0);
-    }
-
-    public static void start(Class<? extends QuillService> service, String[] a) {
-        if (delegate != null) {
-            crashStack("Service attempted to start when an existing delegate was already running!");
-            return;
-        }
-
-        try {
-            delegateClass = service;
-            delegate = QuillService.initializeConfigured(service);
-            assert delegate != null;
-        } catch (Throwable e) {
-            L.ex(e);
-            crash("Failed to initialize Chimera Service Delegate Class");
-            return;
-        }
-
-        try {
-            delegate.startService();
-        } catch (Throwable e) {
-            L.ex(e);
-            crash("Failed to start Chimera Service Delegate onEnable");
-            return;
-        }
-
-        Runtime.getRuntime().addShutdownHook(new Thread(Chimera::shutdown));
-    }
-
-    public static void shutdown() {
-        try {
-            delegate.stopService();
-        } catch (Throwable e) {
-
-        }
-
-        delegateClass = null;
-        delegate = null;
-        System.exit(0);
-    }
-
-    public static void crash() {
-        crash("¯\\_(ツ)_/¯");
-    }
-
-    public static void crashStack(String message) {
-        J.printStack(message);
-        crash(message);
-    }
-
-    public static void crash(String message) {
-        L.f("Chimera Service Crash: " + message);
-        L.flush();
-        System.exit(1);
-    }
-
-    public static String getDelegateModuleName() {
-        return delegateClass.getCanonicalName().split("\\Q.\\E")[3];
     }
 }

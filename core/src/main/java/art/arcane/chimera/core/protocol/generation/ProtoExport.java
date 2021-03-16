@@ -1037,13 +1037,11 @@ public class ProtoExport {
         cb.append(" {");
 
         cb.append(O.class.getCanonicalName() + "<" + f.getFixedResult() + "> result = new " + O.class.getCanonicalName() + "<>();");
-        cb.append("((");
-        cb.append(ChimeraBackendService.class.getCanonicalName() + ")");
-        cb.append(Chimera.class.getCanonicalName() + ".delegate)");
+        cb.append(ChimeraBackendService.class.getCanonicalName());
+        cb.append(Chimera.class.getCanonicalName() + ".backend");
         cb.append(".serviceWork(() -> result.set(");
-        cb.append("((");
-        cb.append(ChimeraBackendService.class.getCanonicalName() + ")");
-        cb.append(Chimera.class.getCanonicalName() + ".delegate)");
+        cb.append(ChimeraBackendService.class.getCanonicalName() + "");
+        cb.append(Chimera.class.getCanonicalName() + ".backend");
         cb.append(f.isDownstreamResult() ? (".invokeDownstreamFunction(\"" + f.getName() + "\"") : (".invokeFunction(\"" + f.getName() + "\""));
         pb = new StringBuilder();
 
@@ -1114,7 +1112,7 @@ public class ProtoExport {
         cb.append("((").append(ServiceJob.class.getCanonicalName() + ")");
         cb.append(ServiceJob.class.getCanonicalName() + ".builder().service(\"" + f.getService() + "\").deadline(deadline).ttl(ttl).function(\"" + f.getName() + "\").id(new " + ID.class.getCanonicalName() + "())");
         cb.append(".build()");
-        cb.append(".archon(((" + ChimeraBackendService.class.getCanonicalName() + ") " + Chimera.class.getCanonicalName() + ".delegate).getDatabase())");
+        cb.append(".archon(" + Chimera.class.getCanonicalName() + ".backend.getDatabase())");
         cb.append(")");
         cb.append(".encodeParameters(new Object[]{");
         pb = new StringBuilder();

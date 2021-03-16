@@ -6,6 +6,7 @@ import art.arcane.chimera.core.net.ServiceSet;
 import art.arcane.chimera.core.net.parcels.ParcelPing;
 import art.arcane.chimera.core.net.parcels.ParcelPong;
 import art.arcane.chimera.core.object.HostedService;
+import art.arcane.quill.Quill;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.collections.KMap;
 import art.arcane.quill.collections.KSet;
@@ -86,7 +87,7 @@ public class ChimeraServiceAccess extends QuillServiceWorker {
                 svc.append(", " + i + "(" + services.get(i).size() + ")");
             }
 
-            int f = ((ChimeraBackendService) Chimera.delegate).getProtocolAccess().getAllFunctions().size();
+            int f = ((ChimeraBackendService) Quill.delegate).getProtocolAccess().getAllFunctions().size();
             String ff = f + " Function" + (f == 1 ? "" : "s");
             String g = nodes + " Node" + (nodes == 1 ? "" : "s") + ", " + ff + " ";
 
@@ -174,7 +175,7 @@ public class ChimeraServiceAccess extends QuillServiceWorker {
 
     private boolean ping(HostedService svc) {
         try {
-            ParcelPong pong = (ParcelPong) ((ChimeraBackendService) Chimera.delegate)
+            ParcelPong pong = (ParcelPong) Chimera.backend
                     .requestImpatient(svc, new ParcelPing(), true);
 
             if (pong != null) {
@@ -247,7 +248,7 @@ public class ChimeraServiceAccess extends QuillServiceWorker {
         if (verifyService(i)) {
             services.get(i.getType()).add(i);
             L.v("Found Service " + i.getType() + "/" + i.getId() + " at " + i.getAddress() + ":" + i.getPort() + " online for " + Form.duration(M.ms() - i.getTime()));
-            ((ChimeraBackendService) Chimera.delegate).registerProtocols(i.getType());
+            Chimera.backend.registerProtocols(i.getType());
             logNetworkUpdate();
         } else {
             if (services.containsKey(i.getType()) && services.get(i.getType()).isEmpty()) {
@@ -302,7 +303,7 @@ public class ChimeraServiceAccess extends QuillServiceWorker {
     }
 
     private void notifyShuttingDown(HostedService i) {
-        ((ChimeraBackendService) Chimera.delegate).requestImpatient(i, null, true);
+        Chimera.backend.requestImpatient(i, null, true);
     }
 
     @Override
@@ -316,6 +317,6 @@ public class ChimeraServiceAccess extends QuillServiceWorker {
             J.a(() -> notifyShuttingDown(i));
         }
 
-        J.sleep(((ChimeraBackendService) Chimera.delegate).getImpatientWebClient().getTimeoutMs() + 50);
+        J.sleep(Chimera.backend.getImpatientWebClient().getTimeoutMs() + 50);
     }
 }

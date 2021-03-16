@@ -9,6 +9,7 @@ import art.arcane.chimera.core.protocol.generation.ProtoBuilder;
 import art.arcane.chimera.core.protocol.generation.ProtoFunction;
 import art.arcane.chimera.core.protocol.generation.Protocol;
 import art.arcane.chimera.core.util.web.Parcelable;
+import art.arcane.quill.Quill;
 import art.arcane.quill.collections.ID;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.collections.KMap;
@@ -76,6 +77,12 @@ public abstract class ChimeraBackendService extends QuillService {
     private transient ID id;
     private transient HostedService host;
     private transient KMap<String, Class<? extends Parcelable>> parcelTypeCache = new KMap<>();
+
+    public ChimeraBackendService(String name) {
+        super(name);
+        Chimera.archon = getDatabase();
+        Chimera.backend = this;
+    }
 
     private void publish(HostedService service) {
         service.push();
@@ -233,7 +240,7 @@ public abstract class ChimeraBackendService extends QuillService {
                 parcelTypeCache.put(v.getParcelType(), i);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 L.ex(e);
-                Chimera.crash("Failed to process parcel " + i.getCanonicalName());
+                Quill.crash("Failed to process parcel " + i.getCanonicalName());
             }
         }
 
@@ -245,14 +252,14 @@ public abstract class ChimeraBackendService extends QuillService {
                     .id(id)
                     .time(M.ms())
                     .dir(web.getWebServer().serverPath())
-                    .type(Chimera.getDelegateModuleName())
+                    .type(Quill.getDelegateModuleName())
                     .build();
             publish(host);
             //@done
             L.i("Published Host: " + host.toString());
         } catch (Throwable e) {
             L.ex(e);
-            Chimera.crash("Failed to build host information for service publication.");
+            Quill.crash("Failed to build host information for service publication.");
         }
 
         for (String i : getServiceAccess().getServices()) {
@@ -276,10 +283,6 @@ public abstract class ChimeraBackendService extends QuillService {
     @Override
     public void onDisable() {
         unpublish(host);
-    }
-
-    public ChimeraBackendService(String serviceName) {
-        super(serviceName);
     }
 
     public void scheduleRepeatingJob(Runnable delegate, long interval) {
@@ -322,7 +325,7 @@ public abstract class ChimeraBackendService extends QuillService {
                     functions.add(ProtoBuilder.functions(i.getType(), i.get(Modifier.isStatic(i.getModifiers()) ? null : this)));
                 } catch (IllegalAccessException e) {
                     L.ex(e);
-                    Chimera.crash("Failed to read function list in field " + i.getName() + " in " + getClass().getCanonicalName());
+                    Quill.crash("Failed to read function list in field " + i.getName() + " in " + getClass().getCanonicalName());
                 }
             }
         }

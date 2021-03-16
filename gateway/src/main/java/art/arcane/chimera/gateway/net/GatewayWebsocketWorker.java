@@ -1,6 +1,6 @@
 package art.arcane.chimera.gateway.net;
 
-import art.arcane.chimera.core.Chimera;
+import art.arcane.quill.Quill;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.service.QuillServiceWorker;
 import art.arcane.quill.service.ServiceWorker;
@@ -28,7 +28,7 @@ public class GatewayWebsocketWorker extends QuillServiceWorker {
             server.start();
         } catch (DeploymentException e) {
             L.ex(e);
-            Chimera.crash("Deployment Error Websocket Server");
+            Quill.crash("Deployment Error Websocket Server");
         }
     }
 

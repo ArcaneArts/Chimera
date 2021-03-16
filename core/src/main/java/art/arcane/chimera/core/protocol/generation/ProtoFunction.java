@@ -1,8 +1,8 @@
 package art.arcane.chimera.core.protocol.generation;
 
-import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.protocol.ChimeraContext;
 import art.arcane.chimera.core.protocol.EDX;
+import art.arcane.quill.Quill;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.logging.L;
 import com.google.gson.Gson;
@@ -183,7 +183,7 @@ public class ProtoFunction {
                 .type(type)
                 .bigJob(m.isAnnotationPresent(BigJob.class))
                 .resultType(m.getReturnType().getCanonicalName())
-                .service(Chimera.getDelegateModuleName())
+                .service(Quill.getDelegateModuleName())
                 .downstreamResult(m.getReturnType().equals(InputStream.class))
                 .src(m.getDeclaringClass().getCanonicalName())
                 .description("No Description Provided")

@@ -22,29 +22,8 @@
         "deduplicateLines": true,
         "idleFlushInterval": 1000
     },
-    "database": {
-        "jdbcAddress": "localhost",
-        "jdbcDriver": "com.mysql.jdbc.Driver",
-        "jdbcPort": 3306,
-        "jdbcTimeout": 3000,
-        "jdbcConnections": 1,
-        "jdbcPassword": "123123123",
-        "jdbcLogging": false,
-        "jdbcDatabase": "chimera_gateway",
-        "jdbcUsername": "chimera"
-    },
-    "serviceDatabase": {
-        "jdbcAddress": "localhost",
-        "jdbcDriver": "com.mysql.jdbc.Driver",
-        "jdbcPort": 3306,
-        "jdbcTimeout": 3000,
-        "jdbcConnections": 1,
-        "jdbcPassword": "123123123",
-        "jdbcLogging": false,
-        "jdbcDatabase": "chimera_core",
-        "jdbcUsername": "chimera"
-    },
     "sessionCleanupMinuteLaziness": 30,
+    "hangingWebClient": {"timeoutMinutes": 5},
     "backendService": {
         "impatientWebClient": {"timeoutMs": 150},
         "serviceAccess": {
@@ -86,6 +65,68 @@
     },
     "listenerCleanupMinuteLaziness": 60,
     "minutesPerSessionCleanup": 60,
-    "gateway": {},
-    "verbose": true
+    "logRequests": true,
+    "schedulerService": {
+        "minInterval": 1000,
+        "maxTicksPerInterval": 1,
+        "maxInterval": 1000,
+        "minTicksPerInterval": 3
+    },
+    "verbose": true,
+    "impatientWebClient": {"timeoutMs": 150},
+    "database": {
+        "jdbcAddress": "localhost",
+        "jdbcDriver": "com.mysql.jdbc.Driver",
+        "jdbcPort": 3306,
+        "jdbcTimeout": 3000,
+        "jdbcConnections": 1,
+        "jdbcPassword": "123123123",
+        "jdbcLogging": false,
+        "jdbcDatabase": "chimera_gateway",
+        "jdbcUsername": "chimera"
+    },
+    "serviceAccess": {
+        "maxConservativeServiceGroupSize": 64,
+        "maxServiceGroupSize": 64,
+        "networkUpdates": true,
+        "tickTime": 7000,
+        "fastTickTime": 950,
+        "startupFastTicks": 7
+    },
+    "serviceDatabase": {
+        "jdbcAddress": "localhost",
+        "jdbcDriver": "com.mysql.jdbc.Driver",
+        "jdbcPort": 3306,
+        "jdbcTimeout": 3000,
+        "jdbcConnections": 1,
+        "jdbcPassword": "123123123",
+        "jdbcLogging": false,
+        "jdbcDatabase": "chimera_core",
+        "jdbcUsername": "chimera"
+    },
+    "web": {
+        "webServer": {
+            "serverPath": "/",
+            "sslKeystorePassword": "",
+            "sslKeystoreKeyName": "",
+            "sslKeystore": "",
+            "maxFormContentSize": 1073741824,
+            "httpPort": 80,
+            "http": true,
+            "sslKeystoreKeyPassword": "",
+            "https": false,
+            "httpsPort": 8443
+        },
+        "minPort": 10000,
+        "maxPort": 20000
+    },
+    "protocolAccess": {},
+    "jobService": {
+        "logJobExecutions": true,
+        "minInterval": 1000,
+        "maxTicksPerInterval": 1,
+        "maxInterval": 1000,
+        "minTicksPerInterval": 3
+    },
+    "gateway": {}
 }

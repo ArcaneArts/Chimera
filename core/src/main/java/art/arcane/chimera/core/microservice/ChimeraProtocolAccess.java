@@ -10,6 +10,7 @@ import art.arcane.chimera.core.protocol.EDN;
 import art.arcane.chimera.core.protocol.generation.ProtoFunction;
 import art.arcane.chimera.core.protocol.generation.ProtoParam;
 import art.arcane.chimera.core.protocol.generation.ProtoType;
+import art.arcane.quill.Quill;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.collections.KMap;
 import art.arcane.quill.logging.L;
@@ -23,7 +24,7 @@ public class ChimeraProtocolAccess extends QuillServiceWorker {
     private transient KMap<String, KList<ProtoFunction>> remoteFunctionGroups = new KMap<>();
 
     public void registerRemoteFunctions(HostedService service, KList<ProtoFunction> functions) {
-        if (service.getType().equals(Chimera.getDelegateModuleName())) {
+        if (service.getType().equals(Quill.getDelegateModuleName())) {
             return;
         }
 
@@ -180,7 +181,7 @@ public class ChimeraProtocolAccess extends QuillServiceWorker {
         invoke.setMethod(j.getName());
         invoke.setContext(context);
         invoke.setParameters(new KList<>(parameters));
-        ChimeraBackendService c = (ChimeraBackendService) Chimera.delegate;
+        ChimeraBackendService c = Chimera.backend;
         ParcelResult result = (ParcelResult) c.request(j.getService(), invoke);
 
         if (j.getResult().equals(ProtoType.JSON_OBJECT)) {
@@ -200,7 +201,7 @@ public class ChimeraProtocolAccess extends QuillServiceWorker {
         invoke.setContext(context);
         invoke.setParameters(new KList<>(parameters));
 
-        return ((ChimeraBackendService) Chimera.delegate).requestDownstream(j.getService(), invoke);
+        return Chimera.backend.requestDownstream(j.getService(), invoke);
     }
 
     private Object invokeRemote(String service, ProtoFunction j, Object[] parameters) {
@@ -209,15 +210,13 @@ public class ChimeraProtocolAccess extends QuillServiceWorker {
 
     @Override
     public void onEnable() {
-        if (Chimera.delegate instanceof ChimeraBackendService) {
-            for (ProtoFunction i : ((ChimeraBackendService) Chimera.delegate).getFunctions()) {
-                if (localFunctions.containsKey(i.getName())) {
-                    Chimera.crashStack("Duplicate Function! " + i.toString() + " AND " + localFunctions.get(i.getName()).toString());
-                    return;
-                }
-
-                localFunctions.put(i.getName(), i);
+        for (ProtoFunction i : Chimera.backend.getFunctions()) {
+            if (localFunctions.containsKey(i.getName())) {
+                Quill.crashStack("Duplicate Function! " + i.toString() + " AND " + localFunctions.get(i.getName()).toString());
+                return;
             }
+
+            localFunctions.put(i.getName(), i);
         }
     }
 

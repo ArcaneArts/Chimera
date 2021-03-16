@@ -1,8 +1,8 @@
 package art.arcane.chimera.core.microservice;
 
-import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.util.web.ParcelWebServer;
 import art.arcane.chimera.core.util.web.ParcelWebServerConfiguration;
+import art.arcane.quill.Quill;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.random.RNG;
 import art.arcane.quill.service.QuillServiceWorker;
@@ -27,7 +27,7 @@ public class ChimeraWebServiceWorker extends QuillServiceWorker {
 
     private void attemptStart(int i) {
         if (i <= 0) {
-            Chimera.crashStack("Failed to start web server!");
+            Quill.crashStack("Failed to start web server!");
             return;
         }
 
