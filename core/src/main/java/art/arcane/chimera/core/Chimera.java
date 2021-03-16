@@ -39,15 +39,18 @@ public class Chimera {
 
         for (String v : a) {
             if (v.equals("-config")) {
-                post = () -> setupChimeraProject(a);
+                setupChimeraProject(a);
+                return;
             }
 
             if (v.equals("-protogen")) {
-                post = () -> startProtogen(a);
+                startProtogen(a);
+                return;
             }
 
             if (v.equals("-codegen")) {
-                post = () -> startCodegen(a);
+                startCodegen(a);
+                return;
             }
         }
 
