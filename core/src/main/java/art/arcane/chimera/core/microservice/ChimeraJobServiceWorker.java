@@ -32,6 +32,12 @@ public class ChimeraJobServiceWorker extends ChimeraTickingServiceWorker {
     public void onTick() {
         String serviceType = Chimera.backend.getServiceName().toLowerCase();
         ArchonServiceWorker archon = Chimera.archon;
+
+        if (archon.access() == null) {
+            L.w("NULL EDICT???????");
+            return;
+        }
+
         ArchonResult r = archon.query("SELECT `id`,`function`,`parameters` FROM `jobs` WHERE `service` = '" + serviceType + "' AND `ttl` < " + M.ms() + " ORDER BY `deadline` DESC LIMIT 1;");
         r.forEachRow((s) -> {
             String id = s.getString(1);

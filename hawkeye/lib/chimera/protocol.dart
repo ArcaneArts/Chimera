@@ -5,24 +5,24 @@ class ChimeraGateway
 /// Invokes isRegistered(...) on the Remote Gateway Service on the Chimera Network
 static Future<bool> isRegistered(ID id) async { try{ 
 return await (ChimeraSocketHelper.invoke("isRegistered",<dynamic>[id.toJson()]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
-/// Invokes getSessionId(...) on the Remote Gateway Service on the Chimera Network
-static Future<String> getSessionId() async { try{ 
-return await (ChimeraSocketHelper.invoke("getSessionId",<dynamic>[]))as String;}catch(e){ print('Failed to convert result -> String: (probably null) $e'); return null; }}
-/// Invokes unregisterAll(...) on the Remote Gateway Service on the Chimera Network
-static Future<int> unregisterAll() async { try{ 
-return await (ChimeraSocketHelper.invoke("unregisterAll",<dynamic>[]))as int;}catch(e){ print('Failed to convert result -> int: (probably null) $e'); return null; }}
-/// Invokes ping(...) on the Remote Gateway Service on the Chimera Network
-static Future<bool> ping() async { try{ 
-return await (ChimeraSocketHelper.invoke("ping",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
-/// Invokes unregisterListener(...) on the Remote Gateway Service on the Chimera Network
-static Future<bool> unregisterListener(ID id) async { try{ 
-return await (ChimeraSocketHelper.invoke("unregisterListener",<dynamic>[id.toJson()]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
-/// Invokes registerListener(...) on the Remote Gateway Service on the Chimera Network
-static Future<ID> registerListener(ID target) async { try{ 
-return WrappedObject.of(await ChimeraSocketHelper.invoke("registerListener",<dynamic>[target.toJson()])).get() as ID;}catch(e){ print('Failed to convert result -> ID: (probably null) $e'); return null; }}
 /// Invokes unregisterAllWithTarget(...) on the Remote Gateway Service on the Chimera Network
 static Future<int> unregisterAllWithTarget(ID target) async { try{ 
 return await (ChimeraSocketHelper.invoke("unregisterAllWithTarget",<dynamic>[target.toJson()]))as int;}catch(e){ print('Failed to convert result -> int: (probably null) $e'); return null; }}
+/// Invokes getSessionId(...) on the Remote Gateway Service on the Chimera Network
+static Future<String> getSessionId() async { try{ 
+return await (ChimeraSocketHelper.invoke("getSessionId",<dynamic>[]))as String;}catch(e){ print('Failed to convert result -> String: (probably null) $e'); return null; }}
+/// Invokes unregisterListener(...) on the Remote Gateway Service on the Chimera Network
+static Future<bool> unregisterListener(ID id) async { try{ 
+return await (ChimeraSocketHelper.invoke("unregisterListener",<dynamic>[id.toJson()]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
+/// Invokes unregisterAll(...) on the Remote Gateway Service on the Chimera Network
+static Future<int> unregisterAll() async { try{ 
+return await (ChimeraSocketHelper.invoke("unregisterAll",<dynamic>[]))as int;}catch(e){ print('Failed to convert result -> int: (probably null) $e'); return null; }}
+/// Invokes registerListener(...) on the Remote Gateway Service on the Chimera Network
+static Future<ID> registerListener(ID target) async { try{ 
+return WrappedObject.of(await ChimeraSocketHelper.invoke("registerListener",<dynamic>[target.toJson()])).get() as ID;}catch(e){ print('Failed to convert result -> ID: (probably null) $e'); return null; }}
+/// Invokes ping(...) on the Remote Gateway Service on the Chimera Network
+static Future<bool> ping() async { try{ 
+return await (ChimeraSocketHelper.invoke("ping",<dynamic>[]))as bool;}catch(e){ print('Failed to convert result -> bool: (probably null) $e'); return null; }}
 }
 /// User is a ghost-copy of the Java Object (art.arcane.chimera.core.object.account.User) on Chimera
 class User{

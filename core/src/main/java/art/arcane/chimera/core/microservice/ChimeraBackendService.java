@@ -262,9 +262,17 @@ public abstract class ChimeraBackendService extends QuillService {
             Quill.crash("Failed to build host information for service publication.");
         }
 
-        for (String i : getServiceAccess().getServices()) {
-            registerProtocols(i);
+        try {
+            for (String i : getServiceAccess().getServices()) {
+                registerProtocols(i);
+            }
+        } catch (Throwable e) {
+            L.ex(e);
+            Quill.crashStack("Failed to register service protocols");
         }
+
+        L.i("STARTED");
+        L.i("EDICT " + getDatabase().access() != null);
     }
 
     public void registerProtocols(String i) {
