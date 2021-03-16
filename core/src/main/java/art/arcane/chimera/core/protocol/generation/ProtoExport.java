@@ -2,9 +2,9 @@ package art.arcane.chimera.core.protocol.generation;
 
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.microservice.ChimeraBackendService;
-import art.arcane.chimera.core.object.ID;
 import art.arcane.chimera.core.object.ServiceJob;
 import art.arcane.chimera.core.protocol.EDX;
+import art.arcane.quill.collections.ID;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.collections.KMap;
 import art.arcane.quill.collections.KSet;
@@ -1110,9 +1110,13 @@ public class ProtoExport {
         cb.append(")");
         cb.append(" {");
         cb.append(nl);
-        cb.append(Chimera.class.getCanonicalName() + ".delegate.getServiceDatabase().setAsync(");
-        cb.append(ServiceJob.class.getCanonicalName() + ".builder().service(\"" + f.getService() + "\").deadline(deadline).ttl(ttl).function(\"" + f.getName() + "\").id(" + ID.class.getCanonicalName() + ".randomUUID().toString())");
-        cb.append(".build().encodeParameters(new Object[]{");
+
+        cb.append("((").append(ServiceJob.class.getCanonicalName() + ")");
+        cb.append(ServiceJob.class.getCanonicalName() + ".builder().service(\"" + f.getService() + "\").deadline(deadline).ttl(ttl).function(\"" + f.getName() + "\").id(new " + ID.class.getCanonicalName() + "())");
+        cb.append(".build()");
+        cb.append(".archon(((" + ChimeraBackendService.class.getCanonicalName() + ") " + Chimera.class.getCanonicalName() + ".delegate).getDatabase())");
+        cb.append(")");
+        cb.append("encodeParameters(new Object[]{");
         pb = new StringBuilder();
         for (ProtoParam i : f.getParams()) {
             pb.append(", ");
@@ -1125,7 +1129,7 @@ public class ProtoExport {
         } else {
             cb.append(p);
         }
-        cb.append("}));}").append(nl2);
+        cb.append("}).push();").append("}").append(nl2);
         cb.append(exportJavaFunctionScheduledLazy(f));
 
         return cb.toString();
