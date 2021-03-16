@@ -2,7 +2,7 @@ package art.arcane.chimera.core.util.web;
 
 import art.arcane.quill.collections.KList;
 
-public interface FancyParcelable extends art.arcane.quill.web.Parcelable {
+public interface FancyParcelable extends Parcelable {
     public String getHTML();
 
     public static FancyParcelable of(String html) {
