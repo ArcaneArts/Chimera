@@ -78,7 +78,7 @@ subprojects {
         compileOnly 'org.projectlombok:lombok:1.18.12'
         annotationProcessor 'org.projectlombok:lombok:1.18.12'
         implementation 'com.github.ArcaneArts:Quill:1.0.14'
-        implementation 'com.github.ArcaneArts:Archon:1.0.14'
+        implementation 'com.github.ArcaneArts:Archon:1.0.15'
         implementation 'com.github.ArcaneArts:Cauldron:1.0.9'
         implementation 'org.slf4j:slf4j-api:1.7.22'
         implementation 'com.google.code.gson:gson:2.8.6'
