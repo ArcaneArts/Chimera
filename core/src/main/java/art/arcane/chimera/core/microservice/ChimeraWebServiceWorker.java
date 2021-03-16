@@ -5,10 +5,10 @@ import art.arcane.chimera.core.util.web.ParcelWebServerConfiguration;
 import art.arcane.quill.Quill;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.random.RNG;
-import art.arcane.quill.service.QuillServiceWorker;
+import art.arcane.quill.service.QuillService;
 import lombok.Getter;
 
-public class ChimeraWebServiceWorker extends QuillServiceWorker {
+public class ChimeraWebServiceWorker extends QuillService {
     @Getter
     private ParcelWebServerConfiguration webServer = new ParcelWebServerConfiguration();
     private int minPort = 10000;

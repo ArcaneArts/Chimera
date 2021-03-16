@@ -5,9 +5,9 @@ import art.arcane.quill.collections.KList;
 import art.arcane.quill.io.IO;
 import art.arcane.quill.io.StreamGobbler;
 import art.arcane.quill.logging.L;
-import art.arcane.quill.service.ConsoleServiceWorker;
 import art.arcane.quill.service.QuillService;
-import art.arcane.quill.service.ServiceWorker;
+import art.arcane.quill.service.Service;
+import art.arcane.quill.service.services.ConsoleServiceWorker;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -101,12 +101,8 @@ public class ProjectConfigurator extends QuillService {
     private String projectName = "Chimera";
     private String appName = "kraken";
 
-    @ServiceWorker
+    @Service
     private ConsoleServiceWorker console = new ConsoleServiceWorker();
-
-    public ProjectConfigurator() {
-        super("ChimeraSetup");
-    }
 
     public static void startConfigurator() {
         Quill.start(ProjectConfigurator.class, new String[0]);

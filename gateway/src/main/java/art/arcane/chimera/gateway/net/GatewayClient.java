@@ -1,6 +1,5 @@
 package art.arcane.chimera.gateway.net;
 
-import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.microservice.ChimeraBackendService;
 import art.arcane.chimera.core.protocol.ChimeraContext;
 import art.arcane.chimera.core.protocol.EDX;
@@ -8,6 +7,7 @@ import art.arcane.chimera.core.protocol.generation.FunctionReference;
 import art.arcane.chimera.core.protocol.generation.ProtoExport;
 import art.arcane.chimera.core.protocol.generation.ProtoType;
 import art.arcane.chimera.core.protocol.generation.WrappedObject;
+import art.arcane.quill.Quill;
 import art.arcane.quill.collections.ID;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.collections.KMap;
@@ -40,11 +40,11 @@ public class GatewayClient implements IClient {
         chimeraSession = art.arcane.chimera.core.object.Session.builder()
                 .id(ID.fromString(session.getId()))
                 .last(M.ms())
-                .gateway(((ChimeraBackendService) Chimera.delegate).getId())
+                .gateway(((ChimeraBackendService) Quill.delegate).getId())
                 .token(ID.fromString("none"))
                 .user(ID.fromString("none"))
                 .build()
-                .archon(((ChimeraBackendService) Chimera.delegate).getDatabase());
+                .archon(((ChimeraBackendService) Quill.delegate).getDatabase());
 
         if (context.getAccessToken() != null) {
             chimeraSession.setToken(getContext().getAccessToken().getId());
@@ -107,7 +107,7 @@ public class GatewayClient implements IClient {
 
         if (nowSet || M.ms() - chimeraSession.getLast() > 10000) {
             chimeraSession.setLast(M.ms());
-            chimeraSession.setArchon(((ChimeraBackendService) Chimera.delegate).getDatabase());
+            chimeraSession.setArchon(((ChimeraBackendService) Quill.delegate).getDatabase());
             chimeraSession.push();
         }
     }
@@ -156,7 +156,7 @@ public class GatewayClient implements IClient {
                     .builder()
                     .id(ID.fromString(EDX.getContext().getSessionId()))
                     .build()
-                    .archon(((ChimeraBackendService) Chimera.delegate).getDatabase())
+                    .archon(((ChimeraBackendService) Quill.delegate).getDatabase())
                     .delete();
         } catch (IOException ignored) {
 

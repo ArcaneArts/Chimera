@@ -32,7 +32,7 @@
         "fastTickTime": 950,
         "startupFastTicks": 7
     },
-    "database": {"sqlConnections": [{
+    "database": {"connections": [{
         "database": "chimera",
         "password": "chimera",
         "address": "localhost",
@@ -61,10 +61,10 @@
     "protocolAccess": {},
     "jobService": {
         "logJobExecutions": true,
-        "minInterval": 1000,
+        "minInterval": 10000,
         "maxTicksPerInterval": 1,
-        "maxInterval": 1000,
-        "minTicksPerInterval": 3
+        "maxInterval": 60000,
+        "minTicksPerInterval": 1
     },
     "gateway": {"listenerCleanupDaysEviction": 31}
 }

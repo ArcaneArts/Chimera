@@ -3,13 +3,13 @@ package art.arcane.chimera.core.microservice;
 import art.arcane.quill.execution.J;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.random.RNG;
-import art.arcane.quill.service.QuillServiceWorker;
+import art.arcane.quill.service.QuillService;
 
-public abstract class ChimeraTickingServiceWorker extends QuillServiceWorker {
-    private long minInterval = 1000;
-    private long maxInterval = 1000;
+public abstract class ChimeraTickingServiceWorker extends QuillService {
+    private long minInterval = 10000;
+    private long maxInterval = 60000;
     private int maxTicksPerInterval = 1;
-    private int minTicksPerInterval = 3;
+    private int minTicksPerInterval = 1;
     private transient boolean stop = false;
 
     @Override

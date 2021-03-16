@@ -3,13 +3,13 @@ package art.arcane.chimera.mail;
 import art.arcane.chimera.core.protocol.generation.ServiceFunction;
 import art.arcane.chimera.mail.util.Email;
 import art.arcane.chimera.mail.util.MailMan;
-import art.arcane.quill.service.QuillServiceWorker;
+import art.arcane.quill.service.QuillService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ProtoMail extends QuillServiceWorker {
+public class ProtoMail extends QuillService {
     private MailMan mailMan = new MailMan();
 
     @ServiceFunction

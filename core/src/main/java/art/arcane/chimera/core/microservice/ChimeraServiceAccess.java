@@ -1,6 +1,7 @@
 package art.arcane.chimera.core.microservice;
 
-import art.arcane.archon.server.ArchonServiceWorker;
+import art.arcane.archon.data.ArchonResult;
+import art.arcane.archon.server.ArchonService;
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.net.ServiceSet;
 import art.arcane.chimera.core.net.parcels.ParcelPing;
@@ -14,11 +15,11 @@ import art.arcane.quill.execution.J;
 import art.arcane.quill.format.Form;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.math.M;
-import art.arcane.quill.service.QuillServiceWorker;
+import art.arcane.quill.service.QuillService;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ChimeraServiceAccess extends QuillServiceWorker {
+public class ChimeraServiceAccess extends QuillService {
     private transient KMap<String, ServiceSet> services = new KMap<>();
     private int startupFastTicks = 7;
     private long fastTickTime = 950;
@@ -143,7 +144,7 @@ public class ChimeraServiceAccess extends QuillServiceWorker {
         if (svc != null) {
             return svc;
         }
-        ArchonServiceWorker archon = firstParentService();
+        ArchonService archon = Chimera.archon;
         HostedService f = HostedService.builder().build();
         f.setArchon(archon);
         if (f.pull(archon.query("SELECT * FROM `" + f.getTableName() + "` WHERE `type` = '" + type + "' LIMIT 1;")) && verifyService(f)) {
@@ -259,10 +260,10 @@ public class ChimeraServiceAccess extends QuillServiceWorker {
 
     public void tick() {
         HostedService h = HostedService.builder().build();
-        ArchonServiceWorker archon = firstParentService();
+        ArchonService archon = Chimera.archon;
         h.setArchon(archon);
-
-        if (h.pull(archon.query("SELECT * FROM `" + h.getTableName() + "` ORDER BY RAND() LIMIT 1;"))) {
+        ArchonResult q = archon.query("SELECT * FROM `" + h.getTableName() + "` ORDER BY RAND() LIMIT 1;");
+        if (h.pull(q)) {
             registerService(h, maxConservativeServiceGroupSize);
         }
 

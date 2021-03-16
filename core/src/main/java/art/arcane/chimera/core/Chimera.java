@@ -1,6 +1,6 @@
 package art.arcane.chimera.core;
 
-import art.arcane.archon.server.ArchonServiceWorker;
+import art.arcane.archon.server.ArchonService;
 import art.arcane.chimera.core.microservice.ChimeraBackendService;
 import art.arcane.chimera.core.protocol.EDX;
 import art.arcane.chimera.core.protocol.generation.*;
@@ -21,9 +21,8 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 
 public class Chimera {
-    public static ArchonServiceWorker archon;
+    public static ArchonService archon;
     public static ChimeraBackendService backend;
-    public static QuillService delegate;
 
     public static void fix(Class<?> derp) {
         // "Fixed"
@@ -45,7 +44,7 @@ public class Chimera {
                     break;
                 }
             } catch (Throwable e) {
-                
+
             }
         }
 

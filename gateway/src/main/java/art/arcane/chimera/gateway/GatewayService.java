@@ -1,15 +1,16 @@
 package art.arcane.chimera.gateway;
 
-import art.arcane.archon.element.Element;
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.microservice.ChimeraBackendService;
 import art.arcane.chimera.core.object.HostedService;
 import art.arcane.chimera.core.object.Listener;
 import art.arcane.chimera.core.object.ServiceJob;
+import art.arcane.chimera.core.object.Session;
 import art.arcane.chimera.core.protocol.EDN;
 import art.arcane.chimera.core.protocol.generation.Protocol;
 import art.arcane.chimera.gateway.net.GatewayWebsocketWorker;
-import art.arcane.quill.service.ServiceWorker;
+import art.arcane.quill.Quill;
+import art.arcane.quill.service.Service;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,29 +29,27 @@ public class GatewayService extends ChimeraBackendService {
     }
 
     @Getter
-    @ServiceWorker
+    @Service
     private GatewayWebsocketWorker webSocketService = new GatewayWebsocketWorker();
 
-    @ServiceWorker
+    @Service
     @Getter
     @Protocol
     private ProtoGateway gateway = new ProtoGateway();
 
-    public GatewayService() {
-        super("Gateway");
-    }
-
     @Override
-    public void onStart() {
-        Element.register(ServiceJob.class);
-        Element.register(Listener.class);
-        Element.register(HostedService.class);
+    public void onEnable() {
+        super.onEnable();
         scheduleRepeatingJob(() -> EDN.SERVICE.Gateway.scheduleCleanupDeadSessions(TimeUnit.MINUTES.toMillis(sessionCleanupMinuteLaziness)), TimeUnit.MINUTES.toMillis(minutesPerSessionCleanup));
         EDN.SERVICE.Gateway.scheduleCleanupDeadListeners(TimeUnit.MINUTES.toMillis(listenerCleanupMinuteLaziness));
+        Quill.postJob(() -> Session.builder().build().archon(Chimera.archon).sync());
+        Quill.postJob(() -> Listener.builder().build().archon(Chimera.archon).sync());
+        Quill.postJob(() -> ServiceJob.builder().build().archon(Chimera.archon).sync());
+        Quill.postJob(() -> HostedService.builder().build().archon(Chimera.archon).sync());
     }
 
     @Override
-    public void onStop() {
-
+    public void onDisable() {
+        super.onDisable();
     }
 }

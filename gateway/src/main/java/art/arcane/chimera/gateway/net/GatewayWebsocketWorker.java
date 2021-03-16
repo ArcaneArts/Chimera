@@ -2,8 +2,8 @@ package art.arcane.chimera.gateway.net;
 
 import art.arcane.quill.Quill;
 import art.arcane.quill.logging.L;
-import art.arcane.quill.service.QuillServiceWorker;
-import art.arcane.quill.service.ServiceWorker;
+import art.arcane.quill.service.QuillService;
+import art.arcane.quill.service.Service;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.glassfish.tyrus.server.Server;
@@ -12,8 +12,8 @@ import javax.websocket.DeploymentException;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class GatewayWebsocketWorker extends QuillServiceWorker {
-    @ServiceWorker
+public class GatewayWebsocketWorker extends QuillService {
+    @Service
     private GatewayServer gateway = new GatewayServer();
     public static GatewayWebsocketWorker instance;
     private transient Server server;

@@ -1,6 +1,6 @@
 package art.arcane.chimera.core.microservice;
 
-import art.arcane.archon.server.ArchonServiceWorker;
+import art.arcane.archon.server.ArchonService;
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.net.parcels.ParcelGetProtocol;
 import art.arcane.chimera.core.net.parcels.ParcelSendProtocol;
@@ -19,9 +19,9 @@ import art.arcane.quill.json.JSONObject;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.math.M;
 import art.arcane.quill.reaction.O;
-import art.arcane.quill.service.ConsoleServiceWorker;
 import art.arcane.quill.service.QuillService;
-import art.arcane.quill.service.ServiceWorker;
+import art.arcane.quill.service.Service;
+import art.arcane.quill.service.services.ConsoleServiceWorker;
 import com.google.gson.Gson;
 import lombok.Getter;
 
@@ -35,40 +35,40 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class ChimeraBackendService extends QuillService {
     @Getter
-    @ServiceWorker
+    @Service
     private ConsoleServiceWorker console = new ConsoleServiceWorker();
 
     @Getter
-    @ServiceWorker
+    @Service
     private ChimeraWebServiceWorker web = new ChimeraWebServiceWorker();
 
     @Getter
-    @ServiceWorker
+    @Service
     private ChimeraServiceAccess serviceAccess = new ChimeraServiceAccess();
 
     @Getter
-    @ServiceWorker
+    @Service
     private ChimeraWebClientWorker hangingWebClient = new ChimeraWebClientWorker();
 
     @Getter
-    @ServiceWorker
+    @Service
     private ChimeraWebImpatientClientWorker impatientWebClient = new ChimeraWebImpatientClientWorker();
 
     @Getter
-    @ServiceWorker
+    @Service
     private ChimeraProtocolAccess protocolAccess = new ChimeraProtocolAccess();
 
     @Getter
-    @ServiceWorker
+    @Service
     private ChimeraJobServiceWorker jobService = new ChimeraJobServiceWorker();
 
     @Getter
-    @ServiceWorker
+    @Service
     private ChimeraJobScheduler schedulerService = new ChimeraJobScheduler();
 
     @Getter
-    @ServiceWorker
-    private ArchonServiceWorker database = new ArchonServiceWorker();
+    @Service
+    private ArchonService database = new ArchonService();
 
     @Getter
     private transient KList<ProtoFunction> functions;
@@ -78,14 +78,8 @@ public abstract class ChimeraBackendService extends QuillService {
     private transient HostedService host;
     private transient KMap<String, Class<? extends Parcelable>> parcelTypeCache = new KMap<>();
 
-    public ChimeraBackendService(String name) {
-        super(name);
-        Chimera.archon = getDatabase();
-        Chimera.backend = this;
-    }
-
     public ChimeraBackendService() {
-        this("ERROR");
+        Chimera.backend = this;
     }
 
     private void publish(HostedService service) {
@@ -237,16 +231,11 @@ public abstract class ChimeraBackendService extends QuillService {
         return res.get();
     }
 
-    public abstract void onStart();
-
-    public abstract void onStop();
-
     @Override
     public void onEnable() {
         id = new ID();
         functions = new KList<>();
 
-        L.v("FUNCSTI CREATE");
         for (Field i : QuillService.getAllFields(getClass())) {
             if (i.isAnnotationPresent(Protocol.class)) {
                 try {
@@ -285,9 +274,8 @@ public abstract class ChimeraBackendService extends QuillService {
                     .dir(web.getWebServer().serverPath())
                     .type(Quill.getDelegateModuleName())
                     .build();
-            publish(host);
-            //@done
-            L.i("Published Host: " + host.toString());
+            Quill.postJob(() -> host.archon(Chimera.archon).push());
+            //@done);
         } catch (Throwable e) {
             L.ex(e);
             Quill.crash("Failed to build host information for service publication.");
@@ -301,8 +289,7 @@ public abstract class ChimeraBackendService extends QuillService {
             L.ex(e);
             Quill.crashStack("Failed to register service protocols");
         }
-
-        onStart();
+        Chimera.archon = getDatabase();
     }
 
     public void registerProtocols(String i) {
@@ -321,7 +308,6 @@ public abstract class ChimeraBackendService extends QuillService {
     @Override
     public void onDisable() {
         unpublish(host);
-        onStop();
     }
 
     public void scheduleRepeatingJob(Runnable delegate, long interval) {

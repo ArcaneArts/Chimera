@@ -1,8 +1,8 @@
 package art.arcane.chimera.core.protocol;
 
-import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.microservice.ChimeraBackendService;
 import art.arcane.chimera.core.protocol.generation.ProtoFunction;
+import art.arcane.quill.Quill;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.logging.L;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -44,15 +44,15 @@ public class EDX {
     }
 
     public static Object invokeType(String type, String function, KList<Object> objects) {
-        return ((ChimeraBackendService) Chimera.delegate).getProtocolAccess().executeType(type, function, objects.toArray(new Object[0]));
+        return ((ChimeraBackendService) Quill.delegate).getProtocolAccess().executeType(type, function, objects.toArray(new Object[0]));
     }
 
     public static Object invokeTypeWithContext(ChimeraContext context, String type, String function, KList<Object> objects) {
-        return ((ChimeraBackendService) Chimera.delegate).getProtocolAccess().executeTypeWithContext(context, type, function, objects.toArray(new Object[0]));
+        return ((ChimeraBackendService) Quill.delegate).getProtocolAccess().executeTypeWithContext(context, type, function, objects.toArray(new Object[0]));
     }
 
     public static KList<ProtoFunction> getAllFunctions() {
-        return ((ChimeraBackendService) Chimera.delegate).getProtocolAccess().getAllFunctions();
+        return ((ChimeraBackendService) Quill.delegate).getProtocolAccess().getAllFunctions();
     }
 
     public static KList<ProtoFunction> getAllFunctionsOfType(String type) {
