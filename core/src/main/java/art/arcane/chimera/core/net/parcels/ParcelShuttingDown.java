@@ -1,10 +1,7 @@
 package art.arcane.chimera.core.net.parcels;
 
-import art.arcane.chimera.core.Chimera;
-import art.arcane.chimera.core.microservice.ChimeraBackendService;
-import art.arcane.quill.execution.J;
-import art.arcane.quill.web.Parcel;
-import art.arcane.quill.web.Parcelable;
+import art.arcane.chimera.core.util.web.Parcel;
+import art.arcane.chimera.core.util.web.Parcelable;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,7 +21,7 @@ public class ParcelShuttingDown extends Parcel {
 
     @Override
     public Parcelable respond() {
-        J.a(() -> ((ChimeraBackendService) Chimera.delegate).getBackendService().notifyRemoteShuttingDown(getKey()));
+        // TODO: J.a(() -> ((ChimeraBackendService) Chimera.delegate).getBackendService().notifyRemoteShuttingDown(getKey()));
         return new ParcelOK();
     }
 }
