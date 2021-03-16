@@ -1,27 +1,30 @@
 package art.arcane.chimera.gateway;
 
+import art.arcane.archon.data.ArchonResult;
+import art.arcane.archon.element.ElementList;
+import art.arcane.archon.server.ArchonServiceWorker;
 import art.arcane.chimera.core.Chimera;
-import art.arcane.chimera.core.microservice.ChimeraServiceWorker;
-import art.arcane.chimera.core.object.ID;
+import art.arcane.chimera.core.microservice.ChimeraBackendService;
 import art.arcane.chimera.core.object.Listener;
 import art.arcane.chimera.core.object.Session;
 import art.arcane.chimera.core.protocol.ChimeraContext;
 import art.arcane.chimera.core.protocol.EDN;
+import art.arcane.chimera.core.protocol.EDX;
 import art.arcane.chimera.core.protocol.generation.FunctionReference;
 import art.arcane.chimera.core.protocol.generation.GatewayFunction;
 import art.arcane.chimera.core.protocol.generation.ServiceFunction;
 import art.arcane.chimera.gateway.net.GatewayClient;
+import art.arcane.quill.collections.ID;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.execution.J;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.math.M;
+import art.arcane.quill.service.QuillServiceWorker;
 import com.google.gson.Gson;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
-public class ProtoGateway extends ChimeraServiceWorker {
+public class ProtoGateway extends QuillServiceWorker {
     private int listenerCleanupDaysEviction = 31;
 
     @GatewayFunction
@@ -31,41 +34,25 @@ public class ProtoGateway extends ChimeraServiceWorker {
 
     @GatewayFunction
     public String getSessionId() {
-        return getContext().getSessionId();
+        return EDX.getContext().getSessionId();
     }
 
     @GatewayFunction
     public Boolean isRegistered(ID id) {
-        try {
-            return getServiceDatabase().getSql().exists(Listener.builder().id(id).build());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+        return Listener.builder().id(id).build().exists();
     }
 
     @GatewayFunction
     public ID registerListener(ID target) {
-        ID id = ID.randomUUID();
-        getServiceDatabase().set(Listener.builder().id(id).target(target).session(getSessionId()).build());
+        ID id = new ID();
+        Listener.builder().id(id).target(target).session(getSessionId()).build().push();
         return id;
     }
 
     @ServiceFunction
     public KList<String> getSessionsListening(ID target) {
         KList<String> sessions = new KList<>();
-
-        try {
-            ResultSet r = getServiceDatabase().getSql().getConnection().prepareStatement("SELECT DISTINCT `session` FROM `listener` WHERE `target` = '" + target.toString() + "';").executeQuery();
-
-            while (r.next()) {
-                sessions.add(r.getString(1));
-            }
-        } catch (Throwable e) {
-
-        }
-
+        ((ChimeraBackendService) Chimera.delegate).getDatabase().query("SELECT DISTINCT `session` FROM `listener` WHERE `target` = '" + target.toString() + "';").forEachRow((i) -> sessions.add(i.getString(0)));
         return sessions;
     }
 
@@ -90,123 +77,69 @@ public class ProtoGateway extends ChimeraServiceWorker {
 
     @GatewayFunction
     public Boolean unregisterListener(ID id) {
-        return getServiceDatabase().delete(Listener.builder().id(id).build());
+        return Listener.builder().id(id).build().archon(((ChimeraBackendService) Chimera.delegate).getDatabase()).delete();
     }
 
     @ServiceFunction
     public Integer unregisterListenersBySession(String id) {
-        try {
-            return getServiceDatabase().getSql().getConnection().prepareStatement("DELETE FROM `listener` WHERE `session` = '" + id + "';").executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return -1;
+        return ((ChimeraBackendService) Chimera.delegate).getDatabase().update("DELETE FROM `listener` WHERE `session` = '" + id + "';");
     }
 
     @GatewayFunction
     public Integer unregisterAll() {
-        try {
-            return getServiceDatabase().getSql().getConnection().prepareStatement("DELETE FROM `listener` WHERE `session` = '" + getSessionId() + "';").executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return -1;
+        return ((ChimeraBackendService) Chimera.delegate).getDatabase().update("DELETE FROM `listener` WHERE `session` = '" + getSessionId() + "';");
     }
 
     @GatewayFunction
     public Integer unregisterAllWithTarget(ID target) {
-        try {
-            return getServiceDatabase().getSql().getConnection().prepareStatement("DELETE FROM `listener` WHERE `target` = '" + target.toString() + "' AND `session` = '" + getSessionId() + "';").executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return -1;
+        return ((ChimeraBackendService) Chimera.delegate).getDatabase().update("DELETE FROM `listener` WHERE `target` = '" + target.toString() + "' AND `session` = '" + getSessionId() + "';");
     }
 
     @ServiceFunction
     public KList<Session> getSessionsByUser(ID user) {
-        Session s = Session.builder().build();
-
-        try {
-            KList<Session> sds = new KList<>();
-            return getServiceDatabase().getSql().getAllFor(user.toString(), "user", Session.class, sds, () -> Session.builder().build());
-        } catch (SQLException v) {
-            v.printStackTrace();
-        }
-        return new KList<>();
+        Session s = Session.builder().build().archon(((ChimeraBackendService) Chimera.delegate).getDatabase());
+        ElementList<Session> el = s.allWhere("`user` = '" + user.toString() + "'");
+        return el.toList();
     }
 
     @ServiceFunction
     public Integer cleanupDeadSessions() {
-        try {
-            KList<String> gateways = new KList<>();
-
-            ResultSet r = getServiceDatabase().getSql().getConnection().prepareStatement("SELECT `id` FROM `service` WHERE `type` = 'gateway'").executeQuery();
-
-            while (r.next()) {
-                gateways.add("`gateway` != '" + r.getString(1) + "'");
-            }
-
-            return getServiceDatabase().getSql().getConnection().prepareStatement("DELETE FROM `session` WHERE " + gateways.toString(" AND ") + ";").executeUpdate();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-
-        return -1;
+        KList<String> gateways = new KList<>();
+        ArchonServiceWorker a = ((ChimeraBackendService) Chimera.delegate).getDatabase();
+        ArchonResult r = a.query("SELECT `id` FROM `service` WHERE `type` = 'gateway'");
+        r.forEachRow((i) -> gateways.add("`gateway` != '" + i.getString(0) + "'"));
+        return a.update("DELETE FROM `session` WHERE " + gateways.toString(" AND ") + ";");
     }
 
     @ServiceFunction
     public Integer cleanupDeadListeners() {
-        try {
-
-            return getServiceDatabase().getSql().getConnection().prepareStatement("DELETE FROM `listener` WHERE `time` < " + (M.ms() - TimeUnit.DAYS.toMillis(listenerCleanupDaysEviction))).executeUpdate();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-
-        return -1;
+        return ((ChimeraBackendService) Chimera.delegate).getDatabase().update("DELETE FROM `listener` WHERE `time` < " + (M.ms() - TimeUnit.DAYS.toMillis(listenerCleanupDaysEviction)));
     }
 
     @ServiceFunction
-    public KList<Session> getSessionsByToken(ID t) {
-        Session s = Session.builder().build();
-
-        try {
-            KList<Session> sds = new KList<>();
-            return getServiceDatabase().getSql().getAllFor(t.toString(), "token", Session.class, sds, () -> Session.builder().build());
-        } catch (SQLException v) {
-            v.printStackTrace();
-        }
-        return new KList<>();
+    public KList<Session> getSessionsByToken(ID token) {
+        Session s = Session.builder().build().archon(((ChimeraBackendService) Chimera.delegate).getDatabase());
+        ElementList<Session> el = s.allWhere("`token` = '" + token.toString() + "'");
+        return el.toList();
     }
 
     @ServiceFunction
     public Session getFirstSessionByUser(ID user) {
+        Session s = Session.builder().build().archon(((ChimeraBackendService) Chimera.delegate).getDatabase());
 
-        Session s = Session.builder().build();
-        try {
-            if (getServiceDatabase().getSql().getWhere(s, "user", user.toString())) {
-                return s;
-            }
-        } catch (SQLException v) {
-            v.printStackTrace();
+        if (s.where("user", user.toString())) {
+            return s;
         }
 
         return null;
     }
 
     @ServiceFunction
-    public Session getFirstSessionByToken(ID t) {
-        Session s = Session.builder().build();
-        try {
-            if (getServiceDatabase().getSql().getWhere(s, "token", t.toString())) {
-                return s;
-            }
-        } catch (SQLException v) {
-            v.printStackTrace();
+    public Session getFirstSessionByToken(ID token) {
+        Session s = Session.builder().build().archon(((ChimeraBackendService) Chimera.delegate).getDatabase());
+
+        if (s.where("token", token.toString())) {
+            return s;
         }
 
         return null;
@@ -214,13 +147,10 @@ public class ProtoGateway extends ChimeraServiceWorker {
 
     @ServiceFunction
     public Session getSessionByID(String id) {
-        Session s = Session.builder().build();
-        try {
-            if (getServiceDatabase().getSql().getWhere(s, "id", id)) {
-                return s;
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        Session s = Session.builder().id(ID.fromString(id)).build().archon(((ChimeraBackendService) Chimera.delegate).getDatabase());
+
+        if (s.pull()) {
+            return s;
         }
 
         return null;

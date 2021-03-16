@@ -5,16 +5,14 @@ import art.arcane.archon.element.Identity;
 import art.arcane.archon.element.Type;
 import art.arcane.chimera.core.protocol.generation.Dart;
 import art.arcane.quill.collections.ID;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Dart
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class User extends Element {
     @Identity
     @Builder.Default

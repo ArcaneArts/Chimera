@@ -1,7 +1,7 @@
 package art.arcane.chimera.gateway.net;
 
-import art.arcane.chimera.core.microservice.ChimeraServiceWorker;
 import art.arcane.quill.collections.KMap;
+import art.arcane.quill.service.QuillServiceWorker;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,7 +9,7 @@ import javax.websocket.Session;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class GatewayServer extends ChimeraServiceWorker {
+public class GatewayServer extends QuillServiceWorker {
     private transient KMap<String, GatewayClient> clients = new KMap<>();
 
     public void disconnectAll() {

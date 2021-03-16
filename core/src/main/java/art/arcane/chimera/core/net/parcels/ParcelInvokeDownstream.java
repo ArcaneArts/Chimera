@@ -25,7 +25,7 @@ public class ParcelInvokeDownstream extends Parcel implements DownloadParcelable
 
     @Override
     public Parcelable respond() {
-        InputStream result = ((ChimeraBackendService) Chimera.delegate).getBackendService().getProtocolAccess().executeTypeDownstreamWithContext(context, null, method, parameters.toArray(new Object[0]));
+        InputStream result = ((ChimeraBackendService) Chimera.delegate).getProtocolAccess().executeTypeDownstreamWithContext(context, null, method, parameters.toArray(new Object[0]));
 
         if (result == null) {
             return new ParcelError("Null Downstream for " + method);

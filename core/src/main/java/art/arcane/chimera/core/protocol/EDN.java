@@ -37,6 +37,10 @@ public class EDN {
 
             public static void snackConnectionError(String sessionId, String partial_service_outage, String s, boolean b) {
             }
+
+            public static Boolean targetUpdated(String i, String toString, boolean b) {
+                return false;
+            }
         }
     }
 }

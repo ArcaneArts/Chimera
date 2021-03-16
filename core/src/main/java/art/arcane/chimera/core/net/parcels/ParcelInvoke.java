@@ -22,7 +22,7 @@ public class ParcelInvoke extends Parcel {
 
     @Override
     public Parcelable respond() {
-        Object result = ((ChimeraBackendService) Chimera.delegate).getBackendService().getProtocolAccess().executeTypeWithContext(context, null, method, parameters.toArray(new Object[0]));
+        Object result = ((ChimeraBackendService) Chimera.delegate).getProtocolAccess().executeTypeWithContext(context, null, method, parameters.toArray(new Object[0]));
 
         return new ParcelResult(result);
     }

@@ -6,7 +6,7 @@ plugins {
 
 /////////////////////////////////////////////////////////
 group 'art.arcane'
-version '1.0.0'
+version '1.0.24'
 String servicePackage = "art.arcane.chimera.core.protocol";
 String serviceName = "EDN";
 String flutterProjects = 'hawkeye'
@@ -44,7 +44,6 @@ subprojects {
     String chimeraName = project.name.substring(0, 1).toUpperCase() + project.name.toLowerCase().substring(1)
     String chimeraModule = chimeraName.toLowerCase();
     String chimeraMainClass = "art.arcane.chimera." + chimeraModule + "." + chimeraName + "Service";
-
     String archiveName = "Chimera" + chimeraName + "-" + rootProject.version + ".jar"
     String archivePath = jar.archiveFile.get().getAsFile().getParentFile().getAbsolutePath()
     String archiveFilePath = archivePath + "\\" + archiveName
@@ -78,7 +77,7 @@ subprojects {
         compileOnly 'org.projectlombok:lombok:1.18.12'
         annotationProcessor 'org.projectlombok:lombok:1.18.12'
         implementation 'com.github.ArcaneArts:Quill:1.0.14'
-        implementation 'com.github.ArcaneArts:Archon:1.0.16'
+        implementation 'com.github.ArcaneArts:Archon:1.0.18'
         implementation 'com.github.ArcaneArts:Cauldron:1.0.9'
         implementation 'org.slf4j:slf4j-api:1.7.22'
         implementation 'com.google.code.gson:gson:2.8.6'

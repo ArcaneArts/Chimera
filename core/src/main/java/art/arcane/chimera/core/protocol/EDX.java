@@ -44,15 +44,15 @@ public class EDX {
     }
 
     public static Object invokeType(String type, String function, KList<Object> objects) {
-        return ((ChimeraBackendService) Chimera.delegate).getBackendService().getProtocolAccess().executeType(type, function, objects.toArray(new Object[0]));
+        return ((ChimeraBackendService) Chimera.delegate).getProtocolAccess().executeType(type, function, objects.toArray(new Object[0]));
     }
 
     public static Object invokeTypeWithContext(ChimeraContext context, String type, String function, KList<Object> objects) {
-        return ((ChimeraBackendService) Chimera.delegate).getBackendService().getProtocolAccess().executeTypeWithContext(context, type, function, objects.toArray(new Object[0]));
+        return ((ChimeraBackendService) Chimera.delegate).getProtocolAccess().executeTypeWithContext(context, type, function, objects.toArray(new Object[0]));
     }
 
     public static KList<ProtoFunction> getAllFunctions() {
-        return ((ChimeraBackendService) Chimera.delegate).getBackendService().getProtocolAccess().getAllFunctions();
+        return ((ChimeraBackendService) Chimera.delegate).getProtocolAccess().getAllFunctions();
     }
 
     public static KList<ProtoFunction> getAllFunctionsOfType(String type) {

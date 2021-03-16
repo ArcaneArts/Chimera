@@ -2,13 +2,13 @@ package art.arcane.chimera.gateway.net;
 
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.microservice.ChimeraBackendService;
-import art.arcane.chimera.core.object.ID;
 import art.arcane.chimera.core.protocol.ChimeraContext;
 import art.arcane.chimera.core.protocol.EDX;
 import art.arcane.chimera.core.protocol.generation.FunctionReference;
 import art.arcane.chimera.core.protocol.generation.ProtoExport;
 import art.arcane.chimera.core.protocol.generation.ProtoType;
 import art.arcane.chimera.core.protocol.generation.WrappedObject;
+import art.arcane.quill.collections.ID;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.collections.KMap;
 import art.arcane.quill.collections.KSet;
@@ -38,19 +38,20 @@ public class GatewayClient implements IClient {
         this.session = session;
         this.server = server;
         chimeraSession = art.arcane.chimera.core.object.Session.builder()
-                .id(session.getId())
+                .id(ID.fromString(session.getId()))
                 .last(M.ms())
-                .gateway(((ChimeraBackendService) Chimera.delegate).getBackendService().getId())
-                .token(new ID("none"))
-                .user(new ID("none"))
-                .build();
+                .gateway(((ChimeraBackendService) Chimera.delegate).getId())
+                .token(ID.fromString("none"))
+                .user(ID.fromString("none"))
+                .build()
+                .archon(((ChimeraBackendService) Chimera.delegate).getDatabase());
 
         if (context.getAccessToken() != null) {
             chimeraSession.setToken(getContext().getAccessToken().getId());
             chimeraSession.setUser(getContext().getAccessToken().getAccount());
         }
 
-        Chimera.delegate.getServiceDatabase().set(chimeraSession);
+        chimeraSession.push();
     }
 
     protected void receive(String message) {
@@ -106,7 +107,8 @@ public class GatewayClient implements IClient {
 
         if (nowSet || M.ms() - chimeraSession.getLast() > 10000) {
             chimeraSession.setLast(M.ms());
-            Chimera.delegate.getServiceDatabase().setAsync(chimeraSession);
+            chimeraSession.setArchon(((ChimeraBackendService) Chimera.delegate).getDatabase());
+            chimeraSession.push();
         }
     }
 
@@ -149,7 +151,13 @@ public class GatewayClient implements IClient {
     public void disconnect() {
         try {
             session.close();
-            Chimera.delegate.getServiceDatabase().deleteAsync(art.arcane.chimera.core.object.Session.builder().id(getContext().getSessionId()).build());
+
+            art.arcane.chimera.core.object.Session
+                    .builder()
+                    .id(ID.fromString(EDX.getContext().getSessionId()))
+                    .build()
+                    .archon(((ChimeraBackendService) Chimera.delegate).getDatabase())
+                    .delete();
         } catch (IOException ignored) {
 
         }

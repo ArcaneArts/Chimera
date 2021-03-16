@@ -8,13 +8,12 @@ import art.arcane.quill.collections.ID;
 import art.arcane.quill.io.IO;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.random.RNG;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Data
 @Dart
 public class UserAuthentication extends Element {

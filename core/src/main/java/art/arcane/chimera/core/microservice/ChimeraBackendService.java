@@ -30,7 +30,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class ChimeraBackendService extends QuillService {
@@ -73,7 +72,8 @@ public abstract class ChimeraBackendService extends QuillService {
     @Getter
     private transient KList<ProtoFunction> functions;
     private boolean logRequests = true;
-    private transient String id;
+    @Getter
+    private transient ID id;
     private transient HostedService host;
     private transient KMap<String, Class<? extends Parcelable>> parcelTypeCache = new KMap<>();
 
@@ -226,7 +226,7 @@ public abstract class ChimeraBackendService extends QuillService {
 
     @Override
     public void onEnable() {
-        id = IO.hash(UUID.randomUUID().toString()).toLowerCase();
+        id = new ID();
         for (Class<? extends Parcelable> i : web.getServer().getParcelables()) {
             try {
                 Parcelable v = i.getConstructor().newInstance();
@@ -242,7 +242,7 @@ public abstract class ChimeraBackendService extends QuillService {
             host = HostedService.builder()
                     .address(InetAddress.getLocalHost().getHostAddress())
                     .port(web.getWebServer().httpPort())
-                    .id(ID.fromString(id))
+                    .id(id)
                     .time(M.ms())
                     .dir(web.getWebServer().serverPath())
                     .type(Chimera.getDelegateModuleName())

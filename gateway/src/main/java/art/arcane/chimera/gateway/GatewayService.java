@@ -1,17 +1,15 @@
 package art.arcane.chimera.gateway;
 
+import art.arcane.archon.element.Element;
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.microservice.ChimeraBackendService;
-import art.arcane.chimera.core.microservice.ServiceWorker;
 import art.arcane.chimera.core.object.HostedService;
 import art.arcane.chimera.core.object.Listener;
 import art.arcane.chimera.core.object.ServiceJob;
-import art.arcane.chimera.core.protocol.EDN;
 import art.arcane.chimera.core.protocol.generation.Protocol;
 import art.arcane.chimera.gateway.net.GatewayWebsocketWorker;
+import art.arcane.quill.service.ServiceWorker;
 import lombok.Getter;
-
-import java.util.concurrent.TimeUnit;
 
 public class GatewayService extends ChimeraBackendService {
     private int listenerCleanupMinuteLaziness = 60;
@@ -37,11 +35,12 @@ public class GatewayService extends ChimeraBackendService {
 
     @Override
     public void onEnable() {
-        getServiceDatabase().validate(ServiceJob.builder().build());
-        getServiceDatabase().validate(Listener.builder().build());
-        getServiceDatabase().validate(HostedService.builder().build());
-        scheduleRepeatingJob(() -> EDN.SERVICE.Gateway.scheduleCleanupDeadSessions(TimeUnit.MINUTES.toMillis(sessionCleanupMinuteLaziness)), TimeUnit.MINUTES.toMillis(minutesPerSessionCleanup));
-        EDN.SERVICE.Gateway.scheduleCleanupDeadListeners(TimeUnit.MINUTES.toMillis(listenerCleanupMinuteLaziness));
+        Element.register(ServiceJob.class);
+        Element.register(Listener.class);
+        Element.register(HostedService.class);
+        // TODO: GATEWAY
+        //scheduleRepeatingJob(() -> EDN.SERVICE.Gateway.scheduleCleanupDeadSessions(TimeUnit.MINUTES.toMillis(sessionCleanupMinuteLaziness)), TimeUnit.MINUTES.toMillis(minutesPerSessionCleanup));
+        //EDN.SERVICE.Gateway.scheduleCleanupDeadListeners(TimeUnit.MINUTES.toMillis(listenerCleanupMinuteLaziness));
     }
 
     @Override
