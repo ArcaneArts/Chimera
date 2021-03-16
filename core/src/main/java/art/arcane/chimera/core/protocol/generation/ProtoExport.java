@@ -1116,7 +1116,7 @@ public class ProtoExport {
         cb.append(".build()");
         cb.append(".archon(((" + ChimeraBackendService.class.getCanonicalName() + ") " + Chimera.class.getCanonicalName() + ".delegate).getDatabase())");
         cb.append(")");
-        cb.append("encodeParameters(new Object[]{");
+        cb.append(".encodeParameters(new Object[]{");
         pb = new StringBuilder();
         for (ProtoParam i : f.getParams()) {
             pb.append(", ");
