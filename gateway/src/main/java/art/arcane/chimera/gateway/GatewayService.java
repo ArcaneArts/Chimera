@@ -41,7 +41,6 @@ public class GatewayService extends ChimeraBackendService {
     public void onEnable() {
         super.onEnable();
         scheduleRepeatingJob(() -> EDN.SERVICE.Gateway.scheduleCleanupDeadSessions(TimeUnit.MINUTES.toMillis(sessionCleanupMinuteLaziness)), TimeUnit.MINUTES.toMillis(minutesPerSessionCleanup));
-        EDN.SERVICE.Gateway.scheduleCleanupDeadListeners(TimeUnit.MINUTES.toMillis(listenerCleanupMinuteLaziness));
         Quill.postJob(() -> Session.builder().build().archon(Chimera.archon).sync());
         Quill.postJob(() -> Listener.builder().build().archon(Chimera.archon).sync());
         Quill.postJob(() -> ServiceJob.builder().build().archon(Chimera.archon).sync());

@@ -1,5 +1,7 @@
 import 'package:application/krakicon_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:hawkeye/chimera/protocol.dart';
+import 'package:hawkeye/util/l.dart';
 import 'package:hawkeye/util/paddings.dart';
 
 class Home extends StatefulWidget {
@@ -13,6 +15,8 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    ChimeraGateway.getSessionId()
+        .then((value) => L.v("Connected. Session id is $value"));
     return Scaffold(
       appBar: AppBar(
         title: Row(

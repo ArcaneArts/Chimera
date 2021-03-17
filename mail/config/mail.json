@@ -4,42 +4,10 @@
         "shittyConsole": false,
         "allowCommands": true,
         "deduplicateLines": true,
-        "idleFlushInterval": 1000
+        "idleFlushInterval": 1000,
+        "verbose": true
     },
-    "mail": {},
-    "hangingWebClient": {"timeoutMinutes": 5},
-    "backendService": {
-        "packetServer": {"port": 9598},
-        "redis": {
-            "database": 0,
-            "password": "asecurepassword",
-            "address": "localhost",
-            "port": 6379,
-            "logging": true,
-            "ssl": false,
-            "timeout": 7000
-        }
-    },
-    "logRequests": true,
-    "schedulerService": {
-        "minInterval": 1000,
-        "maxTicksPerInterval": 1,
-        "maxInterval": 1000,
-        "minTicksPerInterval": 3
-    },
-    "verbose": true,
     "impatientWebClient": {"timeoutMs": 150},
-    "database": {
-        "jdbcAddress": "localhost",
-        "jdbcDriver": "com.mysql.jdbc.Driver",
-        "jdbcPort": 3306,
-        "jdbcTimeout": 3000,
-        "jdbcConnections": 1,
-        "jdbcPassword": "123123123",
-        "jdbcLogging": true,
-        "jdbcDatabase": "chimera_mail",
-        "jdbcUsername": "chimera"
-    },
     "serviceAccess": {
         "maxConservativeServiceGroupSize": 64,
         "maxServiceGroupSize": 64,
@@ -48,17 +16,27 @@
         "fastTickTime": 950,
         "startupFastTicks": 7
     },
-    "serviceDatabase": {
-        "jdbcAddress": "localhost",
-        "jdbcDriver": "com.mysql.jdbc.Driver",
-        "jdbcPort": 3306,
-        "jdbcTimeout": 3000,
-        "jdbcConnections": 1,
-        "jdbcPassword": "123123123",
-        "jdbcLogging": true,
-        "jdbcDatabase": "chimera_core",
-        "jdbcUsername": "chimera"
-    },
+    "database": {"connections": [{
+        "database": "chimera",
+        "password": "chimera",
+        "address": "localhost",
+        "driver": "com.mysql.cj.jdbc.Driver",
+        "port": 3306,
+        "readOnly": false,
+        "username": "chimera",
+        "usesPassword": true
+    }]},
+    "mail": {"mailMan": {
+        "server": "some.server.something",
+        "password": "somethingSecure",
+        "smtpAuth": true,
+        "port": 123,
+        "name": "Chimera",
+        "tls": true,
+        "ssl": false,
+        "email": "you@something.something",
+        "username": "you@something.something"
+    }},
     "web": {
         "webServer": {
             "serverPath": "/",
@@ -75,12 +53,20 @@
         "minPort": 10000,
         "maxPort": 20000
     },
+    "hangingWebClient": {"timeoutMinutes": 5},
     "protocolAccess": {},
     "jobService": {
         "logJobExecutions": true,
-        "minInterval": 1000,
+        "minInterval": 10000,
         "maxTicksPerInterval": 1,
-        "maxInterval": 1000,
-        "minTicksPerInterval": 3
+        "maxInterval": 60000,
+        "minTicksPerInterval": 1
+    },
+    "logRequests": true,
+    "schedulerService": {
+        "minInterval": 10000,
+        "maxTicksPerInterval": 1,
+        "maxInterval": 60000,
+        "minTicksPerInterval": 1
     }
 }

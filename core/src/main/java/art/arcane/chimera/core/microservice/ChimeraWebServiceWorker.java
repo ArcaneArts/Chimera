@@ -35,7 +35,7 @@ public class ChimeraWebServiceWorker extends QuillService {
         //@builder
         server = new ParcelWebServer()
                 .configure(webServer)
-                .addParcelables(getClass(), "care.mpm.chimera.core.net.parcels.")
+                .addParcelables(getClass(), "art.arcane.chimera.core.net.parcels.")
                 .start();
         //@done
 

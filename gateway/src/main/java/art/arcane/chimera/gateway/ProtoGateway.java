@@ -109,6 +109,11 @@ public class ProtoGateway extends QuillService {
         ArchonService a = Chimera.archon;
         ArchonResult r = a.query("SELECT `id` FROM `service` WHERE `type` = 'gateway'");
         r.forEachRow((i) -> gateways.add("`gateway` != '" + i.getString(0) + "'"));
+
+        if (r.size() == 0) {
+            return 0;
+        }
+
         return a.update("DELETE FROM `session` WHERE " + gateways.toString(" AND ") + ";");
     }
 
