@@ -6,7 +6,7 @@ plugins {
 
 /////////////////////////////////////////////////////////
 group 'art.arcane'
-version '1.0.26'
+version '1.0.27'
 String servicePackage = "art.arcane.chimera.core.protocol";
 String serviceName = "EDN";
 String flutterProjects = 'hawkeye'
@@ -76,9 +76,8 @@ subprojects {
     dependencies {
         compileOnly 'org.projectlombok:lombok:1.18.12'
         annotationProcessor 'org.projectlombok:lombok:1.18.12'
-        implementation 'com.github.ArcaneArts:Quill:1.1.1'
-        implementation 'com.github.ArcaneArts:Archon:1.1.1'
-        implementation 'com.github.ArcaneArts:Cauldron:1.0.9'
+        implementation 'com.github.ArcaneArts:Quill:1.1.2'
+        implementation 'com.github.ArcaneArts:Archon:1.1.2'
         implementation 'org.slf4j:slf4j-api:1.7.22'
         implementation 'com.google.code.gson:gson:2.8.6'
         implementation 'org.eclipse.jetty:jetty-server:9.4.28.v20200408'
