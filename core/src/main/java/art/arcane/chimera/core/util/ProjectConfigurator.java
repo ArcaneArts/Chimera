@@ -26,76 +26,58 @@ public class ProjectConfigurator extends QuillService {
             """;
     private static final String protoSrc = """
             package art.arcane.chimera.$l;
-
-            import art.arcane.chimera.core.microservice.ChimeraServiceWorker;
-            import art.arcane.chimera.core.protocol.generation.GatewayFunction;
+                        
             import art.arcane.chimera.core.protocol.generation.ServiceFunction;
-
-            public class Proto$u extends ChimeraServiceWorker {
-                @ServiceFunction
-                private int add(int a, int b)
-                {
-                    return a + b;
-                }
-
-                @GatewayFunction
-                private int subtract(int a, int b)
-                {
-                    return a - b;
-                }
-
+            import art.arcane.quill.service.QuillService;
+            import lombok.Data;
+            import lombok.EqualsAndHashCode;
+                        
+            @EqualsAndHashCode(callSuper = true)
+            @Data
+            public class Proto$u extends QuillService {
                 @Override
                 public void onEnable() {
-                   
+                        
                 }
-
+                        
                 @Override
                 public void onDisable() {
-
+                        
                 }
             }
             """;
 
     private static final String src = """     
-            package art.arcane.chimera.$l;
-
+            package art.arcane.chimera.mail;
+                        
             import art.arcane.chimera.core.Chimera;
             import art.arcane.chimera.core.microservice.ChimeraBackendService;
-            import art.arcane.chimera.core.microservice.ServiceWorker;
-            import art.arcane.chimera.core.protocol.EDN;
             import art.arcane.chimera.core.protocol.generation.Protocol;
-            import art.arcane.quill.io.IO;
-            import art.arcane.quill.logging.L;
-
+            import art.arcane.quill.service.Service;
+            import lombok.Data;
+            import lombok.EqualsAndHashCode;
+                        
+            @EqualsAndHashCode(callSuper = true)
+            @Data
             public class $uService extends ChimeraBackendService {
-
                 public static void main(String[] a) {
                     Chimera.start(a);
                 }
-
-                @ServiceWorker
+                        
+                @Service
                 @Protocol
-                private Proto$u $l = new Proto$u();
-
-                public $uService() {
-                    super("$u");
-                }
-
+                private Proto$u mail = new Proto$u();
+                        
                 @Override
                 public void onEnable() {
-                    getConsole().registerCommand("test-command", (a) ->
-                    {
-                        L.i("This is a test command!");
-
-                        return true;
-                    });
+                    super.onEnable();
                 }
-
+                        
                 @Override
                 public void onDisable() {
-
+                    super.onDisable();
                 }
-            }        
+            }     
             """;
 
     private String projectName = "Chimera";

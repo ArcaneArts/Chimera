@@ -6,7 +6,7 @@ import art.arcane.chimera.mail.util.MailMan;
 import art.arcane.quill.service.QuillService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
+ 
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ProtoMail extends QuillService {
