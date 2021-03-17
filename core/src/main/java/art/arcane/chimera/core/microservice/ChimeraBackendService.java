@@ -21,7 +21,7 @@ import art.arcane.quill.math.M;
 import art.arcane.quill.reaction.O;
 import art.arcane.quill.service.QuillService;
 import art.arcane.quill.service.Service;
-import art.arcane.quill.service.services.ConsoleServiceWorker;
+import art.arcane.quill.service.services.ConsoleService;
 import com.google.gson.Gson;
 import lombok.Getter;
 
@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class ChimeraBackendService extends QuillService {
     @Getter
     @Service
-    private ConsoleServiceWorker console = new ConsoleServiceWorker();
+    private ConsoleService console = new ConsoleService();
 
     @Getter
     @Service

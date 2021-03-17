@@ -7,7 +7,7 @@ import art.arcane.quill.io.StreamGobbler;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.service.QuillService;
 import art.arcane.quill.service.Service;
-import art.arcane.quill.service.services.ConsoleServiceWorker;
+import art.arcane.quill.service.services.ConsoleService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -84,7 +84,7 @@ public class ProjectConfigurator extends QuillService {
     private String appName = "kraken";
 
     @Service
-    private ConsoleServiceWorker console = new ConsoleServiceWorker();
+    private ConsoleService console = new ConsoleService();
 
     public static void startConfigurator() {
         Quill.start(ProjectConfigurator.class, new String[0]);
