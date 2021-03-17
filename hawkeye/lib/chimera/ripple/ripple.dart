@@ -16,7 +16,7 @@ class RippleNetwork {
   static void unregister(ID tag, ID listener) {
     if (listeners.containsKey(tag.toString())) {
       listeners[tag.toString()]
-          .removeWhere((element) => element.id.i == listener.i);
+          .removeWhere((element) => element.id.id == listener.id);
 
       if (listeners[tag.toString()].isEmpty) {
         _unregisterNetwork(tag);

@@ -435,7 +435,7 @@ public class ProtoExport {
 
             cb.append("/// Converts " + typeName + " to JSON " + nl);
             cb.append("Map<String, dynamic> toJson(){" + nl);
-            cb.append("Map<String, dynamic> json = Map<String, dynamic>();" + nl);
+            cb.append("var json = <String, dynamic>{};" + nl);
 
             for (Field i : fields) {
                 ProtoType t = ProtoType.of(i.getType());
@@ -465,7 +465,7 @@ public class ProtoExport {
                     String cx2 = listTypeOfJava(i, 1, clz.getCanonicalName());
                     boolean jsobj2 = cx2 != null && !cx2.equals(Object.class.getCanonicalName()) && ProtoType.of(Class.forName(cx2)).equals(ProtoType.JSON_OBJECT);
                     dt2 = dt2 == null ? "dynamic" : dt2;
-                    cb.append("Map<String, dynamic> m" + i.getName() + " = Map<String, dynamic>();\n");
+                    cb.append("Map<String, dynamic> m" + i.getName() + " = <String, dynamic>{};\n");
                     cb.append(i.getName() + ".forEach((k,v)=>");
                     cb.append("m" + i.getName() + "[k] = ");
                     if (jsobj2) {
@@ -496,13 +496,13 @@ public class ProtoExport {
 
             if (typeName.equals("ID")) {
                 cb.append("/// Generates a new Spec ID" + nl);
-                cb.append("static ID random() => ID()..i=RNG.ss(64);" + nl);
+                cb.append("static ID random() => ID()..id=RNG.ss(" + ID.LENGTH + ");" + nl);
 
                 cb.append("/// Creates an ID from string. This is not checked for validity!" + nl);
-                cb.append("static ID from(String v) => ID()..i=v;" + nl);
+                cb.append("static ID from(String v) => ID()..id=v;" + nl);
 
                 cb.append("@override" + nl);
-                cb.append("String toString() => i;" + nl);
+                cb.append("String toString() => id;" + nl);
             } else {
                 cb.append("@override" + nl);
                 cb.append("String toString() => jsonEncode(toJson());" + nl);
@@ -520,7 +520,7 @@ public class ProtoExport {
 
     private String computeAccessorValue(String s, Class<?> type) {
         if (!isPrimitiveDartType(ProtoType.of(type))) {
-            return type.getSimpleName() + ".fromJson((" + s + " ?? Map<String,dynamic>())" + " as Map<String, dynamic>)";
+            return type.getSimpleName() + ".fromJson((" + s + " ?? <String, dynamic>{})" + " as Map<String, dynamic>)";
         }
 
         return s;
@@ -600,7 +600,7 @@ public class ProtoExport {
                     }
 
                     String xt = "Map<" + dtype + "," + dtype2 + ">";
-                    cb.append("Map<String, dynamic> m" + j.getName() + " = Map<String, dynamic>();\n");
+                    cb.append("Map<String, dynamic> m" + j.getName() + " = <String, dynamic>{};\n");
 
                     if (t2.equals(ProtoType.JSON_OBJECT)) {
                         cb.append(j.getName() + ".forEach((k,v)=> m" + j.getName() + "[k]=v.toJson());\n");
@@ -611,7 +611,7 @@ public class ProtoExport {
             }
 
             cb.append("return " + (!isPrimitiveDartType(i.getResult()) ? "WrappedObject.of(await " : "await ("));
-            cb.append("ChimeraSocketHelper." + (i.isBigJob() ? "invokeBigJob" : "invoke") + "(").append("\"" + i.getName() + "\"").append(",");
+            cb.append("ChimeraSocketHelper." + (i.isBigJob() ? "invokeBigJob" : "invoke") + "(").append("'" + i.getName() + "'").append(",");
             cb.append("<dynamic>[");
             cc = new StringBuilder();
 
