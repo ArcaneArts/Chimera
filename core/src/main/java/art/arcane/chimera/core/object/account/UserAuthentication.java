@@ -11,30 +11,30 @@ import art.arcane.quill.random.RNG;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Data
 @Dart
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserAuthentication extends Element {
     @Identity
     @Builder.Default
     private ID id = new ID();
 
+    @Builder.Default
     @Type("VARCHAR(64)")
-    private String password;
+    private String password = "";
 
+    @Builder.Default
     @Type("VARCHAR(32)")
-    private String salt;
+    private String salt = "";
 
+    @Builder.Default
     @Type("VARCHAR(32)")
-    private String pepper;
+    private String pepper = "";
 
     public UserAuthentication(ID id) {
         this.id = id;
-        password = "";
-        salt = "";
-        pepper = "";
     }
 
     public UserAuthentication(ID id, String password) {

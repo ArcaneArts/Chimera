@@ -211,6 +211,10 @@ public class ChimeraProtocolAccess extends QuillService {
     @Override
     public void onEnable() {
         Quill.postJob(() -> {
+            if (Chimera.backend.getFunctions() == null) {
+                Quill.crashStack("Did you forget to add super.onEnable() and super.onDisable() in your chimera service?");
+            }
+
             for (ProtoFunction i : Chimera.backend.getFunctions()) {
                 if (localFunctions.containsKey(i.getName())) {
                     Quill.crashStack("Duplicate Function! " + i.toString() + " AND " + localFunctions.get(i.getName()).toString());

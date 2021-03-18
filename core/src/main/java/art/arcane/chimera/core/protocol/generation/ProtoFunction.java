@@ -119,6 +119,7 @@ public class ProtoFunction {
 
             L.f(");");
             L.f("=================================================");
+            Quill.crash("Failed to invoke function.");
         }
 
         return ret;

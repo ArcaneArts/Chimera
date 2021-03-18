@@ -5,14 +5,15 @@ import art.arcane.archon.element.Identity;
 import art.arcane.archon.element.Type;
 import art.arcane.chimera.core.protocol.generation.Dart;
 import art.arcane.quill.collections.ID;
+import art.arcane.quill.math.M;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
-@Dart
 @Data
+@Dart
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class User extends Element {
     @Identity
     @Builder.Default
@@ -24,14 +25,14 @@ public class User extends Element {
 
     @Type("VARCHAR(50)")
     @Builder.Default
-    private String lastName = "Doe";
+    private String lastName = "McWhirt";
 
     @Type("VARCHAR(64)")
     @Builder.Default
-    private String email = "poof@arcane.art";
+    private String email = "someone@somewhere.here";
 
     @Builder.Default
-    private long createdDate = -1;
+    private long createdDate = M.ms();
 
     @Builder.Default
     private boolean suspended = false;

@@ -10,11 +10,13 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.12/48e4e5d60309ebd833bc528dcf77668eab3cd72c/lombok-1.18.12.jar" />
         </processorPath>
         <module name="chimera.core.test" />
+        <module name="chimera.mail.test" />
+        <module name="chimera.gateway.main" />
+        <module name="chimera.account.main" />
         <module name="chimera.core.main" />
         <module name="chimera.gateway.test" />
-        <module name="chimera.mail.test" />
         <module name="chimera.mail.main" />
-        <module name="chimera.gateway.main" />
+        <module name="chimera.account.test" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="15">

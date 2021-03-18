@@ -5,7 +5,6 @@ import art.arcane.archon.element.Identity;
 import art.arcane.archon.element.Type;
 import art.arcane.chimera.core.protocol.generation.Dart;
 import art.arcane.quill.collections.ID;
-import art.arcane.quill.math.M;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
@@ -14,22 +13,25 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccessToken extends Element {
+public class UserPersonal extends Element {
     @Identity
     @Builder.Default
     private ID id = new ID();
 
-    private ID account;
-
-    @Type("VARCHAR(36)")
+    @Type("VARCHAR(10)")
     @Builder.Default
-    private String type = "normal";
+    private String phone = "";
 
+    @Type("VARCHAR(64)")
     @Builder.Default
-    private long lastUse = M.ms();
+    private String carrier = "";
+
+    public UserPersonal(ID id) {
+        this.id = id;
+    }
 
     @Override
     public String getTableName() {
-        return "user_access";
+        return "user_personal";
     }
 }
