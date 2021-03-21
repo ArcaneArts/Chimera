@@ -42,9 +42,9 @@ public class GatewayClient implements IClient {
     private final GatewayServer server;
     private final Session session;
     private final art.arcane.chimera.core.object.Session chimeraSession;
-    private ChimeraContext context;
     private final KSet<String> clientFunctionResultWait;
     private final KMap<String, GatewayMessage> clientFunctionResults;
+    private ChimeraContext context;
 
     public GatewayClient(GatewayServer server, Session session) {
         context = ChimeraContext.builder().connectionInitationTime(M.ms())

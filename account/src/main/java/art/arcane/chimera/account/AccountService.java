@@ -32,16 +32,16 @@ import art.arcane.quill.service.Service;
 
 public class AccountService extends ChimeraService {
 
-    public static void main(String[] a) {
-        Chimera.start(a);
-    }
-
     @Service
     @Protocol
     private ProtoAccount account = new ProtoAccount();
 
     public AccountService() {
 
+    }
+
+    public static void main(String[] a) {
+        Chimera.start(a);
     }
 
     @Override

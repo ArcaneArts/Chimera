@@ -21,6 +21,7 @@ import art.arcane.archon.element.ElementList;
 import art.arcane.archon.server.ArchonService;
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.microservice.ChimeraService;
+import art.arcane.chimera.core.object.HostedService;
 import art.arcane.chimera.core.object.Listener;
 import art.arcane.chimera.core.object.Session;
 import art.arcane.chimera.core.protocol.ChimeraContext;
@@ -227,8 +228,16 @@ public class ProtoGateway extends QuillService {
                 L.ex(e);
             }
         } else {
-            L.w("Can't find session " + sessionId);
-            // TODO SEND TO ANOTHER GATEWAY SOMEHOW
+            // Client is connected to another gateway possibly
+            Session s = new Session();
+
+            if (s.where("id", sessionId)) {
+                ChimeraService cs = ((ChimeraService) Quill.delegate);
+                HostedService svc = cs.getServiceAccess().getService(s.getGateway());
+                return cs.invokeFunctionDirect(svc, "invokeClientObject", sessionId, f, expectedReturn, blind);
+            } else {
+                f("Can't find session " + sessionId);
+            }
         }
 
         return null;

@@ -29,9 +29,9 @@ import javax.websocket.DeploymentException;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class GatewayWebsocketWorker extends QuillService {
+    public static GatewayWebsocketWorker instance;
     @Service
     private GatewayServer gateway = new GatewayServer();
-    public static GatewayWebsocketWorker instance;
     private transient Server server;
     private int port = 8585;
     private String bind = "localhost";

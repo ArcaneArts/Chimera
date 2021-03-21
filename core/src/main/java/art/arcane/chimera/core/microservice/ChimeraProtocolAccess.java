@@ -98,6 +98,18 @@ public class ChimeraProtocolAccess extends QuillService {
     }
 
     /**
+     * Execute a network function with type directly on a service remote
+     *
+     * @param service    the service
+     * @param name       the name
+     * @param parameters the params
+     * @return the result
+     */
+    public Object executeDirect(HostedService service, String name, Object... parameters) {
+        return executeTypeWithContextDirect(service, null, null, name, parameters);
+    }
+
+    /**
      * Execute a network function with downstream. This is capable of
      * executing local & remote functions
      *
@@ -107,6 +119,62 @@ public class ChimeraProtocolAccess extends QuillService {
      */
     public InputStream executeDownstream(String name, Object... parameters) {
         return executeDownstreamType(null, name, parameters);
+    }
+
+    /**
+     * Executes a function type with context
+     *
+     * @param service    the service to directly execute with
+     * @param context    the connection context
+     * @param type       the type
+     * @param name       the name
+     * @param parameters the parameters
+     * @return the result
+     */
+    public Object executeTypeWithContextDirect(HostedService service, ChimeraContext context, String type, String name, Object... parameters) {
+        if (((ChimeraService) Quill.delegate).getId().equals(service.getId())) {
+            try {
+                Object[] locals = new Object[parameters.length];
+                ProtoFunction f = localFunctions.get(name);
+
+                if (type == null || type.equals(f.getType())) {
+                    if (f.getParams().size() != locals.length) {
+                        L.f("Parameter Mismatch on " + f.toString());
+                    }
+
+                    for (int i = 0; i < locals.length; i++) {
+                        ProtoParam p = f.getParams().get(i);
+
+                        if (p.getType().equals(ProtoType.JSON_OBJECT)) {
+                            locals[i] = new Gson().fromJson(new Gson().toJson(parameters[i]), Class.forName(p.getRealType()));
+                        }
+
+                        if (p.getType().equals(ProtoType.JSON_LIST)) {
+                            locals[i] = new Gson().fromJson(new Gson().toJson(parameters[i]), Class.forName(p.getRealType()));
+                        } else {
+                            locals[i] = parameters[i];
+                        }
+                    }
+
+                    return localFunctions.get(name).invokeWithContext(context, locals);
+                }
+            } catch (Throwable throwable) {
+                L.ex(throwable);
+                return null;
+            }
+        }
+
+        for (String i : remoteFunctionGroups.keySet()) {
+            for (ProtoFunction j : remoteFunctionGroups.get(i)) {
+                if (j.getName().equals(name) && (type == null || type.equals(j.getType()))) {
+                    return invokeRemoteWithContextDirect(service, context, i, j, parameters);
+                }
+            }
+        }
+
+        L.w("Cannot find function " + name + " on " + service.toString());
+
+        return null;
     }
 
     /**
@@ -147,6 +215,7 @@ public class ChimeraProtocolAccess extends QuillService {
                 }
             } catch (Throwable throwable) {
                 L.ex(throwable);
+                return null;
             }
         }
 
@@ -215,6 +284,7 @@ public class ChimeraProtocolAccess extends QuillService {
                 }
             } catch (Throwable throwable) {
                 L.ex(throwable);
+                return null;
             }
         }
 
@@ -245,6 +315,25 @@ public class ChimeraProtocolAccess extends QuillService {
 
     public Object executeType(String type, String name, Object... parameters) {
         return executeTypeWithContext(null, type, name, parameters);
+    }
+
+    private Object invokeRemoteWithContextDirect(HostedService hostedService, ChimeraContext context, String service, ProtoFunction j, Object[] parameters) {
+        ParcelInvoke invoke = new ParcelInvoke();
+        invoke.setMethod(j.getName());
+        invoke.setContext(context);
+        invoke.setParameters(new KList<>(parameters));
+        ChimeraService c = Chimera.backend;
+        ParcelResult result = (ParcelResult) c.request(hostedService, invoke);
+
+        if (j.getResult().equals(ProtoType.JSON_OBJECT)) {
+            try {
+                result.setResult(new Gson().fromJson(new Gson().toJson(result.getResult()), Class.forName(j.getResultType())));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result.getResult();
     }
 
     private Object invokeRemoteWithContext(ChimeraContext context, String service, ProtoFunction j, Object[] parameters) {

@@ -39,19 +39,17 @@ public class GatewayService extends ChimeraService {
     private int listenerCleanupMinuteLaziness = 60;
     private int minutesPerSessionCleanup = 60;
     private int sessionCleanupMinuteLaziness = 30;
-
-    public static void main(String[] a) {
-        Chimera.start(a);
-    }
-
     @Getter
     @Service
     private GatewayWebsocketWorker webSocketService = new GatewayWebsocketWorker();
-
     @Service
     @Getter
     @Protocol
     private ProtoGateway gateway = new ProtoGateway();
+
+    public static void main(String[] a) {
+        Chimera.start(a);
+    }
 
     @Override
     public void onEnable() {

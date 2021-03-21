@@ -448,6 +448,19 @@ public abstract class ChimeraService extends QuillService {
     }
 
     /**
+     * Invoke a network function directly on a hosted service
+     *
+     * @param service the service
+     * @param name    the function name
+     * @param params  the parameters
+     * @param <T>     the return result type expected
+     * @return the return result of the function
+     */
+    public <T> T invokeFunctionDirect(HostedService service, String name, Object... params) {
+        return (T) getProtocolAccess().executeDirect(service, name, params);
+    }
+
+    /**
      * Invokes a network function with a downstream
      *
      * @param name   the name

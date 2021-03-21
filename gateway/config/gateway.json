@@ -1,38 +1,44 @@
 {
-    "webSocketService": {
-        "bind": "localhost",
-        "port": 8585,
-        "gateway": {}
-    },
-    "console": {
-        "activeFlushInterval": 250,
-        "shittyConsole": false,
-        "allowCommands": true,
-        "deduplicateLines": true,
-        "idleFlushInterval": 1000,
-        "verbose": true
-    },
-    "sessionCleanupMinuteLaziness": 30,
-    "hangingWebClient": {"timeoutMinutes": 5},
-    "listenerCleanupMinuteLaziness": 60,
-    "minutesPerSessionCleanup": 60,
-    "logRequests": true,
-    "schedulerService": {
-        "minInterval": 1000,
-        "maxTicksPerInterval": 1,
-        "maxInterval": 1000,
-        "minTicksPerInterval": 3
-    },
-    "impatientWebClient": {"timeoutMs": 150},
-    "serviceAccess": {
-        "maxConservativeServiceGroupSize": 64,
-        "maxServiceGroupSize": 64,
-        "networkUpdates": true,
-        "tickTime": 7000,
-        "fastTickTime": 950,
-        "startupFastTicks": 7
-    },
-    "database": {"connections": [{
+  "webSocketService": {
+    "bind": "localhost",
+    "port": 8585,
+    "gateway": {}
+  },
+  "console": {
+    "activeFlushInterval": 250,
+    "shittyConsole": false,
+    "allowCommands": true,
+    "deduplicateLines": true,
+    "idleFlushInterval": 1000,
+    "verbose": true
+  },
+  "sessionCleanupMinuteLaziness": 30,
+  "hangingWebClient": {
+    "timeoutMinutes": 5
+  },
+  "listenerCleanupMinuteLaziness": 60,
+  "minutesPerSessionCleanup": 60,
+  "logRequests": true,
+  "schedulerService": {
+    "minInterval": 1000,
+    "maxTicksPerInterval": 1,
+    "maxInterval": 1000,
+    "minTicksPerInterval": 3
+  },
+  "impatientWebClient": {
+    "timeoutMs": 150
+  },
+  "serviceAccess": {
+    "maxConservativeServiceGroupSize": 64,
+    "maxServiceGroupSize": 64,
+    "networkUpdates": true,
+    "tickTime": 7000,
+    "fastTickTime": 950,
+    "startupFastTicks": 7
+  },
+  "database": {
+    "connections": [
+      {
         "database": "chimera",
         "password": "chimera",
         "address": "localhost",
@@ -41,30 +47,34 @@
         "readOnly": false,
         "username": "chimera",
         "usesPassword": true
-    }]},
-    "web": {
-        "webServer": {
-            "serverPath": "/",
-            "sslKeystorePassword": "",
-            "sslKeystoreKeyName": "",
-            "sslKeystore": "",
-            "maxFormContentSize": 1073741824,
-            "httpPort": 80,
-            "http": true,
-            "sslKeystoreKeyPassword": "",
-            "https": false,
-            "httpsPort": 8443
-        },
-        "minPort": 10000,
-        "maxPort": 20000
+      }
+    ]
+  },
+  "web": {
+    "webServer": {
+      "serverPath": "/",
+      "sslKeystorePassword": "",
+      "sslKeystoreKeyName": "",
+      "sslKeystore": "",
+      "maxFormContentSize": 1073741824,
+      "httpPort": 80,
+      "http": true,
+      "sslKeystoreKeyPassword": "",
+      "https": false,
+      "httpsPort": 8443
     },
-    "protocolAccess": {},
-    "jobService": {
-        "logJobExecutions": true,
-        "minInterval": 10000,
-        "maxTicksPerInterval": 1,
-        "maxInterval": 60000,
-        "minTicksPerInterval": 1
-    },
-    "gateway": {"listenerCleanupDaysEviction": 31}
+    "minPort": 10000,
+    "maxPort": 20000
+  },
+  "protocolAccess": {},
+  "jobService": {
+    "logJobExecutions": true,
+    "minInterval": 10000,
+    "maxTicksPerInterval": 1,
+    "maxInterval": 60000,
+    "minTicksPerInterval": 1
+  },
+  "gateway": {
+    "listenerCleanupDaysEviction": 31
+  }
 }
