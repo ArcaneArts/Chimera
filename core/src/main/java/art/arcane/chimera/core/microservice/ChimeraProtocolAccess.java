@@ -35,10 +35,19 @@ import com.google.gson.Gson;
 
 import java.io.InputStream;
 
+/**
+ * Responsible for connecting network functions to this service and vice-versa
+ */
 public class ChimeraProtocolAccess extends QuillService {
     private transient KMap<String, ProtoFunction> localFunctions = new KMap<>();
     private transient KMap<String, KList<ProtoFunction>> remoteFunctionGroups = new KMap<>();
 
+    /**
+     * Registers remote functions from data sources provided
+     *
+     * @param service   the service to key it with
+     * @param functions the functions it is registering
+     */
     public void registerRemoteFunctions(HostedService service, KList<ProtoFunction> functions) {
         if (service.getType().equals(Quill.getDelegateModuleName())) {
             return;
@@ -48,10 +57,22 @@ public class ChimeraProtocolAccess extends QuillService {
         L.v("Registered " + functions.size() + " Functions from " + service.getType());
     }
 
+    /**
+     * Check if we have a protocol for a given service
+     * (meaning we have functions registered) that came from the given service
+     *
+     * @param type the service type
+     * @return true if there are functions registered for that service type
+     */
     public boolean hasProtocolFor(String type) {
         return remoteFunctionGroups.containsKey(type);
     }
 
+    /**
+     * Returns all network functions in a list
+     *
+     * @return the list of functions registered
+     */
     public KList<ProtoFunction> getAllFunctions() {
         KList<ProtoFunction> functions = new KList<>();
 
@@ -64,14 +85,39 @@ public class ChimeraProtocolAccess extends QuillService {
         return functions;
     }
 
+    /**
+     * Execute a network function with type. This is capable of
+     * executing local & remote functions
+     *
+     * @param name       the name
+     * @param parameters the params
+     * @return the result
+     */
     public Object execute(String name, Object... parameters) {
         return executeType(null, name, parameters);
     }
 
+    /**
+     * Execute a network function with downstream. This is capable of
+     * executing local & remote functions
+     *
+     * @param name       the name
+     * @param parameters the params
+     * @return the result downstream
+     */
     public InputStream executeDownstream(String name, Object... parameters) {
         return executeDownstreamType(null, name, parameters);
     }
 
+    /**
+     * Executes a function type with context
+     *
+     * @param context    the connection context
+     * @param type       the type
+     * @param name       the name
+     * @param parameters the parameters
+     * @return the result
+     */
     public Object executeTypeWithContext(ChimeraContext context, String type, String name, Object... parameters) {
         if (localFunctions.containsKey(name)) {
             try {
@@ -125,6 +171,15 @@ public class ChimeraProtocolAccess extends QuillService {
         return null;
     }
 
+    /**
+     * Executes a function type with context downstream
+     *
+     * @param context    the connection context
+     * @param type       the type
+     * @param name       the name
+     * @param parameters the parameters
+     * @return the result downstream
+     */
     public InputStream executeTypeDownstreamWithContext(ChimeraContext context, String type, String name, Object... parameters) {
         if (localFunctions.containsKey(name)) {
             try {

@@ -36,6 +36,10 @@ import art.arcane.quill.service.QuillService;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Manages Chimera services communicating with each other
+ * and registering themselves for each other
+ */
 public class ChimeraServiceAccess extends QuillService {
     private transient KMap<String, ServiceSet> services = new KMap<>();
     private int startupFastTicks = 7;
@@ -51,6 +55,12 @@ public class ChimeraServiceAccess extends QuillService {
         return services.keySet();
     }
 
+    /**
+     * Get all connected services under a specific type
+     *
+     * @param type the service type
+     * @return the service set (list)
+     */
     public ServiceSet getServiceSet(String type) {
         ServiceSet s = services.get(type);
 
@@ -61,6 +71,12 @@ public class ChimeraServiceAccess extends QuillService {
         return s;
     }
 
+    /**
+     * Execute a runnable (async wait) when services are available
+     *
+     * @param r        the runnable to run
+     * @param services the services required
+     */
     public void withService(Runnable r, String... services) {
         J.a(() ->
         {
@@ -72,23 +88,39 @@ public class ChimeraServiceAccess extends QuillService {
         });
     }
 
+    /**
+     * Waits for a list of services to be online before continuing (sync wait)
+     *
+     * @param services the services to wait for
+     */
     public void waitForServices(String... services) {
         while (!hasRequestedServices(services)) {
             J.sleep(1000);
         }
     }
 
-    public void waitForServices(long time, String... services) {
+    /**
+     * Waits for a list of services to be online before continuing (sync wait)
+     *
+     * @param time     the timeout
+     * @param services the services to wait for
+     * @return returns true if all services are online, or false if we timed out
+     */
+    public boolean waitForServices(long time, String... services) {
         long m = M.ms();
         while (!hasRequestedServices(services)) {
             if (M.ms() - m > time) {
-                break;
+                return false;
             }
 
             J.sleep(1000);
         }
+        return true;
     }
 
+    /**
+     * Triggers a log to the console about what nodes are connected
+     */
     public void logNetworkUpdate() {
         if (!networkUpdates) {
             return;
@@ -124,6 +156,12 @@ public class ChimeraServiceAccess extends QuillService {
         });
     }
 
+    /**
+     * Checks if the given services are online and reachable
+     *
+     * @param services the list of services
+     * @return true if they are all online
+     */
     public boolean hasRequestedServices(String... services) {
         boolean ready = true;
 
@@ -139,6 +177,16 @@ public class ChimeraServiceAccess extends QuillService {
         return ready;
     }
 
+    /**
+     * Get a random service from a service type
+     *
+     * @param type the type of service
+     * @param now  if now is false, we will lookup an internal map of existing connections.
+     *             If its not there, we return nothing.
+     *             If now is set to TRUE however, we will lock & look for a service,
+     *             connect it, then return it.
+     * @return the hosted service
+     */
     public HostedService getService(String type, boolean now) {
         if (services.containsKey(type)) {
             return services.get(type).getNextService();
@@ -151,6 +199,12 @@ public class ChimeraServiceAccess extends QuillService {
         return null;
     }
 
+    /**
+     * Get an already connected service by it's id
+     *
+     * @param serviceID the id
+     * @return the service or null
+     */
     public HostedService getService(ID serviceID) {
         for (String i : getServices()) {
             for (HostedService j : getServiceSet(i)) {
@@ -163,10 +217,23 @@ public class ChimeraServiceAccess extends QuillService {
         return null;
     }
 
+    /**
+     * Get a random service from a service type. If there isnt one
+     * we will continue looking for one and connect it then finally return it
+     *
+     * @param type the service type
+     * @return the hosted service or null
+     */
     public HostedService getService(String type) {
         return getService(type, true);
     }
 
+    /**
+     * Find a service NOW, meaning lock this until we find one
+     *
+     * @param type the service type
+     * @return the hosted service
+     */
     private HostedService findServiceNow(String type) {
         HostedService svc = getService(type, false);
 
@@ -217,6 +284,11 @@ public class ChimeraServiceAccess extends QuillService {
         return false;
     }
 
+    /**
+     * Unregister a service (doesnt delete any registries on sql)
+     *
+     * @param i the service to unregister
+     */
     public void unregisterService(HostedService i) {
         if (!services.containsKey(i.getType())) {
             return;
@@ -322,6 +394,11 @@ public class ChimeraServiceAccess extends QuillService {
         });
     }
 
+    /**
+     * Gets all hosted services connected
+     *
+     * @return the list of hosted services
+     */
     public KList<HostedService> getAllServices() {
         KList<HostedService> s = new KList<>();
 

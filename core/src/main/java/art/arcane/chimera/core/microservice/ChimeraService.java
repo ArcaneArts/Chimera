@@ -51,6 +51,9 @@ import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * All root services in chimera need to use ChimeraService instead of QuillService
+ */
 public abstract class ChimeraService extends QuillService {
     @Getter
     @Service
@@ -100,20 +103,47 @@ public abstract class ChimeraService extends QuillService {
         Chimera.backend = this;
     }
 
+    /**
+     * Publish a service into the network so it is discoverable by other services
+     *
+     * @param service the hosted service object
+     */
     private void publish(HostedService service) {
         service.setArchon(Chimera.archon);
         service.push();
     }
 
+    /**
+     * Unpublish a service from the network so it is no longer discoverable
+     *
+     * @param host the host to unpublish
+     */
     private void unpublish(HostedService host) {
         host.setArchon(Chimera.archon);
         host.delete();
     }
 
+    /**
+     * Send a parcel request to the given host with a message and get a reply
+     * This will hang until the service is available.
+     *
+     * @param svc     the service to request to
+     * @param request the request parcel
+     * @return the responding parcel
+     */
     public Parcelable request(HostedService svc, Parcelable request) {
         return request(svc, request, false);
     }
 
+    /**
+     * Send a parcel request to the given host with a message and get a reply
+     * This will hang until the service is available.
+     *
+     * @param svc      the service to request to
+     * @param request  the request parcel
+     * @param suppress if suppressed exceptions will be ignored
+     * @return the responding parcel
+     */
     public Parcelable request(HostedService svc, Parcelable request, boolean suppress) {
         String url = svc.getURL() + "" + request.getParcelType() + "?b=" + IO.encode(new Gson().toJson(request).getBytes(StandardCharsets.UTF_8)).replaceAll("\\Q//\\E", "/").replaceAll("\\Q//\\E", "/");
 
@@ -126,10 +156,27 @@ public abstract class ChimeraService extends QuillService {
         return new Gson().fromJson(r, parcelTypeCache.get(response.getString("type")));
     }
 
+    /**
+     * Send a parcel request to the given host with a message and get a reply
+     * This request will eventually time out
+     *
+     * @param svc     the service to request to
+     * @param request the request parcel
+     * @return the responding parcel
+     */
     public Parcelable requestImpatient(HostedService svc, Parcelable request) {
         return requestImpatient(svc, request, false);
     }
 
+    /**
+     * Send a parcel request to the given host with a message and get a reply
+     * This request will eventually time out
+     *
+     * @param svc      the service to request to
+     * @param request  the request parcel
+     * @param suppress if true will ignore exceptions
+     * @return the responding parcel
+     */
     public Parcelable requestImpatient(HostedService svc, Parcelable request, boolean suppress) {
         String url = svc.getURL() + "" + request.getParcelType() + "?b=" + IO.encode(new Gson().toJson(request).getBytes(StandardCharsets.UTF_8)).replaceAll("\\Q//\\E", "/").replaceAll("\\Q//\\E", "/");
 
@@ -142,13 +189,18 @@ public abstract class ChimeraService extends QuillService {
         return new Gson().fromJson(r, parcelTypeCache.get(response.getString("type")));
     }
 
-    private boolean dropService(HostedService s) {
+    /**
+     * Drop a service from this services connection map. This does not remove the host
+     * It simply drops the connection (meaning it will eventually reconnect)
+     *
+     * @param s the host to drop
+     */
+    public void dropService(HostedService s) {
         serviceAccess.getServiceSet(s.getType()).remove(s);
         L.i("Lost connection to " + s.toString());
-        return true;
     }
 
-    public HostedService internalRequest(String serviceType, Parcelable request, O<Parcelable> o) {
+    private HostedService internalRequest(String serviceType, Parcelable request, O<Parcelable> o) {
         O<Boolean> fail = new O<Boolean>();
         fail.set(false);
         HostedService hs = serviceAccess.getService(serviceType);
@@ -186,7 +238,7 @@ public abstract class ChimeraService extends QuillService {
         }
     }
 
-    public HostedService internalDownstreamRequest(String serviceType, Parcelable request, O<InputStream> o) {
+    private HostedService internalDownstreamRequest(String serviceType, Parcelable request, O<InputStream> o) {
         O<Boolean> fail = new O<Boolean>();
         fail.set(false);
         HostedService hs = serviceAccess.getService(serviceType);
@@ -223,6 +275,15 @@ public abstract class ChimeraService extends QuillService {
         }
     }
 
+    /**
+     * Sends a parcel request to a random connected service under the serviceType
+     * This method will continue to hang until at least one host under that type
+     * is actually online and has handled the request
+     *
+     * @param serviceType the service type
+     * @param request     the request
+     * @return the response.
+     */
     public Parcelable request(String serviceType, Parcelable request) {
         O<Parcelable> res = new O<Parcelable>();
         HostedService dead = internalRequest(serviceType, request, res);
@@ -236,6 +297,15 @@ public abstract class ChimeraService extends QuillService {
         return res.get();
     }
 
+    /**
+     * Sends a parcel request to a random connected service under the serviceType
+     * This method will continue to hang until at least one host under that type
+     * is actually online and has handled the request and sends a stream
+     *
+     * @param serviceType the service type
+     * @param request     the request
+     * @return the response inputstream.
+     */
     public InputStream requestDownstream(String serviceType, Parcelable request) {
         O<InputStream> res = new O<InputStream>();
         HostedService dead = internalDownstreamRequest(serviceType, request, res);
@@ -306,6 +376,11 @@ public abstract class ChimeraService extends QuillService {
         Chimera.archon = getDatabase();
     }
 
+    /**
+     * Registers function protocols for the specified service
+     *
+     * @param i the specified service
+     */
     public void registerProtocols(String i) {
         if (getProtocolAccess().hasProtocolFor(i)) {
             return;
@@ -315,19 +390,28 @@ public abstract class ChimeraService extends QuillService {
         getProtocolAccess().registerRemoteFunctions(getServiceAccess().getService(i), proto.getFunctions());
     }
 
-    public void notifyRemoteShuttingDown(String key) {
-        getServiceAccess().unregisterService(key);
-    }
-
     @Override
     public void onDisable() {
         unpublish(host);
     }
 
+    /**
+     * Schedules a repeating runnable job
+     *
+     * @param delegate the runnable
+     * @param interval the interval in ms
+     */
     public void scheduleRepeatingJob(Runnable delegate, long interval) {
         getSchedulerService().schedule(delegate, interval);
     }
 
+    /**
+     * Will execute a runnable only when there are services available for the job
+     *
+     * @param r        the runnable
+     * @param services the list of services that need to be online for
+     *                 the runnable to work
+     */
     public void serviceWork(Runnable r, String... services) {
         AtomicBoolean b = new AtomicBoolean(false);
         getServiceAccess().withService(() -> {
@@ -340,15 +424,36 @@ public abstract class ChimeraService extends QuillService {
         }
     }
 
+    /**
+     * Wait for the services async, then run the runnable
+     *
+     * @param r        the runnable
+     * @param services the services to wait for before the runnable will run
+     */
     public void serviceWorkAsync(Runnable r, String... services) {
         getServiceAccess().withService(r, services);
     }
 
 
+    /**
+     * Invoke a network function
+     *
+     * @param name   the function name
+     * @param params the parameters
+     * @param <T>    the return result type expected
+     * @return the return result of the function
+     */
     public <T> T invokeFunction(String name, Object... params) {
         return (T) getProtocolAccess().execute(name, params);
     }
 
+    /**
+     * Invokes a network function with a downstream
+     *
+     * @param name   the name
+     * @param params the parameters
+     * @return the inputstream result
+     */
     public InputStream invokeDownstreamFunction(String name, Object... params) {
         return getProtocolAccess().executeDownstream(name, params);
     }
@@ -412,6 +517,11 @@ public abstract class ChimeraService extends QuillService {
         });
     }
 
+    /**
+     * Get the service host that this service represents
+     *
+     * @return the host
+     */
     public HostedService getHost() {
         return host;
     }

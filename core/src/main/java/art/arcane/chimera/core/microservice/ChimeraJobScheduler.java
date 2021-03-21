@@ -19,6 +19,9 @@ package art.arcane.chimera.core.microservice;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.execution.ChronoLatch;
 
+/**
+ * A simple scheduler that runs jobs in a repeating way
+ */
 public class ChimeraJobScheduler extends ChimeraTickingServiceWorker {
     private transient final KList<Runnable> schedulers = new KList<>();
 
@@ -39,6 +42,12 @@ public class ChimeraJobScheduler extends ChimeraTickingServiceWorker {
         }
     }
 
+    /**
+     * Schedule a runnable to repeat per interval
+     *
+     * @param r        the runnable
+     * @param interval the interval in ms
+     */
     public void schedule(Runnable r, long interval) {
         synchronized (schedulers) {
             schedulers.add(ChronoLatch.wrap(interval, r));

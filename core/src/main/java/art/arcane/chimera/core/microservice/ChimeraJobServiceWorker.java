@@ -28,7 +28,10 @@ import art.arcane.quill.math.M;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-
+/**
+ * Responsible for scheduling network functions in a job list
+ * for services to execute in the future
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ChimeraJobServiceWorker extends ChimeraTickingServiceWorker {
