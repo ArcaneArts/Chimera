@@ -1,22 +1,26 @@
 {
-    "console": {
-        "activeFlushInterval": 250,
-        "shittyConsole": false,
-        "allowCommands": true,
-        "deduplicateLines": true,
-        "idleFlushInterval": 1000,
-        "verbose": true
-    },
-    "impatientWebClient": {"timeoutMs": 150},
-    "serviceAccess": {
-        "maxConservativeServiceGroupSize": 64,
-        "maxServiceGroupSize": 64,
-        "networkUpdates": true,
-        "tickTime": 7000,
-        "fastTickTime": 950,
-        "startupFastTicks": 7
-    },
-    "database": {"connections": [{
+  "console": {
+    "activeFlushInterval": 250,
+    "shittyConsole": false,
+    "allowCommands": true,
+    "deduplicateLines": true,
+    "idleFlushInterval": 1000,
+    "verbose": true
+  },
+  "impatientWebClient": {
+    "timeoutMs": 150
+  },
+  "serviceAccess": {
+    "maxConservativeServiceGroupSize": 64,
+    "maxServiceGroupSize": 64,
+    "networkUpdates": true,
+    "tickTime": 7000,
+    "fastTickTime": 950,
+    "startupFastTicks": 7
+  },
+  "database": {
+    "connections": [
+      {
         "database": "chimera",
         "password": "chimera",
         "address": "localhost",
@@ -25,48 +29,54 @@
         "readOnly": false,
         "username": "chimera",
         "usesPassword": true
-    }]},
-    "mail": {"mailMan": {
-        "server": "some.server.something",
-        "password": "somethingSecure",
-        "smtpAuth": true,
-        "port": 123,
-        "name": "Chimera",
-        "tls": true,
-        "ssl": false,
-        "email": "you@something.something",
-        "username": "you@something.something"
-    }},
-    "web": {
-        "webServer": {
-            "serverPath": "/",
-            "sslKeystorePassword": "",
-            "sslKeystoreKeyName": "",
-            "sslKeystore": "",
-            "maxFormContentSize": 1073741824,
-            "httpPort": 80,
-            "http": true,
-            "sslKeystoreKeyPassword": "",
-            "https": false,
-            "httpsPort": 8443
-        },
-        "minPort": 10000,
-        "maxPort": 20000
-    },
-    "hangingWebClient": {"timeoutMinutes": 5},
-    "protocolAccess": {},
-    "jobService": {
-        "logJobExecutions": true,
-        "minInterval": 10000,
-        "maxTicksPerInterval": 1,
-        "maxInterval": 60000,
-        "minTicksPerInterval": 1
-    },
-    "logRequests": true,
-    "schedulerService": {
-        "minInterval": 10000,
-        "maxTicksPerInterval": 1,
-        "maxInterval": 60000,
-        "minTicksPerInterval": 1
+      }
+    ]
+  },
+  "mail": {
+    "mailMan": {
+      "server": "some.server.something",
+      "password": "somethingSecure",
+      "smtpAuth": true,
+      "port": 123,
+      "name": "Chimera",
+      "tls": true,
+      "ssl": false,
+      "email": "you@something.something",
+      "username": "you@something.something"
     }
+  },
+  "web": {
+    "webServer": {
+      "serverPath": "/",
+      "sslKeystorePassword": "",
+      "sslKeystoreKeyName": "",
+      "sslKeystore": "",
+      "maxFormContentSize": 1073741824,
+      "httpPort": 80,
+      "http": true,
+      "sslKeystoreKeyPassword": "",
+      "https": false,
+      "httpsPort": 8443
+    },
+    "minPort": 10000,
+    "maxPort": 20000
+  },
+  "hangingWebClient": {
+    "timeoutMinutes": 5
+  },
+  "protocolAccess": {},
+  "jobService": {
+    "logJobExecutions": true,
+    "minInterval": 10000,
+    "maxTicksPerInterval": 1,
+    "maxInterval": 60000,
+    "minTicksPerInterval": 1
+  },
+  "logRequests": true,
+  "schedulerService": {
+    "minInterval": 10000,
+    "maxTicksPerInterval": 1,
+    "maxInterval": 60000,
+    "minTicksPerInterval": 1
+  }
 }

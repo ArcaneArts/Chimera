@@ -1,3 +1,19 @@
+/*
+ * This file is part of Chimera by Arcane Arts.
+ *
+ * Chimera by Arcane Arts is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * Chimera by Arcane Arts is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License in this package for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Chimera.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package art.arcane.chimera.core.protocol.generation;
 
 import art.arcane.chimera.core.Chimera;
@@ -21,12 +37,12 @@ import java.lang.reflect.*;
 import java.util.Date;
 
 public class ProtoExport {
+    public static KSet<String> warnings = new KSet<>();
     private KMap<String, Class<?>> realDobjects = new KMap<>();
     private KMap<String, String> dobject = new KMap<>();
     private KList<ProtoFunction> functions;
     private KMap<String, File> dartFunctionFiles;
     private KList<String> javaFromDartFunctions = new KList<>();
-    public static KSet<String> warnings = new KSet<>();
 
     public ProtoExport(KList<ProtoFunction> functions, KMap<String, File> dartFunctionFiles) {
         L.DEDUPLICATE_LOGS = false;
@@ -50,6 +66,91 @@ public class ProtoExport {
                 registerDartObject(o);
             }
         }
+    }
+
+    public static boolean isPrimitiveDartType(ProtoType type) {
+        return type.equals(ProtoType.STRING) || type.equals(ProtoType.INT) || type.equals(ProtoType.LONG) || type.equals(ProtoType.DOUBLE) || type.equals(ProtoType.BOOLEAN) || type.equals(ProtoType.VOID);
+    }
+
+    public static String dartTypeStatic(ProtoType type, String typeName, Class<?> lz, String dartType, String dartType2) {
+        if (typeName.endsWith(".UUID")) {
+            throw new RuntimeException("STOP USING UUID. Use ID instead!");
+        }
+
+        if (typeName.equals(Object.class.getCanonicalName())) {
+            return "dynamic";
+        }
+
+        if (type.equals(ProtoType.VOID)) {
+            return "void";
+        }
+
+        if (type.equals(ProtoType.BOOLEAN)) {
+            return "bool";
+        }
+
+        if (type.equals(ProtoType.DOUBLE)) {
+            return "double";
+        }
+
+        if (type.equals(ProtoType.INT) || type.equals(ProtoType.LONG)) {
+            return "int";
+        }
+
+        if (type.equals(ProtoType.STRING)) {
+            return "String";
+        }
+
+        if (type.equals(ProtoType.JSON_LIST)) {
+            if (dartType != null) {
+                return "List<" + dartType + ">";
+            }
+
+            return "List<dynamic>";
+        }
+
+        if (type.equals(ProtoType.JSON_MAP)) {
+            if (dartType != null) {
+                if (dartType2 != null) {
+                    return "Map<" + dartType + "," + dartType2 + ">";
+                }
+                return "Map<" + dartType + ",dynamic>";
+            }
+
+            return "Map<dynamic,dynamic>";
+        }
+
+        return typeName.contains(".") ? new KList<String>(typeName.split("\\Q.\\E")).popLast() : typeName;
+    }
+
+    public static String listTypeOf(AnnotatedElement f, int index) {
+        Types t = f.getDeclaredAnnotation(Types.class);
+
+        if (t != null) {
+            Class<?>[] l = t.value();
+
+            if (l.length > index) {
+                return dartTypeStatic(ProtoType.of(l[index]), l[index].getCanonicalName(), l[index], null, null);
+            }
+        }
+
+        return null;
+    }
+
+    public static String listTypeOfJava(AnnotatedElement f, int index, String at) {
+        Types t = f.getDeclaredAnnotation(Types.class);
+
+        if (t != null) {
+            Class<?>[] l = t.value();
+
+            if (l.length > index) {
+                return l[index].getCanonicalName();
+            }
+        } else if ((f instanceof Method && (((Method) f).getReturnType().equals(KList.class) || ((Method) f).getReturnType().equals(KMap.class))) || (f instanceof Field && (((Field) f).getType().equals(KList.class) || ((Field) f).getType().equals(KMap.class)))) {
+            ProtoExport.warnings.add("The " + f.getClass().getSimpleName() + " " + ((Member) f).getName() + " uses generic types but is not annotated with @Typed(theType) in the class " + at);
+        }
+
+        return null;
     }
 
     public void exportDart(File f, String projectName) {
@@ -164,10 +265,6 @@ public class ProtoExport {
         }
     }
 
-    public static boolean isPrimitiveDartType(ProtoType type) {
-        return type.equals(ProtoType.STRING) || type.equals(ProtoType.INT) || type.equals(ProtoType.LONG) || type.equals(ProtoType.DOUBLE) || type.equals(ProtoType.BOOLEAN) || type.equals(ProtoType.VOID);
-    }
-
     private String dartType(ProtoType type, String typeName, Class<?> lz, String dartType, String dartType2) {
         if (typeName.endsWith(".UUID")) {
             throw new RuntimeException("STOP USING UUID. Use ID instead!");
@@ -220,57 +317,6 @@ public class ProtoExport {
         return typeName.contains(".") ? new KList<String>(typeName.split("\\Q.\\E")).popLast() : typeName;
     }
 
-    public static String dartTypeStatic(ProtoType type, String typeName, Class<?> lz, String dartType, String dartType2) {
-        if (typeName.endsWith(".UUID")) {
-            throw new RuntimeException("STOP USING UUID. Use ID instead!");
-        }
-
-        if (typeName.equals(Object.class.getCanonicalName())) {
-            return "dynamic";
-        }
-
-        if (type.equals(ProtoType.VOID)) {
-            return "void";
-        }
-
-        if (type.equals(ProtoType.BOOLEAN)) {
-            return "bool";
-        }
-
-        if (type.equals(ProtoType.DOUBLE)) {
-            return "double";
-        }
-
-        if (type.equals(ProtoType.INT) || type.equals(ProtoType.LONG)) {
-            return "int";
-        }
-
-        if (type.equals(ProtoType.STRING)) {
-            return "String";
-        }
-
-        if (type.equals(ProtoType.JSON_LIST)) {
-            if (dartType != null) {
-                return "List<" + dartType + ">";
-            }
-
-            return "List<dynamic>";
-        }
-
-        if (type.equals(ProtoType.JSON_MAP)) {
-            if (dartType != null) {
-                if (dartType2 != null) {
-                    return "Map<" + dartType + "," + dartType2 + ">";
-                }
-                return "Map<" + dartType + ",dynamic>";
-            }
-
-            return "Map<dynamic,dynamic>";
-        }
-
-        return typeName.contains(".") ? new KList<String>(typeName.split("\\Q.\\E")).popLast() : typeName;
-    }
-
     public void registerDartObject(Class<?> c) {
         map2DartObject(c.getCanonicalName(), c);
     }
@@ -298,36 +344,6 @@ public class ProtoExport {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static String listTypeOf(AnnotatedElement f, int index) {
-        Types t = f.getDeclaredAnnotation(Types.class);
-
-        if (t != null) {
-            Class<?>[] l = t.value();
-
-            if (l.length > index) {
-                return dartTypeStatic(ProtoType.of(l[index]), l[index].getCanonicalName(), l[index], null, null);
-            }
-        }
-
-        return null;
-    }
-
-    public static String listTypeOfJava(AnnotatedElement f, int index, String at) {
-        Types t = f.getDeclaredAnnotation(Types.class);
-
-        if (t != null) {
-            Class<?>[] l = t.value();
-
-            if (l.length > index) {
-                return l[index].getCanonicalName();
-            }
-        } else if ((f instanceof Method && (((Method) f).getReturnType().equals(KList.class) || ((Method) f).getReturnType().equals(KMap.class))) || (f instanceof Field && (((Field) f).getType().equals(KList.class) || ((Field) f).getType().equals(KMap.class)))) {
-            ProtoExport.warnings.add("The " + f.getClass().getSimpleName() + " " + ((Member) f).getName() + " uses generic types but is not annotated with @Typed(theType) in the class " + at);
-        }
-
-        return null;
     }
 
     private void map2DartObject(String type, Class<?> clz) {

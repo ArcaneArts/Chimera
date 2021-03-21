@@ -1,12 +1,12 @@
 {
-    "console": {
-        "activeFlushInterval": 250,
-        "shittyConsole": false,
-        "allowCommands": true,
-        "deduplicateLines": true,
-        "idleFlushInterval": 1000,
-        "verbose": true
-    },
-    "appName": "kraken",
-    "projectName": "Chimera"
+  "console": {
+    "activeFlushInterval": 250,
+    "shittyConsole": false,
+    "allowCommands": true,
+    "deduplicateLines": true,
+    "idleFlushInterval": 1000,
+    "verbose": true
+  },
+  "appName": "kraken",
+  "projectName": "Chimera"
 }

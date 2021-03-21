@@ -1,3 +1,19 @@
+/*
+ * This file is part of Chimera by Arcane Arts.
+ *
+ * Chimera by Arcane Arts is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * Chimera by Arcane Arts is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License in this package for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Chimera.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package art.arcane.chimera.core.protocol.generation;
 
 import art.arcane.chimera.core.protocol.ChimeraContext;
@@ -36,6 +52,37 @@ public class ProtoFunction {
 
     @Builder.Default
     private KList<ProtoParam> params = new KList<>();
+
+    public static ProtoFunction of(Method m, Object fromInstance, String type) {
+        m.setAccessible(true);
+        //@builder
+        ProtoFunction f = ProtoFunction.builder()
+                .name(m.getName())
+                .type(type)
+                .bigJob(m.isAnnotationPresent(BigJob.class))
+                .resultType(m.getReturnType().getCanonicalName())
+                .service(Quill.getDelegateModuleName())
+                .downstreamResult(m.getReturnType().equals(InputStream.class))
+                .src(m.getDeclaringClass().getCanonicalName())
+                .description("No Description Provided")
+                .result(ProtoType.of(m.getReturnType()))
+                .t1(ProtoExport.listTypeOfJava(m, 0, m.getDeclaringClass().getCanonicalName()))
+                .t2(ProtoExport.listTypeOfJava(m, 1, m.getDeclaringClass().getCanonicalName()))
+                .build();
+        //@done
+
+        for (Parameter i : m.getParameters()) {
+            f.getParams().add(ProtoParam.of(i));
+        }
+
+        if (!Modifier.isStatic(m.getModifiers())) {
+            f.setKnownInstance(fromInstance);
+        }
+
+        f.setKnownMethod(m);
+
+        return f;
+    }
 
     public void filterTypes(Object[] array) {
         for (int i = 0; i < array.length; i++) {
@@ -174,36 +221,5 @@ public class ProtoFunction {
         }
 
         return resultType;
-    }
-
-    public static ProtoFunction of(Method m, Object fromInstance, String type) {
-        m.setAccessible(true);
-        //@builder
-        ProtoFunction f = ProtoFunction.builder()
-                .name(m.getName())
-                .type(type)
-                .bigJob(m.isAnnotationPresent(BigJob.class))
-                .resultType(m.getReturnType().getCanonicalName())
-                .service(Quill.getDelegateModuleName())
-                .downstreamResult(m.getReturnType().equals(InputStream.class))
-                .src(m.getDeclaringClass().getCanonicalName())
-                .description("No Description Provided")
-                .result(ProtoType.of(m.getReturnType()))
-                .t1(ProtoExport.listTypeOfJava(m, 0, m.getDeclaringClass().getCanonicalName()))
-                .t2(ProtoExport.listTypeOfJava(m, 1, m.getDeclaringClass().getCanonicalName()))
-                .build();
-        //@done
-
-        for (Parameter i : m.getParameters()) {
-            f.getParams().add(ProtoParam.of(i));
-        }
-
-        if (!Modifier.isStatic(m.getModifiers())) {
-            f.setKnownInstance(fromInstance);
-        }
-
-        f.setKnownMethod(m);
-
-        return f;
     }
 }

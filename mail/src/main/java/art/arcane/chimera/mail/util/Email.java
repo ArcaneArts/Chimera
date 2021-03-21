@@ -1,3 +1,19 @@
+/*
+ * This file is part of Chimera by Arcane Arts.
+ *
+ * Chimera by Arcane Arts is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * Chimera by Arcane Arts is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License in this package for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Chimera.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package art.arcane.chimera.mail.util;
 
 import art.arcane.quill.execution.J;
@@ -18,17 +34,17 @@ import java.util.Properties;
 import java.util.concurrent.Future;
 
 public class Email {
+    private final String to;
     private boolean html;
     private String message;
     private String subject;
-    private final String to;
-
-    public static Email to(String to) {
-        return new Email(to);
-    }
 
     private Email(String to) {
         this.to = to;
+    }
+
+    public static Email to(String to) {
+        return new Email(to);
     }
 
     public Email message(String message) {
