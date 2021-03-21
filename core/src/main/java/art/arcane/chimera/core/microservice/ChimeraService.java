@@ -1,10 +1,12 @@
 package art.arcane.chimera.core.microservice;
 
+import art.arcane.archon.element.ElementList;
 import art.arcane.archon.server.ArchonService;
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.net.parcels.ParcelGetProtocol;
 import art.arcane.chimera.core.net.parcels.ParcelSendProtocol;
 import art.arcane.chimera.core.object.HostedService;
+import art.arcane.chimera.core.object.Session;
 import art.arcane.chimera.core.protocol.generation.ProtoBuilder;
 import art.arcane.chimera.core.protocol.generation.ProtoFunction;
 import art.arcane.chimera.core.protocol.generation.Protocol;
@@ -33,7 +35,7 @@ import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class ChimeraBackendService extends QuillService {
+public abstract class ChimeraService extends QuillService {
     @Getter
     @Service
     private ConsoleService console = new ConsoleService();
@@ -78,7 +80,7 @@ public abstract class ChimeraBackendService extends QuillService {
     private transient HostedService host;
     private transient KMap<String, Class<? extends Parcelable>> parcelTypeCache = new KMap<>();
 
-    public ChimeraBackendService() {
+    public ChimeraService() {
         Chimera.backend = this;
     }
 
@@ -248,11 +250,7 @@ public abstract class ChimeraBackendService extends QuillService {
             }
         }
 
-        console.registerCommand("list-functions", (args) ->
-        {
-            getProtocolAccess().getAllFunctions().forEach((i) -> L.i(i.getName() + ": " + new Gson().toJson(i)));
-            return true;
-        });
+        registerCommands();
 
         for (Class<? extends Parcelable> i : web.getServer().getParcelables()) {
             try {
@@ -337,5 +335,68 @@ public abstract class ChimeraBackendService extends QuillService {
 
     public InputStream invokeDownstreamFunction(String name, Object... params) {
         return getProtocolAccess().executeDownstream(name, params);
+    }
+
+    private void registerCommands() {
+        console.registerCommand("list-services", (args) -> {
+            for (String i : getServiceAccess().getServices()) {
+                L.i(i + ": ");
+
+                for (HostedService j : getServiceAccess().getServiceSet(i)) {
+                    L.i("  " + j.getURL() + (host.getId().equals(j.getId()) ? " [self] " : " ") + "(" + j.getId() + ")");
+                }
+            }
+            return true;
+        });
+
+        console.registerCommand("list-functions", (args) ->
+        {
+            getProtocolAccess().getAllFunctions().forEach((i) -> L.i(i.getName() + ": " + new Gson().toJson(i)));
+            return true;
+        });
+
+        console.registerCommand("list-clients", (args) ->
+        {
+            J.a(() -> {
+                ElementList<Session> sessions = new Session().allWhere("1");
+
+                L.i("Total Connected Clients: " + sessions.size());
+
+                for (int i = 0; i < sessions.size(); i++) {
+                    Session s = sessions.get(i);
+                    L.i("  - " + s.getId());
+                }
+            });
+
+            return true;
+        });
+
+        console.registerCommand("drop-service", (args) -> {
+            if (args.length < 1) {
+                L.f("Use 'drop-service ServiceID'");
+                return true;
+            }
+
+            HostedService s = getServiceAccess().getService(ID.fromString(args[0]));
+
+            if (s == null) {
+                L.f("Couldn't find any service connection with ID " + args[0]);
+                return true;
+            }
+
+            if (s.getId().equals(host.getId())) {
+                L.f("You cannot disconnect from yourself!");
+                return true;
+            }
+
+            getServiceAccess().unregisterService(s);
+            L.i("Dropped Service " + s.getId().toString());
+
+            return true;
+        });
+    }
+
+    public HostedService getHost() {
+        return host;
     }
 }

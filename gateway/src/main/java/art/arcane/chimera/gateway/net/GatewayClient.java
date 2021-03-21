@@ -1,6 +1,6 @@
 package art.arcane.chimera.gateway.net;
 
-import art.arcane.chimera.core.microservice.ChimeraBackendService;
+import art.arcane.chimera.core.microservice.ChimeraService;
 import art.arcane.chimera.core.protocol.ChimeraContext;
 import art.arcane.chimera.core.protocol.EDX;
 import art.arcane.chimera.core.protocol.generation.FunctionReference;
@@ -40,12 +40,11 @@ public class GatewayClient implements IClient {
         chimeraSession = art.arcane.chimera.core.object.Session.builder()
                 .id(ID.fromString(session.getId()))
                 .last(M.ms())
-                .gateway(((ChimeraBackendService) Quill.delegate).getId())
                 .token(ID.fromString("none"))
                 .user(ID.fromString("none"))
+                .gateway(((ChimeraService) Quill.delegate).getId())
                 .build()
-                .archon(((ChimeraBackendService) Quill.delegate).getDatabase());
-
+                .archon(((ChimeraService) Quill.delegate).getDatabase());
         if (context.getAccessToken() != null) {
             chimeraSession.setToken(getContext().getAccessToken().getId());
             chimeraSession.setUser(getContext().getAccessToken().getAccount());
@@ -107,7 +106,7 @@ public class GatewayClient implements IClient {
 
         if (nowSet || M.ms() - chimeraSession.getLast() > 10000) {
             chimeraSession.setLast(M.ms());
-            chimeraSession.setArchon(((ChimeraBackendService) Quill.delegate).getDatabase());
+            chimeraSession.setArchon(((ChimeraService) Quill.delegate).getDatabase());
             chimeraSession.push();
         }
     }
@@ -156,7 +155,7 @@ public class GatewayClient implements IClient {
                     .builder()
                     .id(ID.fromString(EDX.getContext().getSessionId()))
                     .build()
-                    .archon(((ChimeraBackendService) Quill.delegate).getDatabase())
+                    .archon(((ChimeraService) Quill.delegate).getDatabase())
                     .delete();
         } catch (IOException ignored) {
 

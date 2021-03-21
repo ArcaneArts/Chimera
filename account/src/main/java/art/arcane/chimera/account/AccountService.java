@@ -2,7 +2,7 @@ package art.arcane.chimera.account;
 
 
 import art.arcane.chimera.core.Chimera;
-import art.arcane.chimera.core.microservice.ChimeraBackendService;
+import art.arcane.chimera.core.microservice.ChimeraService;
 import art.arcane.chimera.core.object.account.AccessToken;
 import art.arcane.chimera.core.object.account.User;
 import art.arcane.chimera.core.object.account.UserAuthentication;
@@ -14,7 +14,7 @@ import art.arcane.quill.io.IO;
 import art.arcane.quill.logging.L;
 import art.arcane.quill.service.Service;
 
-public class AccountService extends ChimeraBackendService {
+public class AccountService extends ChimeraService {
 
     public static void main(String[] a) {
         Chimera.start(a);

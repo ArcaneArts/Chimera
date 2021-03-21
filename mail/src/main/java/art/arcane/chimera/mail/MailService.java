@@ -1,7 +1,7 @@
 package art.arcane.chimera.mail;
 
 import art.arcane.chimera.core.Chimera;
-import art.arcane.chimera.core.microservice.ChimeraBackendService;
+import art.arcane.chimera.core.microservice.ChimeraService;
 import art.arcane.chimera.core.protocol.generation.Protocol;
 import art.arcane.quill.service.Service;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class MailService extends ChimeraBackendService {
+public class MailService extends ChimeraService {
     public static void main(String[] a) {
         Chimera.start(a);
     }

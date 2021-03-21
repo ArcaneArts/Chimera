@@ -181,7 +181,7 @@ public class ChimeraProtocolAccess extends QuillService {
         invoke.setMethod(j.getName());
         invoke.setContext(context);
         invoke.setParameters(new KList<>(parameters));
-        ChimeraBackendService c = Chimera.backend;
+        ChimeraService c = Chimera.backend;
         ParcelResult result = (ParcelResult) c.request(j.getService(), invoke);
 
         if (j.getResult().equals(ProtoType.JSON_OBJECT)) {

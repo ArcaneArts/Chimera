@@ -51,7 +51,7 @@ public class ProjectConfigurator extends QuillService {
             package art.arcane.chimera.mail;
                         
             import art.arcane.chimera.core.Chimera;
-            import art.arcane.chimera.core.microservice.ChimeraBackendService;
+            import art.arcane.chimera.core.microservice.ChimeraService;
             import art.arcane.chimera.core.protocol.generation.Protocol;
             import art.arcane.quill.service.Service;
             import lombok.Data;
@@ -59,7 +59,7 @@ public class ProjectConfigurator extends QuillService {
                         
             @EqualsAndHashCode(callSuper = true)
             @Data
-            public class $uService extends ChimeraBackendService {
+            public class $uService extends ChimeraService {
                 public static void main(String[] a) {
                     Chimera.start(a);
                 }

@@ -4,14 +4,14 @@ import art.arcane.archon.element.Element;
 import art.arcane.archon.element.Identity;
 import art.arcane.chimera.core.protocol.generation.Dart;
 import art.arcane.quill.collections.ID;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Dart
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Session extends Element {
     @Identity
     @Builder.Default

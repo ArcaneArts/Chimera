@@ -4,26 +4,29 @@ import art.arcane.archon.element.Element;
 import art.arcane.archon.element.Identity;
 import art.arcane.archon.element.Type;
 import art.arcane.quill.collections.ID;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class HostedService extends Element {
     @Identity
     @Builder.Default
     private ID id = new ID();
 
+    @Builder.Default
     @Type("VARCHAR(64)")
-    private String type;
+    private String type = "";
 
+    @Builder.Default
     @Type("VARCHAR(64)")
-    private String address;
+    private String address = "localhost";
 
+    @Builder.Default
     @Type("VARCHAR(64)")
-    private String dir;
+    private String dir = "/";
 
     @Builder.Default
     private long time = 0;

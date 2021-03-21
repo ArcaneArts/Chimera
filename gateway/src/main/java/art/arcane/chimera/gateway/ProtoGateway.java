@@ -4,7 +4,7 @@ import art.arcane.archon.data.ArchonResult;
 import art.arcane.archon.element.ElementList;
 import art.arcane.archon.server.ArchonService;
 import art.arcane.chimera.core.Chimera;
-import art.arcane.chimera.core.microservice.ChimeraBackendService;
+import art.arcane.chimera.core.microservice.ChimeraService;
 import art.arcane.chimera.core.object.Listener;
 import art.arcane.chimera.core.object.Session;
 import art.arcane.chimera.core.protocol.ChimeraContext;
@@ -53,7 +53,7 @@ public class ProtoGateway extends QuillService {
     @ServiceFunction
     public KList<String> getSessionsListening(ID target) {
         KList<String> sessions = new KList<>();
-        ((ChimeraBackendService) Quill.delegate).getDatabase().query("SELECT DISTINCT `session` FROM `listener` WHERE `target` = '" + target.toString() + "';").forEachRow((i) -> sessions.add(i.getString(0)));
+        ((ChimeraService) Quill.delegate).getDatabase().query("SELECT DISTINCT `session` FROM `listener` WHERE `target` = '" + target.toString() + "';").forEachRow((i) -> sessions.add(i.getString(0)));
         return sessions;
     }
 
@@ -78,27 +78,27 @@ public class ProtoGateway extends QuillService {
 
     @GatewayFunction
     public Boolean unregisterListener(ID id) {
-        return Listener.builder().id(id).build().archon(((ChimeraBackendService) Quill.delegate).getDatabase()).delete();
+        return Listener.builder().id(id).build().archon(((ChimeraService) Quill.delegate).getDatabase()).delete();
     }
 
     @ServiceFunction
     public Integer unregisterListenersBySession(String id) {
-        return ((ChimeraBackendService) Quill.delegate).getDatabase().update("DELETE FROM `listener` WHERE `session` = '" + id + "';");
+        return ((ChimeraService) Quill.delegate).getDatabase().update("DELETE FROM `listener` WHERE `session` = '" + id + "';");
     }
 
     @GatewayFunction
     public Integer unregisterAll() {
-        return ((ChimeraBackendService) Quill.delegate).getDatabase().update("DELETE FROM `listener` WHERE `session` = '" + getSessionId() + "';");
+        return ((ChimeraService) Quill.delegate).getDatabase().update("DELETE FROM `listener` WHERE `session` = '" + getSessionId() + "';");
     }
 
     @GatewayFunction
     public Integer unregisterAllWithTarget(ID target) {
-        return ((ChimeraBackendService) Quill.delegate).getDatabase().update("DELETE FROM `listener` WHERE `target` = '" + target.toString() + "' AND `session` = '" + getSessionId() + "';");
+        return ((ChimeraService) Quill.delegate).getDatabase().update("DELETE FROM `listener` WHERE `target` = '" + target.toString() + "' AND `session` = '" + getSessionId() + "';");
     }
 
     @ServiceFunction
     public KList<Session> getSessionsByUser(ID user) {
-        Session s = Session.builder().build().archon(((ChimeraBackendService) Quill.delegate).getDatabase());
+        Session s = Session.builder().build().archon(((ChimeraService) Quill.delegate).getDatabase());
         ElementList<Session> el = s.allWhere("`user` = '" + user.toString() + "'");
         return el.toList();
     }
@@ -119,19 +119,19 @@ public class ProtoGateway extends QuillService {
 
     @ServiceFunction
     public Integer cleanupDeadListeners() {
-        return ((ChimeraBackendService) Quill.delegate).getDatabase().update("DELETE FROM `listener` WHERE `time` < " + (M.ms() - TimeUnit.DAYS.toMillis(listenerCleanupDaysEviction)));
+        return ((ChimeraService) Quill.delegate).getDatabase().update("DELETE FROM `listener` WHERE `time` < " + (M.ms() - TimeUnit.DAYS.toMillis(listenerCleanupDaysEviction)));
     }
 
     @ServiceFunction
     public KList<Session> getSessionsByToken(ID token) {
-        Session s = Session.builder().build().archon(((ChimeraBackendService) Quill.delegate).getDatabase());
+        Session s = Session.builder().build().archon(((ChimeraService) Quill.delegate).getDatabase());
         ElementList<Session> el = s.allWhere("`token` = '" + token.toString() + "'");
         return el.toList();
     }
 
     @ServiceFunction
     public Session getFirstSessionByUser(ID user) {
-        Session s = Session.builder().build().archon(((ChimeraBackendService) Quill.delegate).getDatabase());
+        Session s = Session.builder().build().archon(((ChimeraService) Quill.delegate).getDatabase());
 
         if (s.where("user", user.toString())) {
             return s;
@@ -142,7 +142,7 @@ public class ProtoGateway extends QuillService {
 
     @ServiceFunction
     public Session getFirstSessionByToken(ID token) {
-        Session s = Session.builder().build().archon(((ChimeraBackendService) Quill.delegate).getDatabase());
+        Session s = Session.builder().build().archon(((ChimeraService) Quill.delegate).getDatabase());
 
         if (s.where("token", token.toString())) {
             return s;
@@ -153,7 +153,7 @@ public class ProtoGateway extends QuillService {
 
     @ServiceFunction
     public Session getSessionByID(String id) {
-        Session s = Session.builder().id(ID.fromString(id)).build().archon(((ChimeraBackendService) Quill.delegate).getDatabase());
+        Session s = Session.builder().id(ID.fromString(id)).build().archon(((ChimeraService) Quill.delegate).getDatabase());
 
         if (s.pull()) {
             return s;

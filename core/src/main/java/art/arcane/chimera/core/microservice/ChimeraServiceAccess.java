@@ -8,6 +8,7 @@ import art.arcane.chimera.core.net.parcels.ParcelPing;
 import art.arcane.chimera.core.net.parcels.ParcelPong;
 import art.arcane.chimera.core.object.HostedService;
 import art.arcane.quill.Quill;
+import art.arcane.quill.collections.ID;
 import art.arcane.quill.collections.KList;
 import art.arcane.quill.collections.KMap;
 import art.arcane.quill.collections.KSet;
@@ -88,7 +89,7 @@ public class ChimeraServiceAccess extends QuillService {
                 svc.append(", " + i + "(" + services.get(i).size() + ")");
             }
 
-            int f = ((ChimeraBackendService) Quill.delegate).getProtocolAccess().getAllFunctions().size();
+            int f = ((ChimeraService) Quill.delegate).getProtocolAccess().getAllFunctions().size();
             String ff = f + " Function" + (f == 1 ? "" : "s");
             String g = nodes + " Node" + (nodes == 1 ? "" : "s") + ", " + ff + " ";
 
@@ -129,6 +130,18 @@ public class ChimeraServiceAccess extends QuillService {
 
         if (now) {
             return findServiceNow(type);
+        }
+
+        return null;
+    }
+
+    public HostedService getService(ID serviceID) {
+        for (String i : getServices()) {
+            for (HostedService j : getServiceSet(i)) {
+                if (j.getId().equals(serviceID)) {
+                    return j;
+                }
+            }
         }
 
         return null;

@@ -1,7 +1,7 @@
 package art.arcane.chimera.gateway;
 
 import art.arcane.chimera.core.Chimera;
-import art.arcane.chimera.core.microservice.ChimeraBackendService;
+import art.arcane.chimera.core.microservice.ChimeraService;
 import art.arcane.chimera.core.object.HostedService;
 import art.arcane.chimera.core.object.Listener;
 import art.arcane.chimera.core.object.ServiceJob;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class GatewayService extends ChimeraBackendService {
+public class GatewayService extends ChimeraService {
     private int listenerCleanupMinuteLaziness = 60;
     private int minutesPerSessionCleanup = 60;
     private int sessionCleanupMinuteLaziness = 30;

@@ -1,7 +1,7 @@
 package art.arcane.chimera.core;
 
 import art.arcane.archon.server.ArchonService;
-import art.arcane.chimera.core.microservice.ChimeraBackendService;
+import art.arcane.chimera.core.microservice.ChimeraService;
 import art.arcane.chimera.core.protocol.EDX;
 import art.arcane.chimera.core.protocol.generation.*;
 import art.arcane.chimera.core.util.ProjectConfigurator;
@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 public class Chimera {
     public static ArchonService archon;
-    public static ChimeraBackendService backend;
+    public static ChimeraService backend;
 
     public static void fix(Class<?> derp) {
         // "Fixed"

@@ -21,7 +21,7 @@ public class ParcelShuttingDown extends Parcel {
 
     @Override
     public Parcelable respond() {
-        // TODO: J.a(() -> ((ChimeraBackendService) Chimera.delegate).getBackendService().notifyRemoteShuttingDown(getKey()));
+        // TODO: J.a(() -> ((ChimeraService) Chimera.delegate).getBackendService().notifyRemoteShuttingDown(getKey()));
         return new ParcelOK();
     }
 }
