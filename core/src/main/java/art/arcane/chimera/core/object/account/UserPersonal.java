@@ -26,10 +26,6 @@ public class UserPersonal extends Element {
     @Builder.Default
     private String carrier = "";
 
-    public UserPersonal(ID id) {
-        this.id = id;
-    }
-
     @Override
     public String getTableName() {
         return "user_personal";

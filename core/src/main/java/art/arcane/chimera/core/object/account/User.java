@@ -41,11 +41,6 @@ public class User extends Element {
         this.id = id;
     }
 
-    public User(ID id, String email) {
-        this(id);
-        this.email = email;
-    }
-
     public String getFullName() {
         return getFirstName() + " " + getLastName();
     }

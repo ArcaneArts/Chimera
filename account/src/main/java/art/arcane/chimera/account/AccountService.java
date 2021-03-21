@@ -3,7 +3,10 @@ package art.arcane.chimera.account;
 
 import art.arcane.chimera.core.Chimera;
 import art.arcane.chimera.core.microservice.ChimeraBackendService;
+import art.arcane.chimera.core.object.account.AccessToken;
 import art.arcane.chimera.core.object.account.User;
+import art.arcane.chimera.core.object.account.UserAuthentication;
+import art.arcane.chimera.core.object.account.UserPersonal;
 import art.arcane.chimera.core.protocol.EDN;
 import art.arcane.chimera.core.protocol.generation.Protocol;
 import art.arcane.quill.collections.ID;
@@ -50,6 +53,11 @@ public class AccountService extends ChimeraBackendService {
 
             return true;
         });
+
+        new User().sync();
+        new AccessToken().sync();
+        new UserAuthentication().sync();
+        new UserPersonal().sync();
     }
 
     @Override

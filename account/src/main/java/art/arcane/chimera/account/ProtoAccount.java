@@ -234,11 +234,11 @@ public class ProtoAccount extends QuillService {
             return null;
         }
 
-        User u = new User(id, email);
-        u.setCreatedDate(M.ms());
+        User u = User.builder().id(id).email(email).build();
+        L.w("It is " + u.getFirstName());
         u.push();
-        new UserAuthentication(id, password).push();
-        new UserPersonal(id).push();
+        UserAuthentication.builder().id(id).build().setPassword(password).push();
+        UserPersonal.builder().id(id).build().push();
 
         return u;
     }
