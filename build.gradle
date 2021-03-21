@@ -22,7 +22,7 @@ plugins {
 
 /////////////////////////////////////////////////////////
 group 'art.arcane'
-version '1.0.27'
+version '1.0.28'
 String servicePackage = "art.arcane.chimera.core.protocol";
 String serviceName = "EDN";
 String flutterProjects = 'hawkeye'
